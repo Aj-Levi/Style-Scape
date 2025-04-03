@@ -33,17 +33,11 @@ const Login = () => {
                     fill="none"
                     stroke="currentColor"
                   >
-                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
+                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                   </g>
                 </svg>
-                <input
-                  type="input"
-                  name="username"
-                  required
-                  placeholder="Username"
-                  className="text-md"
-                />
+                <input type="email" name="email" placeholder="mail@site.com" required />
               </label>
 
               <label className="input validator relative w-full">
@@ -73,7 +67,9 @@ const Login = () => {
                   id="password"
                   value={password}
                   name="password"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>):void => setPassword(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                    setPassword(e.target.value)
+                  }
                   required
                   placeholder="Password"
                 />

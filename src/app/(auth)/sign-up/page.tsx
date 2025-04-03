@@ -1,11 +1,19 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
+  const [Email, setEmail] = useState<string>("");
+  const [ValidEmail, setValidEmail] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  useEffect(() => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    emailRegex.test(Email)?setValidEmail(true):setValidEmail(false);
+  }, [Email])
+  
 
   return (
     <div className="w-[55%] max-md:w-full flex items-center justify-center md:p-8 ">
@@ -13,9 +21,7 @@ const Login = () => {
         <div className="backdrop-blur-md bg-base-300 p-8 rounded-xl shadow-lg">
           <div className="text-center mb-2">
             <h1 className={`text-3xl font-bold`}>Create an Account</h1>
-            <p className={`text-base-content mt-2`}>
-              Sign up to get started
-            </p>
+            <p className={`text-base-content mt-2`}>Sign up to get started</p>
           </div>
 
           <div className="flex flex-col space-y-4 mb-6">
@@ -33,18 +39,13 @@ const Login = () => {
                     fill="none"
                     stroke="currentColor"
                   >
-                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
+                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                   </g>
                 </svg>
-                <input
-                  type="input"
-                  name="username"
-                  required
-                  placeholder="Username"
-                  className="text-md"
-                />
+                <input type="email" placeholder="mail@site.com" name="email" value={Email} onChange={(e: React.ChangeEvent<HTMLInputElement>):void =>setEmail(e.target.value)} required />
               </label>
+                <div className={`text-red-500 pl-2 ${ValidEmail?'hidden':'block'}`}>Enter valid email address</div>
 
               <label className="input validator relative w-full">
                 <svg
@@ -73,7 +74,9 @@ const Login = () => {
                   id="password"
                   value={password}
                   name="password"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>):void => setPassword(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                    setPassword(e.target.value)
+                  }
                   required
                   placeholder="Password"
                 />
@@ -90,7 +93,7 @@ const Login = () => {
                 </button>
               </label>
 
-              <button type="submit" className="w-full btn btn-primary">
+              <button type="submit" className="w-full btn btn-primary" disabled={!ValidEmail}>
                 Sign Up
               </button>
             </form>
