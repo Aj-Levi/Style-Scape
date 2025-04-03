@@ -1,6 +1,6 @@
 "use client"
 import React from "react";
-import { useZustandStore } from "@/ZustandStore";
+import { useZustandStore } from "@/lib/stores/ZustandStore";
 import { FiSun, FiMoon } from "react-icons/fi";
 
 const ThemeToggleLogin = () => {

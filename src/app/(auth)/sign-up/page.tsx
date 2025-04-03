@@ -1,5 +1,5 @@
 "use client";
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -11,9 +11,8 @@ const Login = () => {
 
   useEffect(() => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    emailRegex.test(Email)?setValidEmail(true):setValidEmail(false);
-  }, [Email])
-  
+    emailRegex.test(Email) ? setValidEmail(true) : setValidEmail(false);
+  }, [Email]);
 
   return (
     <div className="w-[55%] max-md:w-full flex items-center justify-center md:p-8 ">
@@ -26,6 +25,57 @@ const Login = () => {
 
           <div className="flex flex-col space-y-4 mb-6">
             <form className="space-y-4 mt-6">
+              <div className="flex flex-col md:flex-row gap-4">
+                <label className="input validator w-full">
+                  <svg
+                    className="h-[1em]"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                  >
+                    <g
+                      strokeLinejoin="round"
+                      strokeLinecap="round"
+                      strokeWidth="2.5"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </g>
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="First Name"
+                    name="firstName"
+                    required
+                  />
+                </label>
+                
+                <label className="input validator w-full">
+                  <svg
+                    className="h-[1em]"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                  >
+                    <g
+                      strokeLinejoin="round"
+                      strokeLinecap="round"
+                      strokeWidth="2.5"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </g>
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Last Name"
+                    name="lastName"
+                    required
+                  />
+                </label>
+              </div>
               <label className="input validator w-full">
                 <svg
                   className="h-[1em]"
@@ -43,9 +93,24 @@ const Login = () => {
                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                   </g>
                 </svg>
-                <input type="email" placeholder="mail@site.com" name="email" value={Email} onChange={(e: React.ChangeEvent<HTMLInputElement>):void =>setEmail(e.target.value)} required />
+                <input
+                  type="email"
+                  placeholder="mail@site.com"
+                  name="email"
+                  value={Email}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                    setEmail(e.target.value)
+                  }
+                  required
+                />
               </label>
-                <div className={`text-red-500 pl-2 ${ValidEmail?'hidden':'block'}`}>Enter valid email address</div>
+              <div
+                className={`text-red-500 pl-2 ${
+                  ValidEmail ? "hidden" : "block"
+                }`}
+              >
+                Enter valid email address
+              </div>
 
               <label className="input validator relative w-full">
                 <svg
@@ -93,7 +158,11 @@ const Login = () => {
                 </button>
               </label>
 
-              <button type="submit" className="w-full btn btn-primary" disabled={!ValidEmail}>
+              <button
+                type="submit"
+                className="w-full btn btn-primary"
+                disabled={!ValidEmail}
+              >
                 Sign Up
               </button>
             </form>
