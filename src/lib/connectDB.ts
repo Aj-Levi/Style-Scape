@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 // connecting to the database
-const ConnectDb = async() => {
+const ConnectDB = async() => {
     try {
         const mongoUri = process.env.MONGO_URI;
         if (!mongoUri) {
@@ -15,4 +15,4 @@ const ConnectDb = async() => {
     }
 }
 
-export default ConnectDb
+export default ConnectDB

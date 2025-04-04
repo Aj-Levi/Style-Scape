@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { registerUser } from "@/actions/User";
 
 const Login = () => {
   const [Email, setEmail] = useState<string>("");
@@ -24,7 +25,7 @@ const Login = () => {
           </div>
 
           <div className="flex flex-col space-y-4 mb-6">
-            <form className="space-y-4 mt-6">
+            <form action={registerUser} className="space-y-4 mt-6">
               <div className="flex flex-col md:flex-row gap-4">
                 <label className="input validator w-full">
                   <svg
@@ -46,7 +47,7 @@ const Login = () => {
                   <input
                     type="text"
                     placeholder="First Name"
-                    name="firstName"
+                    name="firstname"
                     required
                   />
                 </label>
@@ -71,8 +72,7 @@ const Login = () => {
                   <input
                     type="text"
                     placeholder="Last Name"
-                    name="lastName"
-                    required
+                    name="lastname"
                   />
                 </label>
               </div>

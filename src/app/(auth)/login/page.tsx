@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { FaEye, FaEyeSlash, FaGoogle, FaGithub } from "react-icons/fa";
+import { loginUser } from "@/actions/User";
 
 const Login = () => {
   const [password, setPassword] = useState<string>("");
