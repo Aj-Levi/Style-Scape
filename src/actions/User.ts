@@ -4,25 +4,26 @@ import { signIn } from "@/auth";
 import ConnectDB from "@/lib/connectDB";
 import User from "@/lib/models/User";
 import bcrypt from "bcryptjs";
-import { CredentialsSignin } from "next-auth";
+import { redirect } from "next/navigation";
 
-const loginUser = async(formdata: FormData) => {
+const loginUser = async(formdata: FormData): Promise<void> => {
     const email = formdata.get("email") as string;
     const password = formdata.get("password") as string;
 
     try {
         await signIn("credentials" , {
-            redirectTo: '/',
+            redirect: false,
+            callbackUrl: '/',
             email,
             password
         })
     } catch (err) {
-        const someError = err as CredentialsSignin
-        return someError.cause;
+        throw new Error("unable to sign in" + err);
     }
+    redirect("/");
 }
 
-const registerUser = async(formdata: FormData) => {
+const registerUser = async(formdata: FormData): Promise<void> => {
     const firstname = formdata.get('firstname') as string;
     const lastname = formdata.get('lastname') as string;
     const email = formdata.get('email') as string;
@@ -44,6 +45,8 @@ const registerUser = async(formdata: FormData) => {
 
     await User.create({firstname , lastname , email , password: hashedpassword});
     console.log("------ User registered successfully ------");
+
+    redirect("/login");
 }
 
 export { registerUser , loginUser };
