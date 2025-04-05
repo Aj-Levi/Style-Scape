@@ -13,21 +13,27 @@ declare module "next-auth" {
     user: {
       id?: string;
       role?: string;
+      firstname?: string;
+      lastname?: string;
       name?: string | null;
       email?: string | null;
       image?: string | null;
-    }
+    };
   }
-  
+
   interface User {
     id?: string;
     role?: string;
+    firstname?: string;
+    lastname?: string;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
     role?: string;
+    firstname?: string;
+    lastname?: string;
   }
 }
 
@@ -58,15 +64,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const user = await User.findOne({ email }).select("+password +role");
 
         if (!user) {
-          alert("user does not exist");
-          return null;
+          throw new Error("user does not exist");
         }
 
-        const ismatched = compare(password, user.password);
+        const ismatched = await compare(password, user.password);
 
         if (!ismatched) {
-          alert("password did not match");
-          return null;
+          console.log("reached here !!");
+          throw new Error("password did not match");
         }
 
         const userdata = {
@@ -91,6 +96,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (token?.sub && token?.role) {
         session.user.id = token.sub;
         session.user.role = token.role;
+        session.user.firstname = token.firstname;
+        session.user.lastname = token.lastname;
       }
       return session;
     },
@@ -98,6 +105,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role;
+        token.firstname = user.firstname;
+        token.lastname = user.lastname;
       }
       return token;
     },
@@ -106,24 +115,34 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (account?.provider === "google" || account?.provider === "github") {
         try {
           const { email, name, image, id } = user;
+
+          const firstname = name?.split(" ")[0] || "";
+          const lastname = name?.split(" ").slice(1).join(" ") || "";
+
           await ConnectDB();
           const alreadyUser = await User.findOne({ email });
 
           if (!alreadyUser) {
-            await User.create({ email, name, image, authProviderId: id });
-          } else {
-            return true;
+            await User.create({
+              email,
+              firstname,
+              lastname,
+              image,
+              authProviderId: id,
+            });
           }
+          return true;
         } catch (error) {
-          throw new Error("Error while creating new user using google or github");
+          throw new Error(
+            "Error while creating new user using google or github"
+          );
         }
       }
 
-      if (account?.provider === "credentials") {
-        return true;
-      } else {
-        return false;
-      }
+      return true;
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl;
     },
   },
 });

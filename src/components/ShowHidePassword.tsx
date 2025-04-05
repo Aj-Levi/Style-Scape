@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const ShowHidePassword = () => {
-    const [password, setPassword] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   return (
     <label className="input validator relative w-full">

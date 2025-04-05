@@ -4,6 +4,7 @@ import { FaGoogle, FaGithub } from "react-icons/fa";
 import { loginUser } from "@/actions/User";
 import { signIn } from "@/auth";
 import ShowHidePassword from "@/components/ShowHidePassword";
+import { redirect } from "next/navigation";
 
 const Login = () => {
   return (
@@ -63,6 +64,7 @@ const Login = () => {
               action={async () => {
                 "use server";
                 await signIn("google");
+                redirect("/");
               }}
             >
               <button
@@ -78,6 +80,7 @@ const Login = () => {
               action={async () => {
                 "use server";
                 await signIn("github");
+                console.log("reached");
               }}
             >
               <button

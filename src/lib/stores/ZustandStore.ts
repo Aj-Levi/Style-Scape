@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ZustandStoreInterface } from "./Interfaces";
+import { ZustandStoreInterface } from "@/Interfaces";
 
 export const useZustandStore = create<ZustandStoreInterface>((set)=>({
     currentTheme: "synthwave",

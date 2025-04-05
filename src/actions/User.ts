@@ -35,8 +35,7 @@ const registerUser = async(formdata: FormData): Promise<void> => {
     // checking for existing user
     const existinguser = await User.findOne({email});
     if(existinguser){
-        alert("user already exists");
-        return;
+        throw new Error("User already exists");
     }
 
     // hashing the user password by adding salt to it

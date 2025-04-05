@@ -7,10 +7,10 @@ export interface ZustandStoreInterface{
 
 export interface UserInterface extends Document{
     firstname: string;
-    lastname: string;
+    lastname?: string;
     email: string;
     password: string;
     role: 'user'|'admin';
-    image: string;
+    image?: string;
     authProviderId: string;
 }
