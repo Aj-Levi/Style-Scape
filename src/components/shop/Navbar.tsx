@@ -1,9 +1,8 @@
 import Image from "next/image";
 import React from "react";
-import { CiSearch } from "react-icons/ci";
 import Logo from "@/public/HomeFavicon.png";
 import NavbarIcons from "./NavbarIcons";
-import SidebarMenuBtn from "./SidebarMenuBtn";
+import SidebarMenuBtn from "./buttons/SidebarMenuBtn";
 
 const Header = () => {
   return (
@@ -20,7 +19,7 @@ const Header = () => {
                 className="object-contain rounded-full"
               />
             </div>
-            <div className="font-extrabold text-[1.5em] text-accent">
+            <div className="font-extrabold text-[1.5em] text-secondary">
               StyleScape
             </div>
           </div>

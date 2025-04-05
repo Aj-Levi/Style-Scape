@@ -20,7 +20,7 @@ const loginUser = async(formdata: FormData): Promise<void> => {
     } catch (err) {
         throw new Error("unable to sign in" + err);
     }
-    redirect("/");
+    redirect("/home");
 }
 
 const registerUser = async(formdata: FormData): Promise<void> => {

@@ -2,9 +2,9 @@ import { create } from "zustand";
 import { ZustandStoreInterface } from "@/Interfaces";
 
 export const useZustandStore = create<ZustandStoreInterface>((set)=>({
-    currentTheme: "synthwave",
+    currentTheme: "abyss",
     toggleTheme: ()=>{set((state)=>{
-        return state.currentTheme==="synthwave"?{currentTheme: "bumblebee"}:{currentTheme: "synthwave"}
+        return state.currentTheme==="abyss"?{currentTheme: "bumblebee"}:{currentTheme: "abyss"}
     })},
     isSidebarOpen: false,
     toggleSidebar: ()=>{set((state)=>({

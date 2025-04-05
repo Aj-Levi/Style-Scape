@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import LoginBgImage from "../public/images/LoginBG.png";
+import LoginBgImage from "@/public/images/LoginBG.png";
 
 const LoginImage = () => {
   return (

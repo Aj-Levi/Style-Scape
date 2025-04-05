@@ -1,31 +1,29 @@
-"use client";
+"use server";
 import React from "react";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { RiAccountCircleLine } from "react-icons/ri";
-import { useZustandStore } from "@/lib/stores/ZustandStore";
-import { FiSun, FiMoon } from "react-icons/fi";
+import HomeThemeToggle from "./buttons/HomeThemeToggle";
+import { getSession } from "@/lib/getSession";
+import Link from "next/link";
 
-const NavbarIcons = () => {
-  let { currentTheme, toggleTheme } = useZustandStore();
+const NavbarIcons = async () => {
+  const session = await getSession();
+
   return (
     <div className="flex items-center gap-x-2 *:cursor-pointer">
-      <button className="btn btn-primary max-md:p-2">
-        <HiOutlineShoppingCart className="w-4 h-4 md:w-5 md:h-5" />
-      </button>
-      <button className="btn btn-primary max-md:p-2">
-        <RiAccountCircleLine className="w-4 h-4 md:w-5 md:h-5" />
-      </button>
       <button
-        className="font-semibold btn btn-secondary max-md:p-2"
-        onClick={toggleTheme}
-        aria-label="Toggle theme"
+        className={`btn btn-primary max-md:p-2 ${
+          session?.user ? "" : "hidden"
+        }`}
       >
-        {currentTheme === "synthwave" ? (
-          <FiSun className="w-4 h-4 md:w-5 md:h-5" />
-        ) : (
-          <FiMoon className="w-4 h-4 md:w-5 md:h-5" />
-        )}
+        <HiOutlineShoppingCart className={`w-4 h-4 md:w-5 md:h-5`} />
       </button>
+      <Link href={session?.user ? "/profile" : "/signup"}>
+        <button className={`btn btn-primary max-md:p-2`}>
+          <RiAccountCircleLine className="w-4 h-4 md:w-5 md:h-5" />
+        </button>
+      </Link>
+      <HomeThemeToggle />
     </div>
   );
 };
