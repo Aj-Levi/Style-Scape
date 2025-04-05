@@ -3,7 +3,7 @@ import Link from "next/link";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { loginUser } from "@/actions/User";
 import { signIn } from "@/auth";
-import ShowHidePassword from "@/components/ShowHidePassword";
+import ShowHidePassword from "@/components/auth/ShowHidePassword";
 import { redirect } from "next/navigation";
 
 const Login = () => {

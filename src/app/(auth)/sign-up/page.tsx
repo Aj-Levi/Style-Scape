@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { registerUser } from "@/actions/User";
-import ShowHidePassword from "@/components/ShowHidePassword";
-import ValidateInput from "@/components/ValidateInput";
+import ShowHidePassword from "@/components/auth/ShowHidePassword";
+import ValidateInput from "@/components/auth/ValidateInput";
 
 const Login = () => {
   return (

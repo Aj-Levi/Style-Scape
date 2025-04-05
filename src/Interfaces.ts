@@ -3,6 +3,9 @@ import { Document } from "mongoose";
 export interface ZustandStoreInterface{
     currentTheme: string;
     toggleTheme: ()=>void;
+
+    isSidebarOpen: boolean;
+    toggleSidebar: ()=>void;
 }
 
 export interface UserInterface extends Document{

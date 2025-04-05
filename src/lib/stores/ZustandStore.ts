@@ -5,5 +5,9 @@ export const useZustandStore = create<ZustandStoreInterface>((set)=>({
     currentTheme: "synthwave",
     toggleTheme: ()=>{set((state)=>{
         return state.currentTheme==="synthwave"?{currentTheme: "bumblebee"}:{currentTheme: "synthwave"}
-    })}
+    })},
+    isSidebarOpen: false,
+    toggleSidebar: ()=>{set((state)=>({
+        isSidebarOpen: !state.isSidebarOpen
+    }))}
 }))

@@ -1,5 +1,5 @@
-import LoginImage from "@/components/LoginImage";
-import ThemeToggleLogin from "@/components/ThemeToggleLogin";
+import LoginImage from "@/components/auth/LoginImage";
+import ThemeToggleLogin from "@/components/auth/ThemeToggleLogin";
 import React, { ReactNode } from "react";
 
 const LoginSignUpLayout = ({children}: {children: ReactNode}) => {
