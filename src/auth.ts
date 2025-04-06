@@ -18,6 +18,9 @@ declare module "next-auth" {
       name?: string | null;
       email?: string | null;
       image?: string | null;
+      createdAt?: Date | string;
+      phone?: string;
+      address?: string;
     };
   }
 
@@ -26,6 +29,10 @@ declare module "next-auth" {
     role?: string;
     firstname?: string;
     lastname?: string;
+    image?: string | null;
+    createdAt?: Date | string;
+    phone?: string;
+    address?: string;
   }
 }
 
@@ -34,6 +41,10 @@ declare module "next-auth/jwt" {
     role?: string;
     firstname?: string;
     lastname?: string;
+    image?: string | null;
+    createdAt?: Date | string;
+    phone?: string;
+    address?: string;
   }
 }
 
@@ -80,6 +91,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: user.email,
           role: user.role,
           id: user._id,
+          image: user.image,
+          createdAt: user.createdAt,
+          phone: user.phone,
+          address: user.address,
         };
 
         return userdata;
@@ -98,6 +113,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.role = token.role;
         session.user.firstname = token.firstname;
         session.user.lastname = token.lastname;
+        session.user.image = token.image;
+        session.user.createdAt = token.createdAt;
+        session.user.phone = token.phone;
+        session.user.address = token.address;
       }
       return session;
     },
@@ -107,6 +126,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.role = user.role;
         token.firstname = user.firstname;
         token.lastname = user.lastname;
+        token.image = user.image;
+        token.createdAt = user.createdAt;
+        token.phone = user.phone;
+        token.address = user.address;
       }
       return token;
     },

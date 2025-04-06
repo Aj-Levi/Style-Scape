@@ -9,6 +9,8 @@ const UserSchema = new mongoose.Schema<UserInterface>(
     password: { type: String, select: false },
     role: { type: String, default: "user" },
     image: { type: String, required: false },
+    phone: {type: String, required: false},
+    address: {type: String, required: false},
     authProviderId: {type: String}
   },
   { timestamps: true }

@@ -1,34 +1,43 @@
-import { UserInterface } from "@/Interfaces";
+import { UpdatedUserInterface, UserInterface } from "@/Interfaces";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const usersApi = createApi({
   reducerPath: "users",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
+  tagTypes: ["User"],
   endpoints: (builder) => ({
     getAllUsers: builder.query<UserInterface[], void>({
-      query: () => "/users",
+      query: () => "api/users",
+      providesTags: ["User"],
     }),
 
-    getProductById: builder.query<UserInterface, string>({
-      query: (id) => `/users/${id}`,
+    getUserById: builder.query<UserInterface, string>({
+      query: (id) => `api/users/${id}`,
+      providesTags: (result, error, id) => [{ type: "User", id }],
     }),
 
-    updateProduct: builder.mutation<string,{id: string, updatedUser: UserInterface}>({
-      query: ({id, updatedUser}) => ({
-        url: `/users/${id}`,
-        method: "PUT",
+    updateUser: builder.mutation<string, { id: string, updatedUser: UpdatedUserInterface }>({
+      query: ({ id, updatedUser }) => ({
+        url: `api/users/${id}`,
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: updatedUser,
       }),
+
+      invalidatesTags: (result, error, { id }) => [
+        { type: "User", id },
+        { type: "User" }
+      ],
     }),
 
-    deleteProduct: builder.mutation<string,string>({
+    deleteUser: builder.mutation<string, string>({
       query: (id) => ({
-        url: `/users/${id}`,
+        url: `api/users/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["User"],
     }),
   }),
 });
 
-export const { useGetAllUsersQuery, useGetProductByIdQuery, useUpdateProductMutation, useDeleteProductMutation } = usersApi;
+export const { useGetAllUsersQuery, useGetUserByIdQuery, useUpdateUserMutation, useDeleteUserMutation } = usersApi;

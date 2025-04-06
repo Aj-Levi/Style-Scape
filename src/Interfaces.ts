@@ -1,4 +1,5 @@
 import { Document } from "mongoose";
+import { ReactNode } from "react";
 
 export interface ZustandStoreInterface{
     currentTheme: string;
@@ -15,10 +16,26 @@ export interface UserInterface extends Document{
     password: string;
     role: 'user'|'admin';
     image?: string;
+    phone?: string;
+    address?: string;
     authProviderId: string;
+}
+
+export interface UpdatedUserInterface{
+    firstname?: string;
+    lastname?: string;
+    image?: string;
+    phone?: string;
+    address?: string;
 }
 
 export interface ToastInterface{
     autoClose: number;
     className: string;
+}
+
+export interface TabInterface{
+    id: string;
+    label: string;
+    icon: ReactNode;
 }

@@ -8,7 +8,7 @@ const ThemeToggleLogin = () => {
 
   return (
     <button 
-      className="btn btn-secondary font-semibold fixed top-4 right-4" 
+      className="z-30 btn btn-secondary font-semibold fixed top-4 right-4" 
       onClick={toggleTheme}
       aria-label="Toggle theme"
     >
