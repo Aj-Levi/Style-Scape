@@ -31,7 +31,7 @@ const Login = () => {
                       resolve("toast shown");
                     }, 2000);
                   })
-                  router.push("/home");
+                  router.push("/login");
                 }else{
                   toast.warn(response.message, ToastStyles);
                 };
