@@ -17,3 +17,8 @@ export interface UserInterface extends Document{
     image?: string;
     authProviderId: string;
 }
+
+export interface ToastInterface{
+    autoClose: number;
+    className: string;
+}

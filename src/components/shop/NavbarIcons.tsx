@@ -18,7 +18,7 @@ const NavbarIcons = async () => {
       >
         <HiOutlineShoppingCart className={`w-4 h-4 md:w-5 md:h-5`} />
       </button>
-      <Link href={session?.user ? "/profile" : "/signup"}>
+      <Link href={session?.user ? "/profile" : "/sign-up"}>
         <button className={`btn btn-primary max-md:p-2`}>
           <RiAccountCircleLine className="w-4 h-4 md:w-5 md:h-5" />
         </button>

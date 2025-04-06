@@ -1,14 +1,20 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { loginUser } from "@/actions/User";
 import { signIn } from "@/auth";
 import ShowHidePassword from "@/components/auth/ShowHidePassword";
-import { redirect } from "next/navigation";
+import { toast, ToastContainer } from "react-toastify";
+import ToastStyles from "@/styles/ToastStyles";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
   return (
     <div className="w-[55%] max-md:w-full flex items-center justify-center md:p-8 ">
+      <ToastContainer />
       <div className="w-full max-w-md">
         <div className="backdrop-blur-md bg-base-300 p-8 rounded-xl shadow-lg">
           <div className="text-center mb-2">
@@ -19,7 +25,20 @@ const Login = () => {
           </div>
 
           <div className="flex flex-col space-y-4 mb-6">
-            <form action={loginUser} className="space-y-6 mt-6">
+            <form action={async(formdata: FormData): Promise<void> => {
+              const response = await loginUser(formdata);
+              if(response.success) {
+                toast.success(response.message, ToastStyles);
+                await new Promise(resolve=>{
+                  setTimeout(() => {
+                    resolve("toast shown");
+                  }, 2000);
+                })
+                router.push("/home");
+              }else{
+                toast.error(response.message, ToastStyles);
+              };
+            }} className="space-y-6 mt-6">
               <label className="input validator w-full">
                 <svg
                   className="h-[1em]"
@@ -62,9 +81,11 @@ const Login = () => {
 
             <form
               action={async () => {
-                "use server";
-                await signIn("google");
-                redirect("/");
+                try {
+                  await signIn("google");
+                } catch (error) {
+                  toast.error("Failed to sign in with Google", ToastStyles);
+                }
               }}
             >
               <button
@@ -78,9 +99,11 @@ const Login = () => {
 
             <form
               action={async () => {
-                "use server";
-                await signIn("github");
-                console.log("reached");
+                try {
+                  await signIn("github");
+                } catch (error) {
+                  toast.error("Failed to sign in with GitHub", ToastStyles);
+                }
               }}
             >
               <button
