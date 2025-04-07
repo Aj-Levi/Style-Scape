@@ -27,11 +27,12 @@ export async function DELETE(
     const { id } = await params;
     await ConnectDB();
     await User.deleteOne({ $and: [{ _id: id }, { role: "user" }] });
+    console.log("$$$$$$$$$$$")
     return new Response("User deleted successfully", { status: 200 });
   } catch (err) {
     console.error("some error occured while deleting the user");
     return new Response("some error occured while deleting the user", {
-      status: 404,
+      status: 500,
     });
   }
 }
@@ -46,8 +47,9 @@ export async function PATCH(
     await ConnectDB();
     const user = await User.findOne({ _id: id });
     
+    console.log("************")
     if (!user) {
-      return new Response("User not found", { status: 404 });
+      return new Response("User not found", { status: 500 });
     }
 
     console.log(user);
@@ -57,6 +59,7 @@ export async function PATCH(
       lastname: body?.lastname || user.lastname,
       phone: body?.phone || user.phone,
       address: body?.address || user.address,
+      password: body?.password || user.password,
     };
     
     // Only set image if it's a valid string value, not an empty object
@@ -70,6 +73,8 @@ export async function PATCH(
       { _id: id },
       { $set: updateData }
     );
+
+    console.log("yahoooooooooooooo");
 
     return new Response("User updated successfully", { status: 200 });
   } catch (err) {

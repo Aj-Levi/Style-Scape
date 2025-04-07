@@ -8,7 +8,7 @@ import {
   useGetUserByIdQuery,
   useUpdateUserMutation,
 } from "@/app/services/UserData";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import ToastStyles from "@/styles/ToastStyles";
 import dummyimage from "@/public/images/LoginBG.png";
 
@@ -17,13 +17,20 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
   const unwrappedParams = React.use(params);
   const { id } = unwrappedParams;
 
+  const [FirstName, setFirstName] = useState<string | undefined>();
+  const [LastName, setLastName] = useState<string | undefined>();
+  const [Phone, setPhone] = useState<string | undefined>();
+  const [Address, setAddress] = useState<string | undefined>();
+  const [Image, setImage] = useState<string | undefined>();
+  const [PhoneError, setPhoneError] = useState<boolean>(false);
+
   const { data, isError, isLoading } = useGetUserByIdQuery(id);
   const [
     updateUser,
-    { data: updateData, isError: isErrorUpdate, isLoading: isLoadingUpdate },
+    { isLoading: isLoadingUpdate },
   ] = useUpdateUserMutation();
 
-  if (isError || isErrorUpdate) {
+  if (isError) {
     return (
       <div className="col-span-1 md:col-span-3">
         <div className="card bg-error shadow-xl">
@@ -55,25 +62,6 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
       </div>
     );
   }
-
-  const [FirstName, setFirstName] = useState<string>(() =>
-    data?.firstname ? data.firstname : ""
-  );
-  const [LastName, setLastName] = useState<string>(() =>
-    data?.lastname ? data.lastname : ""
-  );
-  const [Phone, setPhone] = useState<string>(() =>
-    data?.phone ? data.phone : ""
-  );
-  const [Address, setAddress] = useState<string>(() =>
-    data?.address ? data.address : ""
-  );
-  const [Image, setImage] = useState<string | undefined>(() =>
-    data?.image ? data.image : undefined
-  );
-  const [PhoneError, setPhoneError] = useState<boolean>(() =>
-    Phone ? false : true
-  );
 
   const reset = (): void => {
     setFirstName("");
@@ -121,7 +109,10 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
         image,
       };
       await updateUser({ id, updatedUser });
-      router.replace(`/profile/${id}/personaldetails`);
+      toast.success("updated info successfully", ToastStyles);
+      setTimeout(() => {
+        router.replace(`/profile/${id}/personaldetails`);
+      }, 1500);
     } catch (err) {
       toast.error("couldn't update the user info", ToastStyles);
       console.error("couldn't update the user info", err);
@@ -130,7 +121,6 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <div className="col-span-1 md:col-span-3">
-      <ToastContainer />
       <div className="card bg-base-200 shadow-xl">
         <div className="card-body">
           <div className="flex justify-between items-center">
@@ -154,7 +144,7 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
                 <input
                   type="text"
                   name="firstname"
-                  value={FirstName}
+                  value={FirstName?FirstName:data?.firstname?data.firstname:""}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
                     setFirstName(e.target.value)
                   }
@@ -171,7 +161,7 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
                 <input
                   type="text"
                   name="lastname"
-                  value={LastName}
+                  value={LastName?LastName:data?.lastname?data.lastname:""}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
                     setLastName(e.target.value)
                   }
@@ -188,7 +178,7 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
                 <input
                   type="text"
                   name="phone"
-                  value={Phone}
+                  value={Phone?Phone:data?.phone?data.phone:""}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                     const newValue = e.target.value;
                     setPhone(e.target.value);
@@ -219,7 +209,7 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
                 <textarea
                   name="address"
                   placeholder="Enter your full address"
-                  value={Address}
+                  value={Address?Address:data?.address?data.address:""}
                   onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void =>
                     setAddress(e.target.value)
                   }
@@ -241,7 +231,7 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
                 <input
                   type="text"
                   name="image"
-                  value={Image || ""}
+                  value={Image?Image:data?.image?data.image:""}
                   onChange={handleImageChange}
                   placeholder="Enter image URL (e.g., https://example.com/image.jpg)"
                   className="input input-bordered w-full"

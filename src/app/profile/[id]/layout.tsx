@@ -14,10 +14,16 @@ import SidebarTabs from "@/components/profile/SidebarTabs";
 import { TabInterface } from "@/Interfaces";
 import ThemeToggleLogin from "@/components/auth/ThemeToggleLogin";
 import { useGetUserByIdQuery } from "../../services/UserData";
+import { toast, ToastContainer } from "react-toastify";
+import ToastStyles from "@/styles/ToastStyles";
+import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 const Profile = ({ children , params }: { children: ReactNode , params: Promise<{id: string}> }) => {
   const unwrappedParams = React.use(params);
   const { id } = unwrappedParams;
+
+  const router = useRouter();
 
   const {data , isError , isLoading} = useGetUserByIdQuery(id);
 
@@ -41,10 +47,24 @@ const Profile = ({ children , params }: { children: ReactNode , params: Promise<
 
   if(isLoading){
     return (
-      <div className="h-full grid place-content-center bg-base-300 col-span-1 md:col-span-3">
+      <div className="h-screen w-screen grid place-content-center bg-base-300">
         <span className="loading loading-spinner text-accent loading-xl"></span>
       </div>
     );
+  }
+
+  const handleSignOut = async() => {
+    try {
+        toast.info("signing out please wait",ToastStyles);
+        await signOut({ redirect: false });
+        toast.success("Logged out successfully", ToastStyles);
+        setTimeout(() => {
+          router.replace("/home");
+        }, 1500);
+    } catch(err) {
+      console.error("error while signing out the user", err);
+      toast.error("Couldn't log out", ToastStyles)
+    }
   }
 
   const tabs: TabInterface[] = [
@@ -73,6 +93,7 @@ const Profile = ({ children , params }: { children: ReactNode , params: Promise<
   return (
     <div className="min-h-screen bg-base-100 py-12 px-4 sm:px-6 lg:px-8">
       <ThemeToggleLogin />
+      <ToastContainer />
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Sidebar */}
@@ -100,7 +121,7 @@ const Profile = ({ children , params }: { children: ReactNode , params: Promise<
 
                 <SidebarTabs tabs={tabs} userid={id} />
 
-                <button className="btn btn-ghost justify-start w-full mt-4 text-error">
+                <button onClick={handleSignOut} className="btn btn-ghost justify-start w-full mt-4 text-error">
                   <span className="mr-2">
                     <FaSignOutAlt />
                   </span>{" "}
@@ -113,7 +134,7 @@ const Profile = ({ children , params }: { children: ReactNode , params: Promise<
           <div className="col-span-1 md:col-span-3 flex flex-col">
             <div className="bg-base-200 rounded-lg p-6 mb-4 shadow-md tracking-tight">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">
-                Hello, {data?.firstname}
+                Hello, {data?.firstname} {data?.lastname}
               </h1>
             </div>
 

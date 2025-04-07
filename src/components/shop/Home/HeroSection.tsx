@@ -3,7 +3,7 @@ import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
 import HeroImage from "@/public/images/LoginBG.png";
 import SummerCollection from "@/public/images/sumercollection.avif"
-import SpringCollection from "@/public/images/SpringCollection.jpg"
+import SpringCollection from "@/public/images/SpringCollection.jpeg"
 import { poppins } from "@/styles/fonts";
 import Link from "next/link";
 import { FaLongArrowAltRight } from "react-icons/fa";
@@ -23,7 +23,7 @@ const HeroSection = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
-    }, 5000); 
+    }, 4200); 
 
     return () => clearInterval(interval);
   }, []);
@@ -93,7 +93,7 @@ const HeroSection = () => {
               {carouselImages.map((image, index) => (
                 <div
                   key={index}
-                  className={`transition-opacity duration-700 ${
+                  className={`transition-opacity duration-1200 ${
                     index === currentSlide
                       ? "opacity-100"
                       : "opacity-0 absolute inset-0"
