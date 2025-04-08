@@ -27,7 +27,6 @@ export async function DELETE(
     const { id } = await params;
     await ConnectDB();
     await User.deleteOne({ $and: [{ _id: id }, { role: "user" }] });
-    console.log("$$$$$$$$$$$")
     return new Response("User deleted successfully", { status: 200 });
   } catch (err) {
     console.error("some error occured while deleting the user");
@@ -47,12 +46,9 @@ export async function PATCH(
     await ConnectDB();
     const user = await User.findOne({ _id: id });
     
-    console.log("************")
     if (!user) {
       return new Response("User not found", { status: 500 });
     }
-
-    console.log(user);
     
     const updateData: UpdatedUserInterface = {
       firstname: body?.firstname || user.firstname,
@@ -73,8 +69,6 @@ export async function PATCH(
       { _id: id },
       { $set: updateData }
     );
-
-    console.log("yahoooooooooooooo");
 
     return new Response("User updated successfully", { status: 200 });
   } catch (err) {

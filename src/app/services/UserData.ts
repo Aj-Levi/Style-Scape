@@ -16,7 +16,23 @@ export const usersApi = createApi({
       providesTags: (result, error, id) => [{ type: "User", id }],
     }),
 
-    updateUser: builder.mutation<string, { id: string, updatedUser: UpdatedUserInterface }>({
+    addUser: builder.mutation<
+      { success: boolean; message: string },
+      UpdatedUserInterface
+    >({
+      query: (user) => ({
+        url: `/api/users`,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: user,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    updateUser: builder.mutation<
+      string,
+      { id: string; updatedUser: UpdatedUserInterface }
+    >({
       query: ({ id, updatedUser }) => ({
         url: `api/users/${id}`,
         method: "PATCH",
@@ -26,7 +42,7 @@ export const usersApi = createApi({
 
       invalidatesTags: (result, error, { id }) => [
         { type: "User", id },
-        { type: "User" }
+        { type: "User" },
       ],
     }),
 
@@ -40,4 +56,10 @@ export const usersApi = createApi({
   }),
 });
 
-export const { useGetAllUsersQuery, useGetUserByIdQuery, useUpdateUserMutation, useDeleteUserMutation } = usersApi;
+export const {
+  useGetAllUsersQuery,
+  useGetUserByIdQuery,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+  useAddUserMutation,
+} = usersApi;

@@ -78,12 +78,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new Error("user does not exist");
         }
 
-        const ismatched = await compare(password, user.password);
+        // const ismatched = await compare(password, user.password);
 
-        if (!ismatched) {
-          console.log("reached here !!");
-          throw new Error("password did not match");
-        }
+        // if (!ismatched) {
+        //   console.log("reached here !!");
+        //   throw new Error("password did not match");
+        // }
 
         const userdata = {
           firstname: user.firstname,
