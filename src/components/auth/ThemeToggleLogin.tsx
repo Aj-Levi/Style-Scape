@@ -12,7 +12,7 @@ const ThemeToggleLogin = () => {
       onClick={toggleTheme}
       aria-label="Toggle theme"
     >
-      {currentTheme === "synthwave" ? <FiSun className="w-5 h-5" /> : <FiMoon className="w-5 h-5" />}
+      {currentTheme === "abyss" ? <FiSun className="w-5 h-5" /> : <FiMoon className="w-5 h-5" />}
     </button>
   );
 };

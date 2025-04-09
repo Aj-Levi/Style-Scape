@@ -4,11 +4,12 @@ import React from "react";
 import Link from "next/link";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { loginUser } from "@/actions/User";
-import { signIn } from "@/auth";
 import ShowHidePassword from "@/components/auth/ShowHidePassword";
 import { toast, ToastContainer } from "react-toastify";
 import ToastStyles from "@/styles/ToastStyles";
 import { useRouter } from "next/navigation";
+import AuthProvider from "@/components/auth/AuthProvider";
+import EmailInput from "@/components/auth/EmailInput";
 
 const Login = () => {
   const router = useRouter();
@@ -39,31 +40,8 @@ const Login = () => {
                 toast.error(response.message, ToastStyles);
               };
             }} className="space-y-6 mt-6">
-              <label className="input validator w-full">
-                <svg
-                  className="h-[1em]"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <g
-                    strokeLinejoin="round"
-                    strokeLinecap="round"
-                    strokeWidth="2.5"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                  </g>
-                </svg>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="mail@site.com"
-                  required
-                />
-              </label>
 
+              <EmailInput />
               <ShowHidePassword />
 
               <button type="submit" className="w-full btn btn-secondary">
@@ -79,41 +57,8 @@ const Login = () => {
               <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
             </div>
 
-            <form
-              action={async () => {
-                try {
-                  await signIn("google");
-                } catch (error) {
-                  toast.error("Failed to sign in with Google", ToastStyles);
-                }
-              }}
-            >
-              <button
-                type="submit"
-                className="flex items-center justify-center w-full btn btn-primary"
-              >
-                <FaGoogle className="mr-2" size={18} />
-                <span className="font-medium">Sign in with Google</span>
-              </button>
-            </form>
-
-            <form
-              action={async () => {
-                try {
-                  await signIn("github");
-                } catch (error) {
-                  toast.error("Failed to sign in with GitHub", ToastStyles);
-                }
-              }}
-            >
-              <button
-                type="submit"
-                className="flex items-center justify-center w-full btn btn-primary"
-              >
-                <FaGithub className="mr-2" size={18} />
-                <span className="font-medium">Sign in with GitHub</span>
-              </button>
-            </form>
+            <AuthProvider provider="google" icon={<FaGoogle className="mr-2" size={18} />} />
+            <AuthProvider provider="github" icon={<FaGithub className="mr-2" size={18} />} />
           </div>
 
           <div className="mt-6 text-center">

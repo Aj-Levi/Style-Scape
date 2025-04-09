@@ -11,14 +11,14 @@ export async function GET() {
   } catch (err) {
     console.error("some error occured while getting all the users");
     return new Response("some error occured while getting all the users", {
-      status: 404,
+      status: 500,
     });
   }
 }
 
 export async function POST(Req: Request) {
   const body = await Req.json();
-  const {email, password, firstname, lastname} = body;
+  const {email, password, firstname, lastname, role} = body;
 
   await ConnectDB();
 
@@ -27,11 +27,10 @@ export async function POST(Req: Request) {
     return Response.json({ success: false, message: "This User Already Exists" });
   }
 
-  // hashing the user password by adding salt to it
   const salt = await bcrypt.genSalt(12);
   const hashedpassword = await bcrypt.hash(password, salt);
 
-  await User.create({ firstname, lastname, email, password: hashedpassword });
+  await User.create({ firstname, lastname, email, password: hashedpassword, role });
   console.log("------ User registered successfully ------");
 
   return Response.json({ success: true, message: "Registered Successfully" });

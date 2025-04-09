@@ -6,10 +6,10 @@ import {
 } from "@/app/services/UserData";
 import { signOut } from "next-auth/react";
 import ToastStyles from "@/styles/ToastStyles";
-import bcrypt from "bcryptjs";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import Modal from "@/components/Modal";
 
 const UserSettings = ({ params }: { params: Promise<{ id: string }> }) => {
   const router = useRouter();
@@ -18,69 +18,73 @@ const UserSettings = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = unwrappedParams;
 
   const [UpdatedPass, setUpdatedPass] = useState<string>("");
-  const [PassError, setPassError] = useState<boolean>(false);
+  const [PassError, setPassError] = useState<boolean>(true);
+  const [ConfirmPass, setConfirmPass] = useState<string>("");
+  const [PasswordsMatch, setPasswordsMatch] = useState<boolean>(true);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
-  const [
-    deleteUser,
-    { isLoading: isLoadingDelete },
-  ] = useDeleteUserMutation();
-  const [
-    updateUser,
-    { isLoading: isLoadingUpdate },
-  ] = useUpdateUserMutation();
+  const [deleteUser, { isLoading: isLoadingDelete }] = useDeleteUserMutation();
+  const [updateUser, { isLoading: isLoadingUpdate }] = useUpdateUserMutation();
 
-  if (isLoadingDelete || isLoadingUpdate) {
-    return (
-      <div className="h-full grid place-content-center bg-base-300 col-span-1 md:col-span-3">
-        <span className="loading loading-spinner text-accent loading-xl"></span>
-      </div>
-    );
-  }
-
-  const ValidatePassword = (value: string): void => {
-    console.log(value.length);
-    if (value && value.length >= 1 && value.length < 6) {
+  const ValidatePassword = (update: string, confirm: string): void => {
+    if (update && update.length >= 1 && update.length < 6) {
       setPassError(true);
     } else {
       setPassError(false);
     }
+
+    if (update && confirm && update !== confirm) {
+      setPasswordsMatch(false);
+    } else {
+      setPasswordsMatch(true);
+    }
   };
 
   const handleDeletion = async () => {
+    setIsDeleting(true);
     try {
       await deleteUser(id);
-      toast.success("User deleted successfully", ToastStyles);
+      toast.success("Account deleted successfully", ToastStyles);
       toast.info("Redirecting please wait", ToastStyles);
+      setIsDeleteModalOpen(false);
 
       setTimeout(async () => {
         await signOut({ redirect: false });
         router.replace("/home");
       }, 2000);
     } catch (err) {
-      toast.error("Could not delete the user", ToastStyles);
-      console.error("Could not delete the user", err);
+      toast.error("Could not delete the Account", ToastStyles);
+      console.error("Could not delete the Account", err);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   const handlePasswordChange = async (formdata: FormData): Promise<void> => {
     const updatedpassword = formdata.get("updatedpassword") as string;
+    const confirmpassword = formdata.get("confirmpassword") as string;
 
-    const salt = await bcrypt.genSalt(12);
-    const hashedpassword = await bcrypt.hash(updatedpassword, salt);
+    if (updatedpassword !== confirmpassword) {
+      toast.warn("Passwords do not match", ToastStyles);
+      return;
+    }
 
     try {
-      const updatedUser = { password: hashedpassword };
+      const updatedUser = { password: updatedpassword };
       await updateUser({ id, updatedUser });
-      toast.success("password updated successfully", ToastStyles);
+      toast.success("Password updated successfully", ToastStyles);
       setUpdatedPass("");
+      setConfirmPass("");
     } catch (err) {
       toast.error("Could not update the password", ToastStyles);
-      console.error("Could not delete the user", err);
+      console.error("Could not update the password", err);
     }
   };
 
   return (
     <div className="col-span-1 md:col-span-3">
+      <ToastContainer />
       <div className="card bg-base-200 shadow-xl">
         <div className="card-body">
           <h2 className="card-title text-2xl font-bold mb-8 pb-2 border-b border-base-300">
@@ -108,7 +112,7 @@ const UserSettings = ({ params }: { params: Promise<{ id: string }> }) => {
                     ): void => {
                       const value = e.target.value;
                       setUpdatedPass(value);
-                      ValidatePassword(value);
+                      ValidatePassword(value, ConfirmPass);
                     }}
                     placeholder="Enter updated password"
                     className={`input input-bordered w-full ${
@@ -123,13 +127,54 @@ const UserSettings = ({ params }: { params: Promise<{ id: string }> }) => {
                     </label>
                   )}
                 </div>
+
+                <div className="form-control w-full">
+                  <label className="label">
+                    <span className="label-text">Confirm Password</span>
+                  </label>
+                  <input
+                    type="password"
+                    name="confirmpassword"
+                    value={ConfirmPass}
+                    onChange={(
+                      e: React.ChangeEvent<HTMLInputElement>
+                    ): void => {
+                      const value = e.target.value;
+                      setConfirmPass(value);
+                      ValidatePassword(UpdatedPass, value);
+                    }}
+                    placeholder="Confirm your password"
+                    className={`input input-bordered w-full ${
+                      !PasswordsMatch ? "input-error" : ""
+                    }`}
+                  />
+                  {!PasswordsMatch && (
+                    <label className="label">
+                      <span className="label-text-alt text-error">
+                        Passwords do not match
+                      </span>
+                    </label>
+                  )}
+                </div>
+
                 <div className="form-control mt-4">
                   <button
                     type="submit"
-                    disabled={PassError}
+                    disabled={
+                      (PassError && UpdatedPass.length > 0) ||
+                      !PasswordsMatch ||
+                      isLoadingUpdate
+                    }
                     className="btn btn-primary w-full sm:w-auto"
                   >
-                    Change Password
+                    {isLoadingUpdate ? (
+                      <>
+                        <span className="loading loading-spinner loading-xs"></span>
+                        Updating...
+                      </>
+                    ) : (
+                      "Change Password"
+                    )}
                   </button>
                 </div>
               </form>
@@ -147,11 +192,57 @@ const UserSettings = ({ params }: { params: Promise<{ id: string }> }) => {
                   action cannot be undone.
                 </p>
                 <button
-                  onClick={handleDeletion}
+                  onClick={() => setIsDeleteModalOpen(true)}
+                  disabled={isDeleting || isLoadingDelete}
                   className="btn btn-error btn-outline hover:btn-error w-full sm:w-48"
                 >
-                  Delete Account
+                  {isDeleting || isLoadingDelete ? (
+                    <>
+                      <span className="loading loading-spinner loading-xs"></span>
+                      Deleting...
+                    </>
+                  ) : (
+                    "Delete Account"
+                  )}
                 </button>
+                <Modal
+                  IsOpen={isDeleteModalOpen}
+                  setIsOpen={setIsDeleteModalOpen}
+                  title="Confirm Account Deletion"
+                  size="sm"
+                >
+                  <div className="space-y-4">
+                    <p className="text-sm">
+                      Are you sure you want to delete your account? This action
+                      cannot be undone and all your data will be permanently
+                      lost.
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row gap-3 justify-end mt-4">
+                      <button
+                        className="btn btn-outline btn-sm"
+                        onClick={() => setIsDeleteModalOpen(false)}
+                      >
+                        Cancel
+                      </button>
+
+                      <button
+                        className="btn btn-error btn-sm"
+                        onClick={handleDeletion}
+                        disabled={isDeleting}
+                      >
+                        {isDeleting ? (
+                          <>
+                            <span className="loading loading-spinner loading-xs"></span>
+                            Deleting...
+                          </>
+                        ) : (
+                          "Delete Account"
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </Modal>
               </div>
             </div>
           </div>

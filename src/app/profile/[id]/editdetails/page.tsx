@@ -8,7 +8,7 @@ import {
   useGetUserByIdQuery,
   useUpdateUserMutation,
 } from "@/app/services/UserData";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import ToastStyles from "@/styles/ToastStyles";
 import dummyimage from "@/public/images/LoginBG.png";
 
@@ -23,12 +23,21 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
   const [Address, setAddress] = useState<string | undefined>();
   const [Image, setImage] = useState<string | undefined>();
   const [PhoneError, setPhoneError] = useState<boolean>(false);
+  const [IsUpdating, setIsUpdating] = useState<boolean>(false);
 
   const { data, isError, isLoading } = useGetUserByIdQuery(id);
   const [
     updateUser,
     { isLoading: isLoadingUpdate },
   ] = useUpdateUserMutation();
+
+  if (isLoading) {
+    return (
+      <div className="h-full grid place-content-center bg-base-300 col-span-1 md:col-span-3">
+        <span className="loading loading-spinner text-accent loading-xl"></span>
+      </div>
+    );
+  }
 
   if (isError) {
     return (
@@ -55,20 +64,12 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
     );
   }
 
-  if (isLoading || isLoadingUpdate) {
-    return (
-      <div className="h-full grid place-content-center bg-base-300 col-span-1 md:col-span-3">
-        <span className="loading loading-spinner text-accent loading-xl"></span>
-      </div>
-    );
-  }
-
   const reset = (): void => {
-    setFirstName("");
-    setLastName("");
-    setPhone("");
-    setAddress("");
-    setImage("");
+    setFirstName(data?.firstname || "");
+    setLastName(data?.lastname || "");
+    setPhone(data?.phone || "");
+    setAddress(data?.address || "");
+    setImage(data?.image || "");
   };
 
   const validatePhone = (value: string | undefined): boolean => {
@@ -94,6 +95,9 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
   };
 
   const handleSubmit = async (formdata: FormData): Promise<void> => {
+
+    setIsUpdating(true);
+    
     const firstname = formdata.get("firstname") as string | undefined;
     const lastname = formdata.get("lastname") as string | undefined;
     const phone = formdata.get("phone") as string | undefined;
@@ -116,11 +120,14 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
     } catch (err) {
       toast.error("couldn't update the user info", ToastStyles);
       console.error("couldn't update the user info", err);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
   return (
     <div className="col-span-1 md:col-span-3">
+      <ToastContainer />
       <div className="card bg-base-200 shadow-xl">
         <div className="card-body">
           <div className="flex justify-between items-center">
@@ -144,7 +151,13 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
                 <input
                   type="text"
                   name="firstname"
-                  value={FirstName?FirstName:data?.firstname?data.firstname:""}
+                  value={
+                    FirstName
+                      ? FirstName
+                      : data?.firstname
+                      ? data.firstname
+                      : ""
+                  }
                   onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
                     setFirstName(e.target.value)
                   }
@@ -161,7 +174,9 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
                 <input
                   type="text"
                   name="lastname"
-                  value={LastName?LastName:data?.lastname?data.lastname:""}
+                  value={
+                    LastName ? LastName : data?.lastname ? data.lastname : ""
+                  }
                   onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
                     setLastName(e.target.value)
                   }
@@ -178,10 +193,10 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
                 <input
                   type="text"
                   name="phone"
-                  value={Phone?Phone:data?.phone?data.phone:""}
+                  value={Phone ? Phone : data?.phone ? data.phone : ""}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                     const newValue = e.target.value;
-                    setPhone(e.target.value);
+                    setPhone(newValue);
                     validatePhone(newValue);
                   }}
                   placeholder="Enter your phone number"
@@ -209,7 +224,7 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
                 <textarea
                   name="address"
                   placeholder="Enter your full address"
-                  value={Address?Address:data?.address?data.address:""}
+                  value={Address ? Address : data?.address ? data.address : ""}
                   onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void =>
                     setAddress(e.target.value)
                   }
@@ -231,7 +246,7 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
                 <input
                   type="text"
                   name="image"
-                  value={Image?Image:data?.image?data.image:""}
+                  value={Image ? Image : data?.image ? data.image : ""}
                   onChange={handleImageChange}
                   placeholder="Enter image URL (e.g., https://example.com/image.jpg)"
                   className="input input-bordered w-full"
@@ -266,12 +281,19 @@ const EditDetails = ({ params }: { params: Promise<{ id: string }> }) => {
               </button>
               <button
                 type="submit"
-                disabled={PhoneError && (data?.phone!==null || data.phone!==undefined)}
+                disabled={(PhoneError && Phone && Phone?.length > 0) || IsUpdating || isLoadingUpdate}
                 className="btn btn-primary"
               >
-                <>
-                  <FaSave className="mr-2" /> Save Changes
-                </>
+                {IsUpdating || isLoadingUpdate ? (
+                  <>
+                    <span className="loading loading-spinner loading-xs"></span>
+                    Updating...
+                  </>
+                ) : (
+                  <>
+                    <FaSave className="mr-2" /> Save Changes
+                  </>
+                )}
               </button>
             </div>
           </form>

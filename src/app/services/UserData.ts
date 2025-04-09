@@ -1,4 +1,4 @@
-import { UpdatedUserInterface, UserInterface } from "@/Interfaces";
+import { AddUserInterface, UpdatedUserInterface, UserInterface } from "@/Interfaces";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const usersApi = createApi({
@@ -18,7 +18,7 @@ export const usersApi = createApi({
 
     addUser: builder.mutation<
       { success: boolean; message: string },
-      UpdatedUserInterface
+      AddUserInterface
     >({
       query: (user) => ({
         url: `/api/users`,
@@ -51,7 +51,11 @@ export const usersApi = createApi({
         url: `api/users/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["User"],
+
+      invalidatesTags: (result, error,id ) => [
+        { type: "User", id },
+        { type: "User" },
+      ],
     }),
   }),
 });

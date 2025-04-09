@@ -4,6 +4,7 @@ import { useGetUserByIdQuery } from "@/app/services/UserData";
 import React from "react";
 import { RiEdit2Line } from "react-icons/ri";
 import { useRouter } from "next/navigation";
+import { ToastContainer } from "react-toastify";
 
 const PersonalDetails = ({params}: {params: Promise<{id: string}>}) => {
 
@@ -13,6 +14,14 @@ const PersonalDetails = ({params}: {params: Promise<{id: string}>}) => {
   const { id } = unwrappedParams;
 
   const {data , isError , isLoading} = useGetUserByIdQuery(id);
+
+  if(isLoading){
+    return (
+      <div className="h-full grid place-content-center bg-base-300 col-span-1 md:col-span-3">
+        <span className="loading loading-spinner text-accent loading-xl"></span>
+      </div>
+    );
+  }
 
   if(isError){
     return (
@@ -32,16 +41,9 @@ const PersonalDetails = ({params}: {params: Promise<{id: string}>}) => {
     );
   }
 
-  if(isLoading){
-    return (
-      <div className="h-full grid place-content-center bg-base-300 col-span-1 md:col-span-3">
-        <span className="loading loading-spinner text-accent loading-xl"></span>
-      </div>
-    );
-  }
-
   return (
     <div className="col-span-1 md:col-span-3">
+      <ToastContainer />
       <div className="card bg-base-200 shadow-xl">
         <div className="card-body">
           <div className="flex justify-between items-center">

@@ -1,14 +1,7 @@
 import HeroSection from '@/components/shop/Home/HeroSection'
-import { getSession } from '@/lib/getSession'
 import React from 'react'
 
-const Home = async () => {
-
-  // const session = await getSession();
-  // console.log("********************");
-  // console.log(session);
-  // console.log("********************");
-  
+const Home = async () => {  
   return (
     <div className='w-screen py-[0rem]'>
       <HeroSection />

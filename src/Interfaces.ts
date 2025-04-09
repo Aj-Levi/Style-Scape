@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import { Document, ObjectId } from "mongoose";
 import { ReactNode } from "react";
 
 export interface ZustandStoreInterface{
@@ -10,6 +10,7 @@ export interface ZustandStoreInterface{
 }
 
 export interface UserInterface extends Document{
+    _id: ObjectId;
     firstname: string;
     lastname?: string;
     email: string;
@@ -28,6 +29,15 @@ export interface UpdatedUserInterface{
     phone?: string;
     address?: string;
     password?: string;
+    role?: 'user' | 'admin';
+}
+
+export interface AddUserInterface{
+    firstname: string;
+    lastname?: string;
+    email: string;
+    password: string;
+    role: 'user' | 'admin';
 }
 
 export interface ToastInterface{
