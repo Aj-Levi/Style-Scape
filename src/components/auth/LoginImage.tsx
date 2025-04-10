@@ -1,14 +1,14 @@
 import React from "react";
 import Image from "next/image";
-import LoginBgImage from "@/public/images/LoginBG.png";
 
 const LoginImage = () => {
   return (
     <div className="max-md:hidden w-[45%] rounded-r-2xl overflow-clip relative">
       <Image
-        src={LoginBgImage}
+        src={'/LoginBG.png'}
         alt="Fashion Login"
-        className="h-full w-full object-cover" // Added blur filter
+        fill
+        className="object-cover" // Added blur filter
         priority
       />
       {/* Company name and punch line overlay with glassmorphism */}

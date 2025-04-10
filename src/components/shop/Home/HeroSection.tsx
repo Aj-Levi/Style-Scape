@@ -1,9 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useEffect, useRef } from "react";
-import HeroImage from "@/public/images/LoginBG.png";
-import SummerCollection from "@/public/images/sumercollection.avif"
-import SpringCollection from "@/public/images/SpringCollection.jpeg"
+import React, { useState, useEffect } from "react";
 import { poppins } from "@/styles/fonts";
 import Link from "next/link";
 import { FaLongArrowAltRight } from "react-icons/fa";
@@ -11,9 +8,9 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import CountUpItem from "./CountUpItem";
 
 const carouselImages = [
-  { src: HeroImage, alt: "Fashion collection" },
-  { src: SummerCollection, alt: "Summer collection" },
-  { src: SpringCollection, alt: "Spring collection" },
+  { src: '/LoginBG.png', alt: "Fashion collection" },
+  { src: '/images/sumercollection.avif', alt: "Summer collection" },
+  { src: '/images/SpringCollection.jpeg', alt: "Spring collection" },
 ];
 
 const HeroSection = () => {

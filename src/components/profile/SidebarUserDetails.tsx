@@ -3,7 +3,6 @@
 import { useGetUserByIdQuery } from "@/app/services/UserData";
 import Image from "next/image";
 import React from "react";
-import loginbg from "@/public/HomeFavicon.png";
 
 const SidebarUserDetails = ({ id }: { id: string }) => {
   const { data, isLoading } = useGetUserByIdQuery(id);
@@ -21,7 +20,7 @@ const SidebarUserDetails = ({ id }: { id: string }) => {
       <div className="avatar">
         <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
           <Image
-            src={data?.image ? data?.image : loginbg}
+            src={data?.image ? data?.image : '/AccountFallback.png'}
             alt="Profile"
             width={128}
             height={128}

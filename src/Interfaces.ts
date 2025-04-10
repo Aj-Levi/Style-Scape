@@ -40,6 +40,37 @@ export interface AddUserInterface{
     role: 'user' | 'admin';
 }
 
+export interface CategoryInterface extends Document{
+    _id: string;
+    name: string;
+    isfeatured: boolean;
+    image?: string;
+    description?: string;
+    metatitle?: string;
+    metadesc?: string;
+    metakeywords?: string[];
+}
+
+export interface UpdatedCategoryInterface{
+    name?: string;
+    isfeatured?: boolean;
+    image?: string;
+    description?: string;
+    metatitle?: string;
+    metadesc?: string;
+    metakeywords?: string[];
+}
+
+export interface AddCategoryInterface{
+    name: string;
+    isfeatured: boolean;
+    image?: string;
+    description?: string;
+    metatitle?: string;
+    metadesc?: string;
+    metakeywords?: string[];
+}
+
 export interface ToastInterface{
     autoClose: number;
     className: string;
