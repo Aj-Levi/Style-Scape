@@ -36,7 +36,7 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="w-full min-h-[90vh] bg-gradient-to-br from-base-100 to-base-300">
+    <div className="w-full bg-gradient-to-br from-base-100 to-base-300">
       <div className="container mx-auto py-16 px-4 flex flex-col-reverse md:flex-row items-center gap-12">
         {/* Content area */}
         <div className="w-full md:w-1/2 space-y-8">
@@ -57,7 +57,7 @@ const HeroSection = () => {
           </div>
 
           <div className="flex flex-wrap gap-4">
-            <Link href="/shop" className="group">
+            <Link href="/categories" className="group">
               <button className="btn btn-primary px-8 py-3 flex items-center gap-2 transition-all hover:shadow-lg hover:bg-primary">
                 Shop Now
                 <FaLongArrowAltRight
@@ -66,7 +66,7 @@ const HeroSection = () => {
                 />
               </button>
             </Link>
-            <Link href="/collections" className="group">
+            <Link href="/categories" className="group">
               <button className="btn btn-outline px-8 py-3">
                 View Collections
               </button>

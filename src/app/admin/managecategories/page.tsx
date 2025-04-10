@@ -4,14 +4,15 @@ import {
   useAddCategoryMutation,
   useDeleteCategoryMutation,
   useGetAllCategoriesQuery,
-  useUpdateCategoryMutation
+  useUpdateCategoryMutation,
 } from "@/app/services/CategoryData";
 import ThemeToggleLogin from "@/components/auth/ThemeToggleLogin";
 import Modal from "@/components/Modal";
+import ImageKit from "@/components/shop/ImageKit";
 import {
   AddCategoryInterface,
   CategoryInterface,
-  UpdatedCategoryInterface
+  UpdatedCategoryInterface,
 } from "@/Interfaces";
 import ToastStyles from "@/styles/ToastStyles";
 import { useRouter } from "next/navigation";
@@ -21,10 +22,15 @@ import { toast, ToastContainer } from "react-toastify";
 const ManageCategories = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [onlyFeatured, setOnlyFeatured] = useState<boolean>(false);
-  const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState<boolean>(false);
-  const [isEditCategoryModalOpen, setIsEditCategoryModalOpen] = useState<boolean>(false);
-  const [categoryToEdit, setCategoryToEdit] = useState<CategoryInterface | null>(null);
-  const [categoryIdToDelete, setCategoryIdToDelete] = useState<string | null>(null);
+  const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] =
+    useState<boolean>(false);
+  const [isEditCategoryModalOpen, setIsEditCategoryModalOpen] =
+    useState<boolean>(false);
+  const [categoryToEdit, setCategoryToEdit] =
+    useState<CategoryInterface | null>(null);
+  const [categoryIdToDelete, setCategoryIdToDelete] = useState<string | null>(
+    null
+  );
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
@@ -74,8 +80,8 @@ const ManageCategories = () => {
       description,
       metatitle,
       metadesc,
-      metakeywords: metakeywords.split(",").map(keyword => keyword.trim()),
-      isfeatured
+      metakeywords: metakeywords.split(",").map((keyword) => keyword.trim()),
+      isfeatured,
     };
 
     try {
@@ -96,7 +102,7 @@ const ManageCategories = () => {
 
   const handleUpdate = async (formData: FormData): Promise<void> => {
     if (!categoryToEdit) return;
-    
+
     setIsUpdating(true);
     const name = formData.get("name") as string;
     const image = formData.get("image") as string;
@@ -112,14 +118,14 @@ const ManageCategories = () => {
       description,
       metatitle,
       metadesc,
-      metakeywords: metakeywords.split(",").map(keyword => keyword.trim()),
-      isfeatured
+      metakeywords: metakeywords.split(",").map((keyword) => keyword.trim()),
+      isfeatured,
     };
 
     try {
-      await updateCategory({ 
-        id: String(categoryToEdit._id), 
-        updatedCategory 
+      await updateCategory({
+        id: String(categoryToEdit._id),
+        updatedCategory,
       });
       toast.success("Category updated successfully", ToastStyles);
     } catch (err) {
@@ -141,7 +147,10 @@ const ManageCategories = () => {
     ? categories?.filter(
         (category: CategoryInterface) =>
           category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (category.description && category.description.toLowerCase().includes(searchQuery.toLowerCase()))
+          (category.description &&
+            category.description
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase()))
       )
     : categories;
 
@@ -156,8 +165,19 @@ const ManageCategories = () => {
       <ToastContainer />
       <div className="flex justify-between items-center mb-6">
         <button onClick={() => router.back()} className="btn btn-outline">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 mr-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
           </svg>
           Back to Dashboard
         </button>
@@ -165,7 +185,9 @@ const ManageCategories = () => {
       </div>
 
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-6 underline decoration-3">Manage Categories</h1>
+        <h1 className="text-3xl font-bold mb-6 underline decoration-3">
+          Manage Categories
+        </h1>
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-6">
           <div className="flex-1">
             <div className="relative">
@@ -227,7 +249,7 @@ const ManageCategories = () => {
                 name="onlyfeatured"
                 id="onlyfeatured"
                 checked={onlyFeatured}
-                onChange={() => setOnlyFeatured(prev => !prev)}
+                onChange={() => setOnlyFeatured((prev) => !prev)}
               />
               <span className="label-text">Only Featured Categories</span>
             </label>
@@ -239,26 +261,40 @@ const ManageCategories = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredCategories && filteredCategories.length > 0 ? (
           filteredCategories.map((category: CategoryInterface) => (
-            <div key={String(category._id)} className="card bg-base-200 shadow-xl">
+            <div
+              key={String(category._id)}
+              className="card bg-base-200 shadow-xl"
+            >
               <figure className="relative h-48">
                 <div className="relative h-full w-full group">
                   {category.image ? (
-                    <img
-                      src={category.image}
-                      alt={category.name}
-                      className="h-full w-full object-cover group-hover:scale-110 transition-all duration-500"
-                    />
+                    <div className="h-full w-full overflow-hidden">
+                      <div className="h-full w-full object-cover group-hover:scale-110 transition-all duration-500">
+                        <ImageKit
+                          src={category.image}
+                          alt={category.name}
+                          width={400}
+                          height={192}
+                        />
+                      </div>
+                    </div>
                   ) : (
                     <div className="w-full h-full bg-base-300 flex items-center justify-center">
-                      <h3 className="text-xl font-bold text-center px-2">{category.name}</h3>
+                      <h3 className="text-xl font-bold text-center px-2">
+                        {category.name}
+                      </h3>
                     </div>
                   )}
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <h3 className="text-xl font-bold text-white text-center px-2">{category.name}</h3>
+                    <h3 className="text-xl font-bold text-white text-center px-2">
+                      {category.name}
+                    </h3>
                   </div>
                 </div>
                 {category.isfeatured && (
-                  <div className="absolute top-2 right-2 badge badge-secondary">Featured</div>
+                  <div className="absolute top-2 right-2 badge badge-secondary">
+                    Featured
+                  </div>
                 )}
               </figure>
               <div className="card-body">
@@ -331,7 +367,7 @@ const ManageCategories = () => {
             <input
               type="text"
               name="image"
-              placeholder="Enter image URL"
+              placeholder="Enter image URL uploaded on imagekit"
               className="input input-bordered w-full"
             />
           </div>
@@ -375,7 +411,9 @@ const ManageCategories = () => {
 
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Meta Keywords (comma separated)</span>
+              <span className="label-text">
+                Meta Keywords (comma separated)
+              </span>
             </label>
             <input
               type="text"
@@ -387,7 +425,11 @@ const ManageCategories = () => {
 
           <div className="form-control">
             <label className="cursor-pointer label justify-start gap-3">
-              <input type="checkbox" name="isfeatured" className="checkbox checkbox-primary" />
+              <input
+                type="checkbox"
+                name="isfeatured"
+                className="checkbox checkbox-primary"
+              />
               <span className="label-text">Featured Category</span>
             </label>
           </div>
@@ -487,7 +529,9 @@ const ManageCategories = () => {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Meta Keywords (comma separated)</span>
+                <span className="label-text">
+                  Meta Keywords (comma separated)
+                </span>
               </label>
               <input
                 type="text"
