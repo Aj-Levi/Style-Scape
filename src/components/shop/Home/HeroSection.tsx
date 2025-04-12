@@ -20,7 +20,7 @@ const HeroSection = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
-    }, 4200); 
+    }, 3500); 
 
     return () => clearInterval(interval);
   }, []);

@@ -10,10 +10,16 @@ export async function middleware(Request: NextRequest) {
         if(path.startsWith("/profile")) return NextResponse.next();
         if(path.startsWith("/admin")) {
             if(session.user.role === "admin") return NextResponse.next();
+        }if(path.startsWith("/api")) {
+            if(path.endsWith("/users") || path.startsWith("/api/categories")) {
+                if(session.user.role === "admin") return NextResponse.next();
+                return NextResponse.redirect(new URL("/home", Request.url));
+            }
+            return NextResponse.next();
         }
         return NextResponse.redirect(new URL("/home", Request.url));
     }else{
-        if(path.startsWith("/profile") || path.startsWith("/admin")) return NextResponse.redirect(new URL("/login", Request.url));
+        if(!path.startsWith("/login") && !path.startsWith("/sign-up")) return NextResponse.redirect(new URL("/login", Request.url));
         return NextResponse.next();
     }
 }
@@ -23,6 +29,7 @@ export const config = {
         "/login",
         "/sign-up",
         "/profile/:path*",
-        "/admin/:path*"
+        "/admin/:path*",
+        "/api/:path*"
     ]
 }

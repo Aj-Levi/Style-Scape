@@ -1,8 +1,9 @@
 "use client";
 
 import { useGetUserByIdQuery } from "@/app/services/UserData";
-import Image from "next/image";
+import { Image } from "@imagekit/next";
 import React from "react";
+import ProfileImgUpload from "./ProfileImgUpload";
 
 const SidebarUserDetails = ({ id }: { id: string }) => {
   const { data, isLoading } = useGetUserByIdQuery(id);
@@ -18,13 +19,14 @@ const SidebarUserDetails = ({ id }: { id: string }) => {
   return (
     <>
       <div className="avatar">
-        <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+        <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 relative">
           <Image
-            src={data?.image ? data?.image : '/AccountFallback.png'}
-            alt="Profile"
+            src={data?.image ? data?.image : "/AccountFallback.png"}
+            alt="Profile Image"
             width={128}
             height={128}
           />
+          <ProfileImgUpload id={id} isAbsolute={true} />
         </div>
       </div>
       <h2 className="text-2xl font-bold mt-4">

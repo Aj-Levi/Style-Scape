@@ -20,10 +20,13 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // Close modal when clicking outside
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+      console.log("before set",IsOpen);
       setIsOpen(false);
+      console.log("after set",IsOpen);
+
     }
   };
 
@@ -49,7 +52,11 @@ const Modal: React.FC<ModalProps> = ({
           <h3 className="font-bold text-lg">{title}</h3>
           <button
             className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 cursor-pointer"
-            onClick={() => setIsOpen(false)}
+            onClick={(e) => {
+              console.log("hello")
+              e.stopPropagation();
+              setIsOpen(false)
+            }}
             aria-label="Close"
           >
             <IoCloseSharp size={25} />
