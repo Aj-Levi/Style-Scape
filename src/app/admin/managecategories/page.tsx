@@ -221,16 +221,17 @@ const ManageCategories = () => {
                 <p className="text-sm line-clamp-2">
                   {category.description || "No description available"}
                 </p>
-                <div className="card-actions justify-end mt-4">
+                <button onClick={():void => router.push(`/admin/managecategories/${String(category._id)}`)} className="btn btn-primary">See Products</button>
+                <div className="card-actions justify-between mt-4">
                   <button
                     onClick={() => openEditModal(category)}
-                    className="btn btn-sm btn-primary"
+                    className="btn btn-sm btn-primary flex-1"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => setCategoryIdToDelete(String(category._id))}
-                    className="btn btn-sm btn-error"
+                    className="btn btn-sm btn-error flex-1"
                   >
                     Delete
                   </button>

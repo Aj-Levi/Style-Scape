@@ -22,11 +22,7 @@ const ProductSchema = new mongoose.Schema<ProductInterface>(
     price: { type: Number, required: true },
     salePrice: { type: Number, required: false },
     category: { type: String, required: false },
-    categoryId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "Category",
-    },
+    categoryId: { type: String, required: true },
     reviews: [ReviewSchema],
     rating: {type: Number, required: true, default: 0},
     stock: { type: Number, required: true, default: 0 },

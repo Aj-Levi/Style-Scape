@@ -11,6 +11,8 @@ export async function GET(
   try {
     const { categoryId } = await params;
 
+    console.log("Category ID:", categoryId);
+
     if(!isValidObjectId(categoryId)) {
         return Response.json({
             success: false,
@@ -23,6 +25,8 @@ export async function GET(
     const products: ProductInterface[] = await Product.find({ 
       categoryId 
     });
+
+    console.log("Products fetched by category ID:", products);
     
     return Response.json({ 
       success: true, 

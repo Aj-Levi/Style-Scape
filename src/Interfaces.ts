@@ -98,7 +98,7 @@ export interface ProductInterface extends Document {
     price: number;
     salePrice?: number;
     category?: string;
-    categoryId: ObjectId;
+    categoryId: string;
     stock: number;
     images?: string[];
     isFeatured: boolean;
@@ -117,7 +117,7 @@ export interface UpdatedProductInterface {
     price?: number;
     salePrice?: number;
     category?: string;
-    categoryId?: ObjectId;
+    categoryId?: string;
     stock?: number;
     images?: string[];
     isFeatured?: boolean;
@@ -134,7 +134,7 @@ export interface AddProductInterface {
     price: number;
     salePrice?: number;
     category?: string;
-    categoryId: ObjectId;
+    categoryId: string;
     stock: number;
     images?: string[];
     isFeatured?: boolean;
