@@ -1,21 +1,45 @@
 "use client";
 
 import { useGetAllCategoriesQuery } from "@/app/services/CategoryData";
-import ImageKit from "@/components/shop/ImageKit";
 import { CategoryInterface } from "@/Interfaces";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { FaSearch, FaTimes } from "react-icons/fa";
+import { FaExclamationTriangle, FaSearch, FaTimes } from "react-icons/fa";
+import { Image } from "@imagekit/next"
 
 const Category = () => {
   const router = useRouter();
   const [search, setSearch] = useState<string>("");
-  const { data, isLoading } = useGetAllCategoriesQuery();
+  const { data, isLoading, error, refetch } = useGetAllCategoriesQuery();
 
   if (isLoading) {
     return (
       <div className="h-screen grid place-content-center bg-base-200">
         <span className="loading loading-spinner text-primary loading-lg"></span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="h-screen grid place-content-center bg-base-200">
+        <div className="card bg-base-100 shadow-xl p-8 max-w-md">
+          <div className="flex flex-col items-center text-center gap-4">
+            <FaExclamationTriangle className="text-error text-5xl" />
+            <h2 className="text-2xl font-bold">Error Loading Categories</h2>
+            <p className="text-gray-600 mb-4">
+              {error instanceof Error 
+                ? error.message 
+                : "Unable to fetch categories. Please try again later."}
+            </p>
+            <button 
+              onClick={() => refetch()} 
+              className="btn btn-primary"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -71,7 +95,7 @@ const Category = () => {
               )}
               <figure className="h-64 overflow-hidden">
                 <div className="h-full w-full hover:scale-110 transition-all duration-500">
-                  <ImageKit
+                  <Image
                     src={item.image ? item.image : ""}
                     alt={item.name}
                     height={400}

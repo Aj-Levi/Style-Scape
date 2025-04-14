@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const categoriesApi = createApi({
   reducerPath: "categories",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
-  tagTypes: ["Category"],
+  tagTypes: ["Category", "FeaturedCategory"],
   endpoints: (builder) => ({
     getAllCategories: builder.query<CategoryInterface[], void>({
       query: () => "api/categories",
@@ -14,6 +14,11 @@ export const categoriesApi = createApi({
     getCategoryById: builder.query<CategoryInterface, string>({
       query: (id) => `api/categories/${id}`,
       providesTags: (result, error, id) => [{ type: "Category", id }],
+    }),
+
+    getFeaturedCategories: builder.query<CategoryInterface[], void>({
+      query: () => `api/featuredCategories`,
+      providesTags: ["FeaturedCategory", "Category"],
     }),
 
     addCategory: builder.mutation<
@@ -26,11 +31,11 @@ export const categoriesApi = createApi({
         headers: { "Content-Type": "application/json" },
         body: category,
       }),
-      invalidatesTags: ["Category"],
+      invalidatesTags: ["Category", "FeaturedCategory"],
     }),
 
     updateCategory: builder.mutation<
-      string,
+      { success: boolean; message: string },
       { id: string; updatedCategory: UpdatedCategoryInterface }
     >({
       query: ({ id, updatedCategory }) => ({
@@ -39,22 +44,25 @@ export const categoriesApi = createApi({
         headers: { "Content-Type": "application/json" },
         body: updatedCategory,
       }),
-
       invalidatesTags: (result, error, { id }) => [
         { type: "Category", id },
-        { type: "Category" },
+        "Category",
+        "FeaturedCategory",
       ],
     }),
 
-    deleteCategory: builder.mutation<string, string>({
+    deleteCategory: builder.mutation<
+      { success: boolean; message: string },
+      string
+    >({
       query: (id) => ({
         url: `api/categories/${id}`,
         method: "DELETE",
       }),
-
-      invalidatesTags: (result, error,id ) => [
+      invalidatesTags: (result, error, id) => [
         { type: "Category", id },
-        { type: "Category" },
+        "Category",
+        "FeaturedCategory",
       ],
     }),
   }),
@@ -63,6 +71,7 @@ export const categoriesApi = createApi({
 export const {
   useGetAllCategoriesQuery,
   useGetCategoryByIdQuery,
+  useGetFeaturedCategoriesQuery,
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,
   useAddCategoryMutation,

@@ -71,6 +71,80 @@ export interface AddCategoryInterface{
     metakeywords?: string[];
 }
 
+export interface ReviewInterface extends Document {
+    _id: string;
+    name: string;
+    rating: number;
+    comment: string;
+    user: ObjectId;
+}
+
+export interface UpdatedReviewInterface {
+    rating?: number;
+    comment?: string;
+}
+
+export interface AddReviewInterface {
+    name: string;
+    rating: number;
+    comment: string;
+    user: ObjectId;
+}
+
+export interface ProductInterface extends Document {
+    _id: string;
+    name: string;
+    description?: string;
+    price: number;
+    salePrice?: number;
+    category?: string;
+    categoryId: ObjectId;
+    stock: number;
+    images?: string[];
+    isFeatured: boolean;
+    isOnSale: boolean;
+    sizes?: string[];
+    metatitle?: string;
+    metadesc?: string;
+    metakeywords?: string[];
+    reviews?: ReviewInterface[];
+    rating: number;
+}
+
+export interface UpdatedProductInterface {
+    name?: string;
+    description?: string;
+    price?: number;
+    salePrice?: number;
+    category?: string;
+    categoryId?: ObjectId;
+    stock?: number;
+    images?: string[];
+    isFeatured?: boolean;
+    isOnSale?: boolean;
+    sizes?: string[];
+    metatitle?: string;
+    metadesc?: string;
+    metakeywords?: string[];
+}
+
+export interface AddProductInterface {
+    name: string;
+    description?: string;
+    price: number;
+    salePrice?: number;
+    category?: string;
+    categoryId: ObjectId;
+    stock: number;
+    images?: string[];
+    isFeatured?: boolean;
+    isOnSale?: boolean;
+    sizes?: string[];
+    metatitle?: string;
+    metadesc?: string;
+    metakeywords?: string[];
+}
+
 export interface ToastInterface{
     autoClose: number;
     className: string;

@@ -13,7 +13,7 @@ const Header = () => {
           <div className="flex items-center cursor-pointer gap-x-4">
             <div className="relative w-8 h-8 rounded-full">
               <Image
-                src={'/HomeFavicon.png'}
+                src={"/HomeFavicon.png"}
                 alt="Logo"
                 fill
                 className="object-contain rounded-full"
@@ -24,9 +24,15 @@ const Header = () => {
             </div>
           </div>
           <ul className="max-lg:hidden flex gap-x-[1.25rem] font-bold text-[1.1rem] *:flex *:items-center *:cursor-pointer">
-            <li>Shop</li>
-            <li>Fetaured</li>
-            <li>New Arrivals</li>
+            <Link href={"#featured"}>
+              <li>Shop</li>
+            </Link>
+            <Link href={"#featured"}>
+              <li>Fetaured</li>
+            </Link>
+            <Link href={"#new-arrivals"}>
+              <li>New Arrivals</li>
+            </Link>
             <Link href={`/categories`}>
               <li>Categories</li>
             </Link>

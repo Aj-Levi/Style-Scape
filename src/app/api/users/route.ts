@@ -2,21 +2,42 @@ import ConnectDB from "@/lib/connectDB";
 import User from "@/lib/models/User";
 import { UserInterface } from "@/Interfaces";
 import bcrypt from "bcryptjs";
+import { getSession } from "@/lib/getSession";
 
 export async function GET() {
+
+  const session = await getSession();
+  if(!session?.user) {
+    return Response.json({success: false, message: "an active admin session is required"},{status: 500});
+  }
+
+  if(session.user.role === "user") {
+    return Response.json({success: false, message: "access denied"},{status: 500});
+  }
+
   try {
     await ConnectDB();
     const allusers: UserInterface[] = await User.find({});
     return allusers ? Response.json(allusers) : Response.json([]);
   } catch (err) {
     console.error("some error occured while getting all the users");
-    return new Response("some error occured while getting all the users", {
+    return Response.json({success: false, message:"some error occured while getting all the users"}, {
       status: 500,
     });
   }
 }
 
 export async function POST(Req: Request) {
+
+  const session = await getSession();
+  if(!session?.user) {
+    return Response.json({success: false, message: "an active admin session is required"},{status: 500});
+  }
+
+  if(session.user.role === "user") {
+    return Response.json({success: false, message: "access denied"},{status: 500});
+  }
+
   const body = await Req.json();
   const {email, password, firstname, lastname, role} = body;
 

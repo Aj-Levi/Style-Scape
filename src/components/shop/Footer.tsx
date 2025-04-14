@@ -33,11 +33,11 @@ const Footer = () => {
                     <div>
                         <h3 className="text-xl font-bold mb-4">Shop</h3>
                         <ul className="space-y-2 text-gray-400">
-                            <li><Link href="/collections/men" className="hover:text-white transition-colors">Men</Link></li>
-                            <li><Link href="/collections/women" className="hover:text-white transition-colors">Women</Link></li>
-                            <li><Link href="/collections/accessories" className="hover:text-white transition-colors">Accessories</Link></li>
-                            <li><Link href="/collections/new-arrivals" className="hover:text-white transition-colors">New Arrivals</Link></li>
-                            <li><Link href="/collections/sale" className="hover:text-white transition-colors">Sale</Link></li>
+                            <li><Link href="/home" className="hover:text-white transition-colors">Men</Link></li>
+                            <li><Link href="/home" className="hover:text-white transition-colors">Women</Link></li>
+                            <li><Link href="/home" className="hover:text-white transition-colors">Accessories</Link></li>
+                            <li><Link href="/home" className="hover:text-white transition-colors">New Arrivals</Link></li>
+                            <li><Link href="/home" className="hover:text-white transition-colors">Sale</Link></li>
                         </ul>
                     </div>
 
@@ -45,11 +45,11 @@ const Footer = () => {
                     <div>
                         <h3 className="text-xl font-bold mb-4">Help</h3>
                         <ul className="space-y-2 text-gray-400">
-                            <li><Link href="/customer-service" className="hover:text-white transition-colors">Customer Service</Link></li>
-                            <li><Link href="/my-account" className="hover:text-white transition-colors">My Account</Link></li>
-                            <li><Link href="/orders" className="hover:text-white transition-colors">Track Order</Link></li>
-                            <li><Link href="/returns" className="hover:text-white transition-colors">Returns & Exchanges</Link></li>
-                            <li><Link href="/shipping" className="hover:text-white transition-colors">Shipping Policy</Link></li>
+                            <li><Link href="/home" className="hover:text-white transition-colors">Customer Service</Link></li>
+                            <li><Link href="/home" className="hover:text-white transition-colors">My Account</Link></li>
+                            <li><Link href="/home" className="hover:text-white transition-colors">Track Order</Link></li>
+                            <li><Link href="/home" className="hover:text-white transition-colors">Returns & Exchanges</Link></li>
+                            <li><Link href="/home" className="hover:text-white transition-colors">Shipping Policy</Link></li>
                         </ul>
                     </div>
 

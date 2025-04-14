@@ -9,10 +9,13 @@ const CategorySchema = new mongoose.Schema<CategoryInterface>(
     description: { type: String },
     metatitle: { type: String },
     metadesc: { type: String },
-    metakeywords: { type: Array },
+    metakeywords: [{ type: String }],
   },
   { timestamps: true }
 );
+ 
+CategorySchema.index({ isfeatured: 1 }); 
+CategorySchema.index({ createdAt: -1 }); 
 
 const Category = mongoose.models?.Category || mongoose.model<CategoryInterface>('Category',CategorySchema);
 export default Category;

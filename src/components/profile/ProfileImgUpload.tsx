@@ -123,13 +123,15 @@ const ProfileImgUpload = ({ id, isAbsolute = true }: { id: string, isAbsolute: b
 
   return (
     <>
+    <div className={`${isAbsolute?"absolute right-[37%] bottom-0":""} cursor-pointer bg-accent p-[0.41rem] rounded-lg`}>
       <FaImage
         onClick={(): void => {
           setIsUploadModalOpen(prev => !prev);
         }}
-        className={`${isAbsolute?"absolute right-[42%] bottom-0":""} cursor-pointer text-primary`}
+        className={`text-primary`}
         size={20}
       />
+    </div>
       <Modal
         title="Upload Image"
         IsOpen={IsUploadModalOpen}

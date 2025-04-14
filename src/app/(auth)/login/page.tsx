@@ -30,12 +30,9 @@ const Login = () => {
               const response = await loginUser(formdata);
               if(response.success) {
                 toast.success(response.message, ToastStyles);
-                await new Promise(resolve=>{
-                  setTimeout(() => {
-                    resolve("toast shown");
-                  }, 2000);
-                })
-                router.push("/home");
+                setTimeout(() => {
+                  router.push("/home");
+                }, 2000);
               }else{
                 toast.error(response.message, ToastStyles);
               };

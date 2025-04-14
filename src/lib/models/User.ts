@@ -16,5 +16,10 @@ const UserSchema = new mongoose.Schema<UserInterface>(
   { timestamps: true }
 );
 
+UserSchema.index({ role: 1 }); 
+UserSchema.index({ authProviderId: 1 });
+UserSchema.index({ createdAt: -1 });
+UserSchema.index({ firstname: 1, lastname: 1 });
+
 const User = mongoose.models?.User || mongoose.model<UserInterface>('User',UserSchema);
 export default User;
