@@ -16,10 +16,7 @@ export const usersApi = createApi({
       providesTags: (result, error, id) => [{ type: "User", id }],
     }),
 
-    addUser: builder.mutation<
-      { success: boolean; message: string },
-      AddUserInterface
-    >({
+    addUser: builder.mutation<{ message: string },AddUserInterface>({
       query: (user) => ({
         url: `/api/users`,
         method: "POST",
@@ -29,10 +26,7 @@ export const usersApi = createApi({
       invalidatesTags: ["User"],
     }),
 
-    updateUser: builder.mutation<
-      string,
-      { id: string; updatedUser: UpdatedUserInterface }
-    >({
+    updateUser: builder.mutation<{message: string},{ id: string; updatedUser: UpdatedUserInterface }>({
       query: ({ id, updatedUser }) => ({
         url: `api/users/${id}`,
         method: "PATCH",
@@ -46,7 +40,7 @@ export const usersApi = createApi({
       ],
     }),
 
-    deleteUser: builder.mutation<string, string>({
+    deleteUser: builder.mutation<{message: string}, string>({
       query: (id) => ({
         url: `api/users/${id}`,
         method: "DELETE",

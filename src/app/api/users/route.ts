@@ -53,5 +53,5 @@ export async function POST(Req: Request) {
 
   await User.create({ firstname, lastname, email, password: hashedpassword, role });
 
-  return Response.json({ success: true, message: "Registered Successfully"}, {status: 200});
+  return Response.json({ message: "Registered Successfully"}, {status: 200});
 }

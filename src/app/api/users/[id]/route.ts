@@ -51,7 +51,7 @@ export async function DELETE(
 
     await User.findByIdAndDelete(id);
 
-    return Response.json("User deleted successfully", { status: 200 });
+    return Response.json({message: "User deleted successfully"}, { status: 200 });
   } catch (err) {
     console.error("some error occured while deleting the user ",err);
     return Response.json("some error occured while deleting the user", {

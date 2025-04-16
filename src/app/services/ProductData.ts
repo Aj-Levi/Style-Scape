@@ -1,31 +1,22 @@
-import { CartInterface, ProductInterface, UpdatedProductInterface } from "@/Interfaces";
+import { AddProductInterface, CartInterface, ProductInterface, UpdatedProductInterface } from "@/Interfaces";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const productsApi = createApi({
   reducerPath: "products",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
-  tagTypes: ["Product", "FeaturedProduct", "CategoryProduct", "NewArrivals", "CartItem"],
+  tagTypes: ["Product","CartItem"],
   endpoints: (builder) => ({
     getAllProducts: builder.query<ProductInterface[], void>({
       query: () => "api/products",
       providesTags: ["Product"],
     }),
 
-    getProductsByCategory: builder.query<
-      ProductInterface[],
-      string
-    >({
+    getProductsByCategory: builder.query<ProductInterface[],string>({
       query: (categoryId) => `api/products/${categoryId}`,
-      providesTags: (result, error, categoryId) => [
-        { type: "CategoryProduct", id: categoryId },
-        "Product",
-      ],
+      providesTags: (result, error) => ["Product"],
     }),
 
-    getProductById: builder.query<
-      { success: boolean; product: ProductInterface },
-      { categoryId: string; productId: string }
-    >({
+    getProductById: builder.query<ProductInterface,{ categoryId: string; productId: string }>({
       query: ({ categoryId, productId }) => 
         `api/products/${categoryId}/${productId}`,
       providesTags: (result, error, { productId }) => [
@@ -35,60 +26,43 @@ export const productsApi = createApi({
 
     getFeaturedProducts: builder.query<ProductInterface[], void>({
       query: () => `api/featuredProducts`,
-      providesTags: ["FeaturedProduct"],
+      providesTags: ["Product"],
     }),
 
     getNewArrivals: builder.query<ProductInterface[], void>({
       query: () => `api/newArrivals`,
-      providesTags: ["NewArrivals"],
+      providesTags: ["Product"],
     }),
 
-    addProduct: builder.mutation<
-      { success: boolean; message: string; product: ProductInterface },
-      Partial<ProductInterface>
-    >({
+    addProduct: builder.mutation<{ message: string; },AddProductInterface>({
       query: (product) => ({
         url: `/api/products`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: product,
       }),
-      invalidatesTags: ["Product", "FeaturedProduct", "CategoryProduct", "NewArrivals"],
+      invalidatesTags: ["Product"],
     }),
 
-    updateProduct: builder.mutation<
-      { success: boolean; message: string; product: ProductInterface },
-      { categoryId: string; productId: string; updatedProduct: UpdatedProductInterface }
-    >({
+    updateProduct: builder.mutation<{ message: string; },{ categoryId: string; productId: string; updatedProduct: UpdatedProductInterface }>({
       query: ({ categoryId, productId, updatedProduct }) => ({
         url: `api/products/${categoryId}/${productId}`,
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: updatedProduct,
       }),
-      invalidatesTags: (result, error, { categoryId, productId }) => [
+      invalidatesTags: (result, error, { productId }) => [
         { type: "Product", id: productId },
-        { type: "CategoryProduct", id: categoryId },
         "Product",
-        "FeaturedProduct",
-        "NewArrivals",
       ],
     }),
 
-    deleteProduct: builder.mutation<
-      { success: boolean; message: string },
-      { categoryId: string; productId: string }
-    >({
+    deleteProduct: builder.mutation<{ message: string },{ categoryId: string; productId: string }>({
       query: ({ categoryId, productId }) => ({
         url: `api/products/${categoryId}/${productId}`,
         method: "DELETE",
       }),
-      invalidatesTags: (result, error, { categoryId }) => [
-        "Product",
-        "FeaturedProduct",
-        "NewArrivals",
-        { type: "CategoryProduct", id: categoryId },
-      ],
+      invalidatesTags: (result, error, { productId }) => ["Product",{ type: "Product", id: productId }],
     }),
 
     getCartItems: builder.query<CartInterface[],void>({

@@ -109,13 +109,13 @@ export async function PATCH(
       updateData.isOnSale = isOnSale;
     }
 
-    const updatedProduct = await Product.findByIdAndUpdate(
+    await Product.findByIdAndUpdate(
       productId,
       { $set: updateData },
       { new: true }
     );
 
-    return Response.json(updatedProduct, {status: 200});
+    return Response.json({message: "Product Updated Successfully"}, {status: 200});
   } catch (error) {
     return Response.json("Failed to update product", { status: 500 });
   }
