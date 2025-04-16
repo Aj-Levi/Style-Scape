@@ -10,7 +10,8 @@ const AuthProvider = ({ provider, icon }: { provider: string, icon: ReactNode })
         try {
           await signIn(provider);
         } catch (error) {
-          toast.error("Failed to sign in with" + provider, ToastStyles);
+          console.error("Failed to sign in with " + provider, error);
+          toast.error("Failed to sign in with " + provider, ToastStyles);
         }
       }}
     >

@@ -4,6 +4,7 @@ import "../styles/globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
 import ReduxStoreProvider from "@/components/ReduxStoreProvider";
 import { ImageKitProvider } from "@imagekit/next";
+import ToastProvider from "@/components/ToastProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +35,9 @@ export default function RootLayout({
       >
         <ImageKitProvider urlEndpoint={urlEndpoint}>
           <ReduxStoreProvider>
-            <ThemeProvider>{children}</ThemeProvider>
+            <ToastProvider>
+              <ThemeProvider>{children}</ThemeProvider>
+            </ToastProvider>
           </ReduxStoreProvider>
         </ImageKitProvider>
       </body>

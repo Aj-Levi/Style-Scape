@@ -3,16 +3,17 @@
 import Link from "next/link";
 import { registerUser } from "@/actions/User";
 import ShowHidePassword from "@/components/auth/ShowHidePassword";
-import ValidateInput from "@/components/auth/ValidateInput";
-import { toast, ToastContainer } from "react-toastify";
+import ValidateEmailInput from "@/components/auth/ValidateEmailInput";
+import { toast } from "react-toastify";
 import ToastStyles from "@/styles/ToastStyles";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const Login = () => {
+  const [ValidEmail, setValidEmail] = useState<boolean>(false);
   const router = useRouter();
   return (
     <div className="w-[55%] max-md:w-full flex items-center justify-center md:p-8 ">
-      <ToastContainer />
       <div className="w-full max-w-md">
         <div className="backdrop-blur-md bg-base-300 p-8 rounded-xl shadow-lg">
           <div className="text-center mb-2">
@@ -26,12 +27,9 @@ const Login = () => {
                 const response = await registerUser(formdata);
                 if(response.success) {
                   toast.success(response.message, ToastStyles);
-                  await new Promise(resolve=>{
-                    setTimeout(() => {
-                      resolve("toast shown");
-                    }, 2000);
-                  })
-                  router.push("/login");
+                  setTimeout(() => {
+                    router.push("/login");
+                  }, 2000);
                 }else{
                   toast.warn(response.message, ToastStyles);
                 };
@@ -85,12 +83,13 @@ const Login = () => {
                 </label>
               </div>
               
-              <ValidateInput />
+              <ValidateEmailInput ValidEmail={ValidEmail} setValidEmail={setValidEmail} />
               <ShowHidePassword />
 
               <button
                 type="submit"
                 className="w-full btn btn-primary"
+                disabled={!ValidEmail}
               >
                 Sign Up
               </button>

@@ -1,21 +1,21 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { loginUser } from "@/actions/User";
 import ShowHidePassword from "@/components/auth/ShowHidePassword";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import ToastStyles from "@/styles/ToastStyles";
 import { useRouter } from "next/navigation";
 import AuthProvider from "@/components/auth/AuthProvider";
-import EmailInput from "@/components/auth/EmailInput";
+import ValidateEmailInput from "@/components/auth/ValidateEmailInput";
 
 const Login = () => {
+  const [ValidEmail, setValidEmail] = useState<boolean>(false);
   const router = useRouter();
   return (
     <div className="w-[55%] max-md:w-full flex items-center justify-center md:p-8 ">
-      <ToastContainer />
       <div className="w-full max-w-md">
         <div className="backdrop-blur-md bg-base-300 p-8 rounded-xl shadow-lg">
           <div className="text-center mb-2">
@@ -38,10 +38,10 @@ const Login = () => {
               };
             }} className="space-y-6 mt-6">
 
-              <EmailInput />
+              <ValidateEmailInput ValidEmail={ValidEmail} setValidEmail={setValidEmail} />
               <ShowHidePassword />
 
-              <button type="submit" className="w-full btn btn-secondary">
+              <button type="submit" className="w-full btn btn-secondary" disabled={!ValidEmail}>
                 Sign In
               </button>
             </form>

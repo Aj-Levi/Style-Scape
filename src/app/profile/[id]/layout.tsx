@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react";
-import { FaUser, FaShoppingBag, FaCog, FaShoppingCart } from "react-icons/fa";
+import { FaUser, FaShoppingBag, FaCog, FaShoppingCart, FaStore } from "react-icons/fa";
 import SidebarTabs from "@/components/profile/SidebarTabs";
 import { TabInterface } from "@/Interfaces";
-import ThemeToggleLogin from "@/components/auth/ThemeToggleLogin";
+import ThemeToggleFixed from "@/components/auth/ThemeToggleFixed";
 import { getSession } from "@/lib/getSession";
 import SignOut from "@/components/auth/SignOut";
 import SidebarUserDetails from "@/components/profile/SidebarUserDetails";
@@ -17,7 +17,7 @@ const Profile = async ({ children }: { children: ReactNode }) => {
     {
       id: "continueshopping",
       label: "Continue Shopping",
-      icon: <FaShoppingCart />,
+      icon: <FaStore />,
     },
   ];
 
@@ -25,18 +25,26 @@ const Profile = async ({ children }: { children: ReactNode }) => {
     tabs.push(
       { id: "manageusers", label: "Manage Users", icon: <FaUser /> },
       {
-        id: "managecategories",
-        label: "Manage Categories",
-        icon: <FaShoppingBag />,
+      id: "managecategories",
+      label: "Manage Categories",
+      icon: <FaShoppingBag />,
+      },
+      {
+      id: "manageorders",
+      label: "Manage Orders",
+      icon: <FaShoppingCart />,
       }
     );
   } else if (session?.user.role === "user") {
-    tabs.push({ id: "orders", label: "Orders", icon: <FaShoppingBag /> });
+    tabs.push(
+      { id: "orders", label: "Orders", icon: <FaShoppingBag /> },
+      { id: "cart", label: "My Cart", icon: <FaShoppingCart /> }
+    );
   }
 
   return (
     <div className="min-h-screen bg-base-100 py-12 px-4 sm:px-6 lg:px-8">
-      <ThemeToggleLogin />
+      <ThemeToggleFixed />
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Sidebar */}

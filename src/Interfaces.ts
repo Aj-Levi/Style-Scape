@@ -1,4 +1,4 @@
-import { Document, ObjectId } from "mongoose";
+import mongoose, { Document, ObjectId } from "mongoose";
 import { ReactNode } from "react";
 
 export interface ZustandStoreInterface{
@@ -9,8 +9,14 @@ export interface ZustandStoreInterface{
     toggleSidebar: ()=>void;
 }
 
+export interface CartInterface{
+    product: mongoose.Types.ObjectId | ProductInterface;
+    quantity: number;
+    totalPrice: number;
+}
+
 export interface UserInterface extends Document{
-    _id: ObjectId;
+    _id: ObjectId | string;
     firstname: string;
     lastname?: string;
     email: string;
@@ -19,6 +25,7 @@ export interface UserInterface extends Document{
     image?: string;
     phone?: string;
     address?: string;
+    cartitems?: CartInterface[];
     authProviderId: string;
 }
 
@@ -76,7 +83,7 @@ export interface ReviewInterface extends Document {
     name: string;
     rating: number;
     comment: string;
-    user: ObjectId;
+    user: mongoose.Types.ObjectId | UserInterface;
 }
 
 export interface UpdatedReviewInterface {
@@ -88,7 +95,7 @@ export interface AddReviewInterface {
     name: string;
     rating: number;
     comment: string;
-    user: ObjectId;
+    user: mongoose.Types.ObjectId | UserInterface;
 }
 
 export interface ProductInterface extends Document {

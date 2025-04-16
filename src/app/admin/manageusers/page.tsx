@@ -1,77 +1,28 @@
 "use client";
 
 import {
-  useDeleteUserMutation,
   useGetAllUsersQuery,
-  useUpdateUserMutation,
 } from "@/app/services/UserData";
 import AddUser from "@/components/admin/AddUser";
-import SearchUser from "@/components/admin/SearchUser";
-import ThemeToggleLogin from "@/components/auth/ThemeToggleLogin";
-import Modal from "@/components/Modal";
-import { UpdatedUserInterface, UserInterface } from "@/Interfaces";
-import ToastStyles from "@/styles/ToastStyles";
+import SearchBar from "@/components/SearchBar";
+import ThemeToggleFixed from "@/components/auth/ThemeToggleFixed";
+import { UserInterface } from "@/Interfaces";
 import { useRouter } from "next/navigation";
 import React, { ReactNode, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
 import { Image } from "@imagekit/next";
 import ProfileImgUpload from "@/components/profile/ProfileImgUpload";
+import UpdateUserRole from "@/components/admin/UpdateUserRole";
+import DeleteUser from "@/components/admin/DeleteUser";
+import QueryStateHandler from "@/components/QueryStateHandler";
 
 const ManageUsers = () => {
   const [SearchQuery, setSearchQuery] = useState<string>("");
   const [OnlyUser, setOnlyUser] = useState<boolean>(false);
   const [OnlyAdmin, setOnlyAdmin] = useState<boolean>(false);
-  const [userIdToDelete, setUserIdToDelete] = useState<string | null>(null);
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
-  const [IsUpdating, setIsUpdating] = useState<boolean>(false);
 
-  const { data, isLoading } = useGetAllUsersQuery();
-  const [deleteUser] = useDeleteUserMutation();
-  const [updateUser] = useUpdateUserMutation();
+  const { data, isLoading, isError, error } = useGetAllUsersQuery();
 
   const router = useRouter();
-
-  if (isLoading) {
-    return (
-      <div className="h-screen grid place-content-center bg-base-300">
-        <span className="loading loading-spinner text-accent loading-xl"></span>
-      </div>
-    );
-  }
-
-  const handleDeletion = async (id: string) => {
-    setIsDeleting(true);
-    try {
-      await deleteUser(id);
-      toast.success("Account deleted successfully", ToastStyles);
-    } catch (err) {
-      toast.error("Could not delete the Account", ToastStyles);
-      console.error("Could not delete the Account", err);
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
-  const handleUpdate = async (user: UserInterface) => {
-    setIsUpdating(true);
-    let updatedUser: UpdatedUserInterface =
-      user.role === "admin"
-        ? {
-            role: "user",
-          }
-        : {
-            role: "admin",
-          };
-    try {
-      await updateUser({ id: String(user._id), updatedUser });
-      toast.success("User info Updated Successfully", ToastStyles);
-    } catch (err) {
-      console.error("Could not update user", err);
-      toast.error("Could not update user", ToastStyles);
-    } finally {
-      setIsUpdating(false);
-    }
-  };
 
   let filteredUsers: UserInterface[] | undefined = SearchQuery
     ? data?.filter(
@@ -94,8 +45,9 @@ const ManageUsers = () => {
   }
 
   return (
+    <>
+    <QueryStateHandler isError={isError} isLoading={isLoading} error={error} />
     <div className="min-h-screen bg-base-100 p-6">
-      <ToastContainer />
       <div className="flex justify-between items-center mb-6">
         <button onClick={(): void => router.back()} className="btn btn-outline">
           <svg
@@ -114,7 +66,7 @@ const ManageUsers = () => {
           </svg>
           Back to Dashboard
         </button>
-        <ThemeToggleLogin />
+        <ThemeToggleFixed />
       </div>
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-6 underline decoration-3">
@@ -122,7 +74,7 @@ const ManageUsers = () => {
         </h1>
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-6">
           {/* search user */}
-          <SearchUser
+          <SearchBar
             SearchQuery={SearchQuery}
             setSearchQuery={setSearchQuery}
           />
@@ -211,32 +163,8 @@ const ManageUsers = () => {
                     </td>
                     <td className="text-center">
                       <div className="flex justify-center gap-2">
-                        <button
-                          onClick={async () => {
-                            await handleUpdate(user);
-                          }}
-                          className="btn btn-sm btn-secondary"
-                          disabled={IsUpdating}
-                        >
-                          {IsUpdating ? (
-                            <>
-                              <span className="loading loading-spinner loading-xs"></span>
-                              Updating...
-                            </>
-                          ) : user.role === "admin" ? (
-                            "Make User"
-                          ) : (
-                            "Make Admin"
-                          )}
-                        </button>
-                        <button
-                          onClick={(): void =>
-                            setUserIdToDelete(String(user._id))
-                          }
-                          className="btn btn-sm btn-error"
-                        >
-                          Delete
-                        </button>
+                        <UpdateUserRole user={user} />
+                        <DeleteUser filteredUsers={filteredUsers} userid={String(user._id)} />
                         <div className="bg-accent p-[0.41rem] rounded-lg">
                           <ProfileImgUpload id={String(user._id)} isAbsolute={false} />
                         </div>
@@ -255,72 +183,8 @@ const ManageUsers = () => {
           </tbody>
         </table>
       </div>
-
-      {/* Delete confirmation modal mapped for each user */}
-      {filteredUsers?.map((user: UserInterface) => (
-        <Modal
-          key={`delete-modal-${user._id}`}
-          IsOpen={userIdToDelete === String(user._id)}
-          setIsOpen={() => setUserIdToDelete(null)}
-          title="Delete User"
-        >
-          <div className="py-4">
-            <div className="flex items-center justify-center mb-4 text-error">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-16 w-16"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                />
-              </svg>
-            </div>
-            <p className="text-lg text-center mb-2">
-              Are you sure you want to delete user:{" "}
-              <span className="font-bold">
-                {user.firstname} {user.lastname}
-              </span>
-              ?
-            </p>
-            <p className="text-center text-gray-500 mb-6">
-              This action cannot be undone.
-            </p>
-
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={() => setUserIdToDelete(null)}
-                className="btn btn-outline"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={async () => {
-                  await handleDeletion(String(user._id));
-                  setUserIdToDelete(null);
-                }}
-                className="btn btn-error"
-                disabled={isDeleting}
-              >
-                {isDeleting ? (
-                  <>
-                    <span className="loading loading-spinner loading-sm"></span>
-                    Deleting...
-                  </>
-                ) : (
-                  "Delete"
-                )}
-              </button>
-            </div>
-          </div>
-        </Modal>
-      ))}
     </div>
+    </>
   );
 };
 

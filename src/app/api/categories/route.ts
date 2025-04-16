@@ -7,10 +7,10 @@ export async function GET() {
   try {
     await ConnectDB();
     const allCategories: CategoryInterface[] = await Category.find({});
-    return allCategories ? Response.json(allCategories) : Response.json([]);
+    return allCategories ? Response.json(allCategories, {status: 200}) : Response.json([], {status: 200});
   } catch (err) {
     console.error("some error occured while getting all the Categories");
-    return new Response("some error occured while getting all the Categories", {
+    return Response.json("some error occured while getting all the Categories", {
       status: 500,
     });
   }
@@ -20,15 +20,15 @@ export async function POST(Req: Request) {
   const session = await getSession();
   if (!session?.user) {
     return Response.json(
-      { success: false, message: "an active admin session is required" },
-      { status: 500 }
+      "An active admin session is required",
+      { status: 400 }
     );
   }
 
   if (session.user.role === "user") {
     return Response.json(
-      { success: false, message: "access denied" },
-      { status: 500 }
+      "Access Denied",
+      { status: 400 }
     );
   }
 
@@ -47,10 +47,7 @@ export async function POST(Req: Request) {
 
   const existingCategory = await Category.findOne({ name });
   if (existingCategory) {
-    return Response.json({
-      success: false,
-      message: "This Category Already Exists",
-    });
+    return Response.json("This Category Already Exists", {status: 500});
   }
 
   await Category.create({
@@ -62,7 +59,6 @@ export async function POST(Req: Request) {
     metadesc,
     metakeywords,
   });
-  console.log("------ Category registered successfully ------");
 
-  return Response.json({ success: true, message: "Registered Successfully" },{status: 200} );
+  return Response.json({message: "Registered Successfully" } ,{status: 200} );
 }

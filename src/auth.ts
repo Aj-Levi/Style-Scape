@@ -19,8 +19,6 @@ declare module "next-auth" {
       email?: string | null;
       image?: string | null;
       createdAt?: Date | string;
-      phone?: string;
-      address?: string;
     };
   }
 
@@ -31,20 +29,17 @@ declare module "next-auth" {
     lastname?: string;
     image?: string | null;
     createdAt?: Date | string;
-    phone?: string;
-    address?: string;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
+    id?: string;
     role?: string;
     firstname?: string;
     lastname?: string;
     image?: string | null;
     createdAt?: Date | string;
-    phone?: string;
-    address?: string;
   }
 }
 
@@ -75,13 +70,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const user = await User.findOne({ email }).select("+password +role");
 
         if (!user) {
-          throw new Error("user does not exist");
+          throw new Error("User Does not Exist");
         }
 
         const ismatched = await compare(password, user.password);
 
         if (!ismatched) {
-          console.log("reached here !!");
           throw new Error("password did not match");
         }
 
@@ -90,11 +84,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           lastname: user.lastname,
           email: user.email,
           role: user.role,
-          id: user._id,
           image: user.image,
+          id: user._id,
           createdAt: user.createdAt,
-          phone: user.phone,
-          address: user.address,
         };
 
         return userdata;
@@ -115,21 +107,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.lastname = token.lastname;
         session.user.image = token.image;
         session.user.createdAt = token.createdAt;
-        session.user.phone = token.phone;
-        session.user.address = token.address;
       }
       return session;
     },
 
     async jwt({ token, user }) {
       if (user) {
+        token.id = user.id;
         token.role = user.role;
         token.firstname = user.firstname;
         token.lastname = user.lastname;
         token.image = user.image;
         token.createdAt = user.createdAt;
-        token.phone = user.phone;
-        token.address = user.address;
       }
       return token;
     },
@@ -155,7 +144,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             });
           }
           return true;
+
         } catch (error) {
+          console.error("Auth Provider Error ",error);
           throw new Error(
             "Error while creating new user using google or github"
           );

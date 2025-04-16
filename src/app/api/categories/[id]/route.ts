@@ -15,15 +15,14 @@ export async function GET(
     const category = await Category.findById(id);
 
     if (!category) {
-      console.error("Category does not exist");
-      return new Response("Category does not exist", { status: 500 });
+      return Response.json("Category does not exist", { status: 404 });
     }
 
-    return Response.json(category);
+    return Response.json(category, { status: 200 });
   } catch (err) {
     console.error("some error occured while getting the Category ", err);
-    return new Response("some error occured while getting the Category", {
-      status: 404,
+    return Response.json("some error occured while getting the Category", {
+      status: 500,
     });
   }
 }
@@ -34,17 +33,13 @@ export async function DELETE(
 ) {
   const session = await getSession();
   if (!session?.user) {
-    return Response.json(
-      { success: false, message: "an active admin session is required" },
-      { status: 500 }
-    );
+    return Response.json("An active admin session is required", {
+      status: 400,
+    });
   }
 
   if (session.user.role === "user") {
-    return Response.json(
-      { success: false, message: "access denied" },
-      { status: 500 }
-    );
+    return Response.json("Access Denied", { status: 400 });
   }
 
   try {
@@ -54,10 +49,12 @@ export async function DELETE(
 
     await Category.findByIdAndDelete(id);
 
-    return new Response("Category deleted successfully", { status: 200 });
+    return Response.json(
+      { message: "Category Deleted Successfully" },
+      { status: 200 }
+    );
   } catch (err) {
-    console.error("some error occured while deleting the Category ", err);
-    return new Response("some error occured while deleting the Category", {
+    return Response.json("some error occured while deleting the Category", {
       status: 500,
     });
   }
@@ -69,17 +66,13 @@ export async function PATCH(
 ) {
   const session = await getSession();
   if (!session?.user) {
-    return Response.json(
-      { success: false, message: "an active admin session is required" },
-      { status: 500 }
-    );
+    return Response.json("An active admin session is required", {
+      status: 400,
+    });
   }
 
   if (session.user.role === "user") {
-    return Response.json(
-      { success: false, message: "access denied" },
-      { status: 500 }
-    );
+    return Response.json("Access Denied", { status: 400 });
   }
 
   try {
@@ -90,7 +83,7 @@ export async function PATCH(
     const category = await Category.findById(id);
 
     if (!Category) {
-      return new Response("Category not found", { status: 500 });
+      return Response.json("Category not found", { status: 404 });
     }
 
     let updateData: UpdatedCategoryInterface = {
@@ -108,10 +101,12 @@ export async function PATCH(
 
     await Category.updateOne({ _id: id }, { $set: updateData });
 
-    return new Response("Category updated successfully", { status: 200 });
+    return Response.json(
+      { message: "Category Updated Successfully" },
+      { status: 200 }
+    );
   } catch (err) {
-    console.error("some error occured while updating the Category ", err);
-    return new Response("some error occured while updating the Category", {
+    return Response.json("some error occured while updating the Category", {
       status: 500,
     });
   }

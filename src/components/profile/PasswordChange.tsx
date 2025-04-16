@@ -4,13 +4,23 @@ import { useUpdateUserMutation } from "@/app/services/UserData";
 import ToastStyles from "@/styles/ToastStyles";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import MutationStateHandler from "../MutationStateHandler";
 
 const PasswordChange = ({ id }: { id: string }) => {
   const [UpdatedPass, setUpdatedPass] = useState<string>("");
   const [PassError, setPassError] = useState<boolean>(true);
   const [ConfirmPass, setConfirmPass] = useState<string>("");
   const [PasswordsMatch, setPasswordsMatch] = useState<boolean>(true);
-  const [updateUser, { isLoading: isLoadingUpdate }] = useUpdateUserMutation();
+
+  const [
+      updateUser,
+      {
+        isLoading: isLoadingUpdate,
+        isError: isErrorUpdate,
+        isSuccess: isSuccessUpdate,
+        error: errorUpdate,
+      },
+    ] = useUpdateUserMutation();
 
   const ValidatePassword = (update: string, confirm: string): void => {
     if (update && update.length >= 1 && update.length < 6) {
@@ -38,7 +48,6 @@ const PasswordChange = ({ id }: { id: string }) => {
     try {
       const updatedUser = { password: updatedpassword };
       await updateUser({ id, updatedUser });
-      toast.success("Password updated successfully", ToastStyles);
       setUpdatedPass("");
       setConfirmPass("");
     } catch (err) {
@@ -48,6 +57,8 @@ const PasswordChange = ({ id }: { id: string }) => {
   };
 
   return (
+    <>
+    <MutationStateHandler isError={isErrorUpdate} isSuccess={isSuccessUpdate} error={errorUpdate} SuccessMessage="Password Updated Successfully" />
     <div className="bg-base-100 p-5 rounded-lg shadow-sm">
       <h3 className="font-medium text-lg mb-4 text-primary">Change Password</h3>
 
@@ -128,6 +139,7 @@ const PasswordChange = ({ id }: { id: string }) => {
         </div>
       </form>
     </div>
+    </>
   );
 };
 

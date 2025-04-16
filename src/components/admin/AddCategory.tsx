@@ -6,15 +6,22 @@ import { AddCategoryInterface } from "@/Interfaces";
 import { useAddCategoryMutation } from "@/app/services/CategoryData";
 import { toast } from "react-toastify";
 import ToastStyles from "@/styles/ToastStyles";
+import MutationStateHandler from "../MutationStateHandler";
 
 const AddCategory = () => {
-  const [isAdding, setIsAdding] = useState<boolean>(false);
   const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] =
     useState<boolean>(false);
-  const [addCategory] = useAddCategoryMutation();
+  const [
+    addCategory,
+    {
+      isLoading: isLoadingAdd,
+      isError: isErrorAdd,
+      isSuccess: isSuccessAdd,
+      error: errorAdd,
+    },
+  ] = useAddCategoryMutation();
 
   const handleAdd = async (formData: FormData): Promise<void> => {
-    setIsAdding(true);
     const name = formData.get("name") as string;
     const image = formData.get("image") as string;
     const description = formData.get("description") as string;
@@ -34,26 +41,26 @@ const AddCategory = () => {
     };
 
     try {
-      const response = await addCategory(category).unwrap();
-      if (response.success) {
-        toast.success("Category added successfully", ToastStyles);
-      } else {
-        toast.warn(response.message, ToastStyles);
-      }
+      await addCategory(category);
     } catch (err) {
-      console.error("Could not add category", err);
       toast.error("Could not add category", ToastStyles);
     } finally {
-      setIsAdding(false);
       setIsAddCategoryModalOpen(false);
     }
   };
 
   return (
     <>
+      <MutationStateHandler
+        isError={isErrorAdd}
+        isSuccess={isSuccessAdd}
+        error={errorAdd}
+        SuccessMessage="Category Added Successfully"
+      />
       <button
         onClick={() => setIsAddCategoryModalOpen(true)}
         className="btn btn-primary"
+        disabled={isLoadingAdd}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +97,7 @@ const AddCategory = () => {
               required
             />
           </div>
-          
+
           <div className="form-control">
             <label className="label">
               <span className="label-text">Description</span>
@@ -156,9 +163,9 @@ const AddCategory = () => {
           <button
             type="submit"
             className="w-full btn btn-primary"
-            disabled={isAdding}
+            disabled={isLoadingAdd}
           >
-            {isAdding ? (
+            {isLoadingAdd ? (
               <>
                 <span className="loading loading-spinner loading-sm"></span>
                 Adding Category...

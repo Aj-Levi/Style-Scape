@@ -15,6 +15,7 @@ import { FaImage, FaTrash } from "react-icons/fa";
 import { useUpdateProductMutation } from "@/app/services/ProductData";
 import { UpdatedProductInterface } from "@/Interfaces";
 import { Image } from "@imagekit/next";
+import MutationStateHandler from "../MutationStateHandler";
 
 interface ProductImgUploadProps {
   categoryId: string;
@@ -22,18 +23,31 @@ interface ProductImgUploadProps {
   currentImages: string[];
 }
 
-const ProductImgUpload = ({ categoryId, productId, currentImages }: ProductImgUploadProps) => {
+const ProductImgUpload = ({
+  categoryId,
+  productId,
+  currentImages,
+}: ProductImgUploadProps) => {
   const [progress, setProgress] = useState(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState<boolean>(false);
-  const [isManageImagesModalOpen, setIsManageImagesModalOpen] = useState<boolean>(false);
+  const [isManageImagesModalOpen, setIsManageImagesModalOpen] =
+    useState<boolean>(false);
   const [images, setImages] = useState<string[]>(currentImages);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const abortController = new AbortController();
 
-  const [updateProduct] = useUpdateProductMutation();
+  const [
+    updateProduct,
+    {
+      isLoading: isLoadingUpdate,
+      isError: isErrorUpdate,
+      error: errorUpdate,
+      isSuccess: isSuccessUpdate,
+    },
+  ] = useUpdateProductMutation();
 
   const authenticator = async () => {
     try {
@@ -41,7 +55,7 @@ const ProductImgUpload = ({ categoryId, productId, currentImages }: ProductImgUp
       if (!response.ok) {
         throw new Error("Failed to get authentication parameters");
       }
-      
+
       return await response.json();
     } catch (error) {
       console.error("Authentication error:", error);
@@ -59,7 +73,6 @@ const ProductImgUpload = ({ categoryId, productId, currentImages }: ProductImgUp
     setIsUploading(true);
     setProgress(0);
 
-    // Check file type
     const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
     if (!allowedTypes.includes(file.type)) {
       setIsUploading(false);
@@ -71,7 +84,6 @@ const ProductImgUpload = ({ categoryId, productId, currentImages }: ProductImgUp
     try {
       authParams = await authenticator();
     } catch (authError) {
-      console.error("Failed to authenticate for upload:", authError);
       toast.error("Error while uploading", ToastStyles);
       return;
     }
@@ -92,27 +104,23 @@ const ProductImgUpload = ({ categoryId, productId, currentImages }: ProductImgUp
         },
         abortSignal: abortController.signal,
       });
-      
+
       const newImageUrl = uploadResponse.filePath as string;
       const updatedImages = [...images, newImageUrl];
       setImages(updatedImages);
-      
-      // Update product with new image
+
       const updatedProduct: UpdatedProductInterface = {
-        images: updatedImages
+        images: updatedImages,
       };
-      
+
       try {
         await updateProduct({
           categoryId,
           productId,
-          updatedProduct
-        }).unwrap();
-        
-        toast.success("Image uploaded successfully", ToastStyles);
+          updatedProduct,
+        });
       } catch (err) {
         toast.error("Couldn't update the product images", ToastStyles);
-        console.error("Couldn't update the product images", err);
       }
     } catch (error) {
       if (error instanceof ImageKitAbortError) {
@@ -126,7 +134,7 @@ const ProductImgUpload = ({ categoryId, productId, currentImages }: ProductImgUp
       } else {
         console.error("Upload error:", error);
       }
-      
+
       toast.error("Failed to upload image", ToastStyles);
     } finally {
       setIsUploading(false);
@@ -136,28 +144,31 @@ const ProductImgUpload = ({ categoryId, productId, currentImages }: ProductImgUp
 
   const handleDeleteImage = async (imageUrl: string) => {
     try {
-      const updatedImages = images.filter(img => img !== imageUrl);
+      const updatedImages = images.filter((img) => img !== imageUrl);
       setImages(updatedImages);
-      
+
       const updatedProduct: UpdatedProductInterface = {
-        images: updatedImages
+        images: updatedImages,
       };
-      
+
       await updateProduct({
         categoryId,
         productId,
-        updatedProduct
-      }).unwrap();
-      
-      toast.success("Image removed successfully", ToastStyles);
+        updatedProduct,
+      });
     } catch (err) {
       toast.error("Couldn't remove the image", ToastStyles);
-      console.error("Couldn't remove the image", err);
     }
   };
 
   return (
     <>
+      <MutationStateHandler
+        isError={isErrorUpdate}
+        isSuccess={isSuccessUpdate}
+        error={errorUpdate}
+        SuccessMessage="Product Images Updated Successfully"
+      />
       <FaImage
         onClick={() => {
           if (images.length > 0) {
@@ -170,7 +181,7 @@ const ProductImgUpload = ({ categoryId, productId, currentImages }: ProductImgUp
         size={20}
         title="Manage product images"
       />
-      
+
       {/* Upload Modal */}
       <Modal
         title="Upload Product Image"
@@ -186,13 +197,13 @@ const ProductImgUpload = ({ categoryId, productId, currentImages }: ProductImgUp
             />
             <button
               onClick={handleUpload}
-              disabled={isUploading}
+              disabled={isUploading || isLoadingUpdate}
               className="btn btn-secondary"
             >
               Upload file
             </button>
           </div>
-          {isUploading && (
+          {(isUploading || isLoadingUpdate) && (
             <div className="w-full flex gap-x-4 items-center">
               <span className="font-semibold">Upload progress:</span>
               <progress
@@ -205,7 +216,7 @@ const ProductImgUpload = ({ categoryId, productId, currentImages }: ProductImgUp
           )}
         </div>
       </Modal>
-      
+
       {/* Manage Images Modal */}
       <Modal
         title="Manage Product Images"
@@ -217,7 +228,10 @@ const ProductImgUpload = ({ categoryId, productId, currentImages }: ProductImgUp
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
             {images.length > 0 ? (
               images.map((image, index) => (
-                <div key={index} className="relative group border rounded-lg overflow-hidden">
+                <div
+                  key={index}
+                  className="relative group border rounded-lg overflow-hidden"
+                >
                   <Image
                     src={image}
                     alt={`Product image ${index + 1}`}
@@ -241,9 +255,9 @@ const ProductImgUpload = ({ categoryId, productId, currentImages }: ProductImgUp
               </div>
             )}
           </div>
-          
+
           <div className="flex justify-between">
-            <button 
+            <button
               onClick={() => {
                 setIsManageImagesModalOpen(false);
                 setIsUploadModalOpen(true);

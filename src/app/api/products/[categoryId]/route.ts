@@ -11,13 +11,9 @@ export async function GET(
   try {
     const { categoryId } = await params;
 
-    console.log("Category ID:", categoryId);
-
     if(!isValidObjectId(categoryId)) {
-        return Response.json({
-            success: false,
-            message: "please enter a valid category id",
-        },{status: 400});
+        return Response.json("please enter a valid category id",
+        {status: 400});
     }
         
     await ConnectDB();
@@ -25,20 +21,10 @@ export async function GET(
     const products: ProductInterface[] = await Product.find({ 
       categoryId 
     });
-
-    console.log("Products fetched by category ID:", products);
     
-    return Response.json({ 
-      success: true, 
-      products: products || [],
-      count: products.length
-    },{status: 200});
+    return products? Response.json(products, {status: 200}) : Response.json([], {status: 200});
     
   } catch (error) {
-    console.error("Error getting products by category ID:", error);
-    return Response.json({ 
-      success: false, 
-      message: "Failed to fetch products for this category" 
-    }, { status: 500 });
+    return Response.json("Failed to fetch products for this category", { status: 500 });
   }
 }

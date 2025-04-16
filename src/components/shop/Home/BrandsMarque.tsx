@@ -20,10 +20,9 @@ interface BrandsMarqueProps {
   title?: string;
 }
 
-const BrandsMarque: React.FC<BrandsMarqueProps> = ({ title = "Our Brands" }) => {
+const BrandsMarque = ({ title = "Our Brands" }: BrandsMarqueProps) => {
   const router = useRouter();
   
-  // React-Slick settings
   const settings = {
     dots: false,
     infinite: true,
@@ -39,25 +38,25 @@ const BrandsMarque: React.FC<BrandsMarqueProps> = ({ title = "Our Brands" }) => 
       {
         breakpoint: 1280,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: 7,
         }
       },
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 6,
         }
       },
       {
         breakpoint: 640,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 4,
         }
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 3,
         }
       }
     ]

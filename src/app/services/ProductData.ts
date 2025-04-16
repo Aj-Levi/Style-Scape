@@ -1,10 +1,10 @@
-import { ProductInterface, UpdatedProductInterface } from "@/Interfaces";
+import { CartInterface, ProductInterface, UpdatedProductInterface } from "@/Interfaces";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const productsApi = createApi({
   reducerPath: "products",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
-  tagTypes: ["Product", "FeaturedProduct", "CategoryProduct", "NewArrivals"],
+  tagTypes: ["Product", "FeaturedProduct", "CategoryProduct", "NewArrivals", "CartItem"],
   endpoints: (builder) => ({
     getAllProducts: builder.query<ProductInterface[], void>({
       query: () => "api/products",
@@ -12,7 +12,7 @@ export const productsApi = createApi({
     }),
 
     getProductsByCategory: builder.query<
-      { success: boolean; products: ProductInterface[]; count: number },
+      ProductInterface[],
       string
     >({
       query: (categoryId) => `api/products/${categoryId}`,
@@ -90,6 +90,42 @@ export const productsApi = createApi({
         { type: "CategoryProduct", id: categoryId },
       ],
     }),
+
+    getCartItems: builder.query<CartInterface[],void>({
+      query: () => ({
+        url: `api/cart`,
+        method: "GET",
+      }),
+      providesTags: ["CartItem"],
+    }),
+
+    deleteProductFromCart: builder.mutation<
+      { success: boolean; message: string },
+      string
+    >({
+      query: (productId) => ({
+        url: `api/cart/${productId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags:[
+        "CartItem"
+      ],
+    }),
+
+    AddToCart: builder.mutation<
+      { success: boolean; message: string },
+      string
+    >({
+      query: (productId) => ({
+        url: `api/cart/${productId}`,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: {},
+      }),
+      invalidatesTags:[
+        "CartItem"
+      ],
+    }),
   }),
 });
 
@@ -102,4 +138,7 @@ export const {
   useAddProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,
+  useAddToCartMutation,
+  useDeleteProductFromCartMutation,
+  useGetCartItemsQuery,
 } = productsApi;

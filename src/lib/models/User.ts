@@ -9,17 +9,36 @@ const UserSchema = new mongoose.Schema<UserInterface>(
     password: { type: String, select: false },
     role: { type: String, default: "user" },
     image: { type: String, required: false },
-    phone: {type: String, required: false},
-    address: {type: String, required: false},
-    authProviderId: {type: String}
+    phone: { type: String, required: false },
+    address: { type: String, required: false },
+    cartitems: [
+      {
+        product: { 
+          type: mongoose.Schema.Types.ObjectId, 
+          required: true, 
+          ref: "Product" 
+        },
+        quantity: { 
+          type: Number, 
+          required: true, 
+          min: 1, 
+          default: 1 
+        },
+        totalPrice: { 
+          type: Number 
+        }
+      },
+    ],
+    authProviderId: { type: String },
   },
   { timestamps: true }
 );
 
-UserSchema.index({ role: 1 }); 
+UserSchema.index({ role: 1 });
 UserSchema.index({ authProviderId: 1 });
 UserSchema.index({ createdAt: -1 });
 UserSchema.index({ firstname: 1, lastname: 1 });
 
-const User = mongoose.models?.User || mongoose.model<UserInterface>('User',UserSchema);
+const User =
+  mongoose.models?.User || mongoose.model<UserInterface>("User", UserSchema);
 export default User;

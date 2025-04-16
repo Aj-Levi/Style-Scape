@@ -13,17 +13,26 @@ import { toast } from "react-toastify";
 import Modal from "@/components/Modal";
 import { FaImage } from "react-icons/fa";
 import { useUpdateCategoryMutation } from "@/app/services/CategoryData";
+import MutationStateHandler from "../MutationStateHandler";
 
 const CategoryImgUpload = ({ id }: { id: string }) => {
+  const [isUploading, setisUploading] = useState<boolean>(false);
   const [progress, setProgress] = useState(0);
-  const [IsUploading, setIsUploading] = useState<boolean>(false);
   const [IsUploadModalOpen, setIsUploadModalOpen] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const abortController = new AbortController();
 
-  const [updateCategory] = useUpdateCategoryMutation();
+  const [
+    updateCategory,
+    {
+      isLoading: isLoadingUpdate,
+      isError: isErrorUpdate,
+      error: errorUpdate,
+      isSuccess: isSuccessUpdate,
+    },
+  ] = useUpdateCategoryMutation();
 
   const authenticator = async () => {
     try {
@@ -46,8 +55,7 @@ const CategoryImgUpload = ({ id }: { id: string }) => {
   };
 
   const handleUpload = async () => {
-    setIsUploading(true);
-
+    setisUploading(true);
     const fileInput = fileInputRef.current;
     if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
       toast.warn("please select at least one file", ToastStyles);
@@ -64,12 +72,12 @@ const CategoryImgUpload = ({ id }: { id: string }) => {
       "image/jpg",
     ];
     if (!allowedTypes.includes(file.type)) {
-      setIsUploading(false);
       toast.warn("only images allowed", ToastStyles);
       return;
     }
 
     let authParams;
+
     try {
       authParams = await authenticator();
     } catch (authError) {
@@ -94,14 +102,11 @@ const CategoryImgUpload = ({ id }: { id: string }) => {
         },
         abortSignal: abortController.signal,
       });
-      console.log("Upload response:", uploadResponse);
       const updatedCategory = { image: uploadResponse.filePath as string };
       try {
         await updateCategory({ id, updatedCategory });
-        toast.success("Category updated successfully", ToastStyles);
       } catch (err) {
         toast.error("couldn't update the category info", ToastStyles);
-        console.error("couldn't update the category info", err);
       }
     } catch (error) {
       if (error instanceof ImageKitAbortError) {
@@ -116,13 +121,19 @@ const CategoryImgUpload = ({ id }: { id: string }) => {
         console.error("Upload error:", error);
       }
     } finally {
-      setIsUploading(false);
+      setisUploading(false);
       setIsUploadModalOpen(false);
     }
   };
 
   return (
     <>
+      <MutationStateHandler
+        isError={isErrorUpdate}
+        isSuccess={isSuccessUpdate}
+        error={errorUpdate}
+        SuccessMessage="Image Uploaded Successfully"
+      />
       <FaImage
         onClick={(): void => {
           setIsUploadModalOpen(true);
@@ -144,13 +155,13 @@ const CategoryImgUpload = ({ id }: { id: string }) => {
             />
             <button
               onClick={handleUpload}
-              disabled={IsUploading}
+              disabled={isUploading || isLoadingUpdate}
               className="btn btn-secondary"
             >
               Upload file
             </button>
           </div>
-          {IsUploading && (
+          {(isUploading || isLoadingUpdate) && (
             <div className="w-full flex gap-x-4 items-center">
               <span className="font-semibold">Upload progress:</span>
               <progress

@@ -1,5 +1,6 @@
 import { UpdatedUserInterface } from "@/Interfaces";
 import ConnectDB from "@/lib/connectDB";
+import { getSession } from "@/lib/getSession";
 import User from "@/lib/models/User";
 import bcrypt from "bcryptjs";
 
@@ -7,24 +8,28 @@ export async function GET(
   _Req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+
+  const session = await getSession();
+    if(!session?.user) {
+      return Response.json("An active admin session is required", {status: 400});
+    }
+
   try {
     const { id } = await params;
 
     await ConnectDB();
-
     const user = await User.findById(id);
 
     if(!user) {
-      console.error("user does not exist");
-      return new Response("user does not exist", {status: 500});
+      return Response.json("user does not exist", {status: 404});
     }
 
-    return Response.json(user);
+    return Response.json(user ,{status: 200});
 
   } catch (err) {
-    console.error("some error occured while getting the user ",err);
-    return new Response("some error occured while getting the user", {
-      status: 404,
+    console.error("Internal Server Error ",err);
+    return Response.json("Internal Server Error", {
+      status: 500,
     });
   }
 }
@@ -33,6 +38,12 @@ export async function DELETE(
   _Req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+
+  const session = await getSession();
+    if(!session?.user) {
+      return Response.json("An active admin session is required", {status: 400});
+    }
+
   try {
     const { id } = await params;
 
@@ -40,10 +51,10 @@ export async function DELETE(
 
     await User.findByIdAndDelete(id);
 
-    return new Response("User deleted successfully", { status: 200 });
+    return Response.json("User deleted successfully", { status: 200 });
   } catch (err) {
     console.error("some error occured while deleting the user ",err);
-    return new Response("some error occured while deleting the user", {
+    return Response.json("some error occured while deleting the user", {
       status: 500,
     });
   }
@@ -53,6 +64,12 @@ export async function PATCH(
   Req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+
+  const session = await getSession();
+    if(!session?.user) {
+      return Response.json("An active admin session is required",{status: 400});
+    }
+
   try {
     const { id } = await params;
 
@@ -61,7 +78,7 @@ export async function PATCH(
     const user = await User.findById(id);
     
     if (!user) {
-      return new Response("User not found", { status: 500 });
+      return Response.json("User not found", { status: 404 });
     }
 
     let hashedpassword: string | undefined;
@@ -92,10 +109,10 @@ export async function PATCH(
       { $set: updateData }
     );
 
-    return new Response("User updated successfully", { status: 200 });
+    return Response.json({message: "User updated successfully"}, { status: 200 });
   } catch (err) {
     console.error("some error occured while updating the user ", err);
-    return new Response("some error occured while updating the user", {
+    return Response.json("some error occured while updating the user", {
       status: 500,
     });
   }

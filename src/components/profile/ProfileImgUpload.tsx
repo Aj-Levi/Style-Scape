@@ -13,17 +13,26 @@ import { toast } from "react-toastify";
 import Modal from "@/components/Modal";
 import { FaImage } from "react-icons/fa";
 import { useUpdateUserMutation } from "@/app/services/UserData";
+import MutationStateHandler from "../MutationStateHandler";
 
 const ProfileImgUpload = ({ id, isAbsolute = true }: { id: string, isAbsolute: boolean }) => {
+  const [isUploading, setisUploading] = useState<boolean>(false);
   const [progress, setProgress] = useState(0);
-  const [IsUploading, setIsUploading] = useState<boolean>(false);
   const [IsUploadModalOpen, setIsUploadModalOpen] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const abortController = new AbortController();
 
-  const [updateUser] = useUpdateUserMutation();
+  const [
+        updateUser,
+        {
+          isLoading: isLoadingUpdate,
+          isError: isErrorUpdate,
+          isSuccess: isSuccessUpdate,
+          error: errorUpdate,
+        },
+      ] = useUpdateUserMutation();
 
   const authenticator = async () => {
     try {
@@ -46,8 +55,7 @@ const ProfileImgUpload = ({ id, isAbsolute = true }: { id: string, isAbsolute: b
   };
 
   const handleUpload = async () => {
-    setIsUploading(true);
-
+    setisUploading(true);
     const fileInput = fileInputRef.current;
     if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
       toast.warn("please select at least one file", ToastStyles);
@@ -64,7 +72,6 @@ const ProfileImgUpload = ({ id, isAbsolute = true }: { id: string, isAbsolute: b
       "image/jpg",
     ];
     if (!allowedTypes.includes(file.type)) {
-      setIsUploading(false);
       toast.warn("only images allowed", ToastStyles);
       return;
     }
@@ -94,11 +101,10 @@ const ProfileImgUpload = ({ id, isAbsolute = true }: { id: string, isAbsolute: b
         },
         abortSignal: abortController.signal,
       });
-      console.log("Upload response:", uploadResponse);
+
       const updatedUser = { image: uploadResponse.filePath as string };
       try {
         await updateUser({ id, updatedUser });
-        toast.success("updated info successfully", ToastStyles);
       } catch (err) {
         toast.error("couldn't update the user info", ToastStyles);
         console.error("couldn't update the user info", err);
@@ -116,14 +122,15 @@ const ProfileImgUpload = ({ id, isAbsolute = true }: { id: string, isAbsolute: b
         console.error("Upload error:", error);
       }
     } finally {
-      setIsUploading(false);
+      setisUploading(false);
       setIsUploadModalOpen(false);
     }
   };
 
   return (
     <>
-    <div className={`${isAbsolute?"absolute right-[37%] bottom-0":""} cursor-pointer bg-accent p-[0.41rem] rounded-lg`}>
+    <MutationStateHandler isError={isErrorUpdate} isSuccess={isSuccessUpdate} error={errorUpdate} SuccessMessage="Image Updated Successfully" />
+    <div className={`${isAbsolute?"absolute right-[40%] bottom-0":""} cursor-pointer bg-accent p-[0.25rem] rounded-lg`}>
       <FaImage
         onClick={(): void => {
           setIsUploadModalOpen(prev => !prev);
@@ -146,13 +153,13 @@ const ProfileImgUpload = ({ id, isAbsolute = true }: { id: string, isAbsolute: b
             />
             <button
               onClick={handleUpload}
-              disabled={IsUploading}
+              disabled={isLoadingUpdate || isUploading}
               className="btn btn-secondary"
             >
               Upload file
             </button>
           </div>
-          {IsUploading && (
+          {(isLoadingUpdate || isUploading) && (
             <div className="w-full flex gap-x-4 items-center">
               <span className="font-semibold">Upload progress:</span>
               <progress

@@ -5,7 +5,7 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaSignOutAlt } from "react-icons/fa";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 const SignOut = () => {
     const router = useRouter();
@@ -28,7 +28,6 @@ const SignOut = () => {
       onClick={handleSignOut}
       className="btn btn-ghost justify-start w-full mt-4 text-error"
     >
-      <ToastContainer />
       <span className="mr-2">
         <FaSignOutAlt />
       </span>{" "}

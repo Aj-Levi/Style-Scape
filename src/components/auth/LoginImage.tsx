@@ -8,10 +8,10 @@ const LoginImage = () => {
         src={'/LoginBG.png'}
         alt="Fashion Login"
         fill
-        className="object-cover" // Added blur filter
+        className="object-cover"
         priority
       />
-      {/* Company name and punch line overlay with glassmorphism */}
+
       <div className="max-md:hidden absolute inset-0 flex flex-col items-center justify-center">
         <div className="backdrop-blur-md bg-white/20 p-8 rounded-xl shadow-lg border border-white/30 max-w-xs w-full">
           <div className="text-center">

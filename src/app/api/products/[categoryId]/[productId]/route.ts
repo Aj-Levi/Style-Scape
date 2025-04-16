@@ -13,52 +13,20 @@ export async function GET(
     const { productId, categoryId } = await params;
 
     if (!isValidObjectId(productId) || !isValidObjectId(categoryId)) {
-      return Response.json(
-        {
-          success: false,
-          message: "Invalid product or category ID",
-        },
-        { status: 400 }
-      );
+      return Response.json("Invalid product or category ID", { status: 400 });
     }
 
     await ConnectDB();
 
-    const product: ProductInterface | null = await Product.findOne({
-      _id: productId,
-      categoryId,
-    });
+    const product = await Product.findById(productId);
 
     if (!product) {
-      return Response.json(
-        {
-          success: false,
-          message: "Product not found",
-        },
-        { status: 404 }
-      );
+      return Response.json("Product not found", { status: 404 });
     }
 
-    if (product?.reviews && product.reviews.length > 0) {
-      await Product.populate(product, {
-        path: "reviews.user",
-        select: "firstname lastname email image",
-      });
-    }
-
-    return Response.json({
-      success: true,
-      product,
-    },{status: 200});
+    return Response.json(product, { status: 200 });
   } catch (error) {
-    console.error("Error fetching product:", error);
-    return Response.json(
-      {
-        success: false,
-        message: "Failed to fetch product details",
-      },
-      { status: 500 }
-    );
+    return Response.json("Failed to fetch product details", { status: 500 });
   }
 }
 
@@ -67,18 +35,12 @@ export async function PATCH(
   { params }: { params: Promise<{ categoryId: string; productId: string }> }
 ) {
   const session = await getSession();
-  if (!session?.user) {
-    return Response.json(
-      { success: false, message: "an active admin session is required" },
-      { status: 500 }
-    );
+  if(!session?.user) {
+    return Response.json("An active admin session is required", {status: 400});
   }
 
-  if (session.user.role === "user") {
-    return Response.json(
-      { success: false, message: "access denied" },
-      { status: 500 }
-    );
+  if(session.user.role === "user") {
+    return Response.json("Access denied", {status: 400});
   }
 
   try {
@@ -86,26 +48,14 @@ export async function PATCH(
     const body = await request.json();
 
     if (!isValidObjectId(productId) || !isValidObjectId(categoryId)) {
-      return Response.json(
-        {
-          success: false,
-          message: "Invalid product or category ID",
-        },
-        { status: 400 }
-      );
+      return Response.json("Invalid product or category ID", { status: 400 });
     }
 
     await ConnectDB();
 
-    const product = await Product.findOne({ _id: productId, categoryId });
+    const product = await Product.findById(productId);
     if (!product) {
-      return Response.json(
-        {
-          success: false,
-          message: "Product not found",
-        },
-        { status: 404 }
-      );
+      return Response.json("Product not found", { status: 404 });
     }
 
     const {
@@ -127,13 +77,13 @@ export async function PATCH(
 
     if(newCategoryId) {
        if(!isValidObjectId(newCategoryId)) {
-        return Response.json({success: false, message: "enter a valid category id"},{status: 400});
+        return Response.json("enter a valid category id", {status: 400});
        }
     }
 
     const existingProduct: ProductInterface | null = await Product.findById(productId);
     if(!existingProduct) {
-       return Response.json({success: false, message: "product not found"},{status: 404});
+       return Response.json("product not found", {status: 404});
     }
 
     const updateData: UpdatedProductInterface = {
@@ -145,13 +95,19 @@ export async function PATCH(
       categoryId: newCategoryId || existingProduct.categoryId,
       stock: stock || existingProduct.stock,
       images: images || existingProduct.images,
-      isFeatured: isFeatured || existingProduct.isFeatured,
-      isOnSale: isOnSale || existingProduct.isOnSale,
       sizes: sizes || existingProduct.sizes,
       metadesc: metadesc || existingProduct.metadesc,
       metakeywords: metakeywords || existingProduct.metakeywords,
       metatitle: metatitle || existingProduct.metatitle,
     };
+
+    if (isFeatured === true || isFeatured === false) {
+      updateData.isFeatured = isFeatured;
+    }
+
+    if (isOnSale === true || isOnSale === false) {
+      updateData.isOnSale = isOnSale;
+    }
 
     const updatedProduct = await Product.findByIdAndUpdate(
       productId,
@@ -159,20 +115,9 @@ export async function PATCH(
       { new: true }
     );
 
-    return Response.json({
-      success: true,
-      message: "Product updated successfully",
-      product: updatedProduct,
-    },{status: 200});
+    return Response.json(updatedProduct, {status: 200});
   } catch (error) {
-    console.error("Error updating product:", error);
-    return Response.json(
-      {
-        success: false,
-        message: "Failed to update product",
-      },
-      { status: 500 }
-    );
+    return Response.json("Failed to update product", { status: 500 });
   }
 }
 
@@ -181,60 +126,29 @@ export async function DELETE(
   { params }: { params: Promise<{ categoryId: string; productId: string }> }
 ) {
   const session = await getSession();
-  if (!session?.user) {
-    return Response.json(
-      { success: false, message: "an active admin session is required" },
-      { status: 500 }
-    );
+  if(!session?.user) {
+    return Response.json("An active admin session is required", {status: 400});
   }
 
-  if (session.user.role === "user") {
-    return Response.json(
-      { success: false, message: "access denied" },
-      { status: 500 }
-    );
+  if(session.user.role === "user") {
+    return Response.json("Access denied", {status: 400});
   }
 
   try {
     const { productId, categoryId } = await params;
 
     if (!isValidObjectId(productId) || !isValidObjectId(categoryId)) {
-      return Response.json(
-        {
-          success: false,
-          message: "Invalid product or category ID",
-        },
-        { status: 400 }
-      );
+      return Response.json("Invalid product or category ID", { status: 400 });
     }
 
     await ConnectDB();
 
-    const product = await Product.findOne({ _id: productId, categoryId });
-    if (!product) {
-      return Response.json(
-        {
-          success: false,
-          message: "Product not found",
-        },
-        { status: 404 }
-      );
-    }
-
     await Product.findByIdAndDelete(productId);
 
     return Response.json({
-      success: true,
       message: "Product deleted successfully",
-    },{status: 200});
+    }, {status: 200});
   } catch (error) {
-    console.error("Error deleting product:", error);
-    return Response.json(
-      {
-        success: false,
-        message: "Failed to delete product",
-      },
-      { status: 500 }
-    );
+    return Response.json("Failed to delete product", { status: 500 });
   }
 }

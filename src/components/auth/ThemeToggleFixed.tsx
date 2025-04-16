@@ -3,7 +3,7 @@ import React from "react";
 import { useZustandStore } from "@/lib/stores/ZustandStore";
 import { FiSun, FiMoon } from "react-icons/fi";
 
-const ThemeToggleLogin = () => {
+const ThemeToggleFixed = () => {
   let { currentTheme , toggleTheme } = useZustandStore();
 
   return (
@@ -17,4 +17,4 @@ const ThemeToggleLogin = () => {
   );
 };
 
-export default ThemeToggleLogin;
+export default ThemeToggleFixed;

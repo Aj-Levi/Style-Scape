@@ -6,17 +6,17 @@ import { toast } from "react-toastify";
 import ToastStyles from "@/styles/ToastStyles";
 import { AddUserInterface } from "@/Interfaces";
 import { useAddUserMutation } from "@/app/services/UserData";
-import ValidateInput from "../auth/ValidateInput";
+import ValidateInput from "../auth/ValidateEmailInput";
 import ShowHidePassword from "../auth/ShowHidePassword";
+import MutationStateHandler from "../MutationStateHandler";
 
 const AddUser = () => {
-  const [IsAdding, setIsAdding] = useState<boolean>(false);
+  const [ValidEmail, setValidEmail] = useState<boolean>(false);
   const [IsAddUserModalOpen, setIsAddUserModalOpen] = useState<boolean>(false);
 
-  const [addUser] = useAddUserMutation();
+  const [addUser, {isLoading: isLoadingAdd, isError: isErrorAdd, isSuccess: isSuccessAdd, error: errorAdd}] = useAddUserMutation();
 
   const handleAdd = async (formdata: FormData): Promise<void> => {
-    setIsAdding(true);
     const firstname = formdata.get("firstname") as string;
     const lastname = formdata.get("lastname") as string;
     const email = formdata.get("email") as string;
@@ -31,24 +31,18 @@ const AddUser = () => {
     };
 
     try {
-      const response = await addUser(user).unwrap();
-      console.log(response);
-      if (response.success) {
-        toast.success("User Added successfully", ToastStyles);
-      } else {
-        toast.warn("This User Already Exists", ToastStyles);
-      }
+      await addUser(user);
     } catch (err) {
       console.error("Could not add user", err);
       toast.error("Could not add user", ToastStyles);
     } finally {
-      setIsAdding(false);
       setIsAddUserModalOpen(false);
     }
   };
 
   return (
     <>
+    <MutationStateHandler isError={isErrorAdd} isSuccess={isSuccessAdd} error={errorAdd} SuccessMessage="Added Successfully" />
       <button
         onClick={(): void => setIsAddUserModalOpen(true)}
         className="btn btn-primary"
@@ -134,15 +128,15 @@ const AddUser = () => {
             </select>
           </div>
 
-          <ValidateInput />
+          <ValidateInput ValidEmail={ValidEmail} setValidEmail={setValidEmail} />
           <ShowHidePassword />
 
           <button
             type="submit"
             className="w-full btn btn-primary"
-            disabled={IsAdding}
+            disabled={isLoadingAdd || !ValidEmail}
           >
-            {IsAdding ? (
+            {isLoadingAdd ? (
               <>
                 <span className="loading loading-spinner loading-sm"></span>
                 Adding User...

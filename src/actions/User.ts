@@ -19,7 +19,11 @@ const loginUser = async (
     });
     return { success: true, message: "Logged In Successfully" };
   } catch (err) {
-    return { success: false, message: "unable to sign in" };
+    if(err instanceof Error) {
+      return { success: false, message: "Invalid Credentials" };
+    }else{
+      return {success: false, message: "Unknown error occured"};
+    }
   }
 };
 
@@ -31,23 +35,30 @@ const registerUser = async (
   const email = formdata.get("email") as string;
   const password = formdata.get("password") as string;
 
-  // connecting to DB
-  await ConnectDB();
+  try {
+    // connecting to DB
+    await ConnectDB();
+  
+    // checking for existing user
+    const existinguser = await User.findOne({ email });
+    if (existinguser) {
+      return { success: false, message: "This User Already Exists" };
+    }
+  
+    // hashing the user password by adding salt to it
+    const salt = await bcrypt.genSalt(12);
+    const hashedpassword = await bcrypt.hash(password, salt);
+  
+    await User.create({ firstname, lastname, email, password: hashedpassword });
+  
+    return { success: true, message: "Registered Successfully" };
 
-  // checking for existing user
-  const existinguser = await User.findOne({ email });
-  if (existinguser) {
-    return { success: false, message: "This User Already Exists" };
+  } catch (err) {
+
+    console.error("Could not register the User",err);
+    return {success: false, message: "Could not register the User"};
+
   }
-
-  // hashing the user password by adding salt to it
-  const salt = await bcrypt.genSalt(12);
-  const hashedpassword = await bcrypt.hash(password, salt);
-
-  await User.create({ firstname, lastname, email, password: hashedpassword });
-  console.log("------ User registered successfully ------");
-
-  return { success: true, message: "Registered Successfully" };
 };
 
 export { registerUser, loginUser };

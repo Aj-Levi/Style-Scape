@@ -8,30 +8,22 @@ export async function GET() {
   try {
     await ConnectDB();
     const allProducts: ProductInterface[] = await Product.find({});
-    return allProducts ? Response.json(allProducts) : Response.json([]);
+    return allProducts ? Response.json(allProducts, {status: 200}) : Response.json([], {status: 200});
   } catch (err) {
-    console.error("some error occured while getting all the Products");
-    return new Response("some error occured while getting all the Products", {
+    return Response.json("some error occured while getting all the Products", {
       status: 500,
     });
   }
 }
 
 export async function POST(Req: Request) {
-  
   const session = await getSession();
-  if (!session?.user) {
-    return Response.json(
-      { success: false, message: "an active admin session is required" },
-      { status: 500 }
-    );
+  if(!session?.user) {
+    return Response.json("An active admin session is required", {status: 400});
   }
 
-  if (session.user.role === "user") {
-    return Response.json(
-      { success: false, message: "access denied" },
-      { status: 500 }
-    );
+  if(session.user.role === "user") {
+    return Response.json("Access denied", {status: 400});
   }
 
   try {
@@ -44,7 +36,6 @@ export async function POST(Req: Request) {
       category,
       categoryId,
       stock,
-      images,
       isFeatured,
       isOnSale,
       sizes,
@@ -55,17 +46,17 @@ export async function POST(Req: Request) {
 
     switch (true) {
       case !name:
-        return Response.json({success: false,message: "product name is required"},{status: 400});
+        return Response.json("product name is required", {status: 400});
       case !price:
-        return Response.json({success: false,message: "product price is required"},{status: 400});
+        return Response.json("product price is required", {status: 400});
       case !categoryId:
+        return Response.json("product categoryId is required", {status: 400});
+      case categoryId:
         if(!isValidObjectId(categoryId)) {
-          return Response.json({success: false, message: "please enter a valid category id"},{status: 400});
+          return Response.json("please enter a valid category id", {status: 400});
         }
-        return Response.json({success: false,message: "product categoryId is required"},{status: 400});
-
-        case !stock:
-          return Response.json({success: false,message: "product stock is required"},{status: 400});
+      case !stock:
+        return Response.json("product stock is required", {status: 400});
     }
 
     await ConnectDB();
@@ -78,7 +69,7 @@ export async function POST(Req: Request) {
       },{status: 400});
     }
 
-    const newProduct = await Product.create({
+    await Product.create({
       name,
       description,
       price,
@@ -86,7 +77,6 @@ export async function POST(Req: Request) {
       category,
       categoryId,
       stock,
-      images,
       isFeatured,
       isOnSale,
       sizes,
@@ -97,16 +87,11 @@ export async function POST(Req: Request) {
       reviews: [],
     });
 
-    console.log("------ Product added successfully ------");
-
     return Response.json({
-      success: true,
       message: "Product added successfully",
-      product: newProduct,
-    });
+    }, {status: 200});
   } catch (error) {
-    console.error("Error adding product:", error);
-    return new Response("Error adding product", {
+    return Response.json("Error adding product", {
       status: 500,
     });
   }

@@ -1,8 +1,7 @@
-"use server";
 import React from "react";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { RiAccountCircleLine } from "react-icons/ri";
-import HomeThemeToggle from "./buttons/HomeThemeToggle";
+import ThemeToggle from "./buttons/ThemeToggle";
 import { getSession } from "@/lib/getSession";
 import Link from "next/link";
 
@@ -23,7 +22,7 @@ const NavbarIcons = async () => {
           <RiAccountCircleLine className="w-4 h-4 md:w-5 md:h-5" />
         </button>
       </Link>
-      <HomeThemeToggle />
+      <ThemeToggle />
     </div>
   );
 };

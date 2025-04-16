@@ -1,11 +1,11 @@
 import LoginImage from "@/components/auth/LoginImage";
-import ThemeToggleLogin from "@/components/auth/ThemeToggleLogin";
+import ThemeToggleFixed from "@/components/auth/ThemeToggleFixed";
 import React, { ReactNode } from "react";
 
 const LoginSignUpLayout = ({children}: {children: ReactNode}) => {
   return (
     <div className="flex h-screen w-screen max-md:flex-col max-md:justify-center max-md:gap-y-8 bg-base-100">
-      <ThemeToggleLogin />
+      <ThemeToggleFixed />
       {/* Background Image */}
       <LoginImage />
 

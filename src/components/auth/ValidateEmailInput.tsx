@@ -1,9 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-const ValidateInput = () => {
+const ValidateEmailInput = ({ValidEmail, setValidEmail}: {ValidEmail: boolean, setValidEmail: (val: boolean) => void}) => {
   const [Email, setEmail] = useState<string>("");
-  const [ValidEmail, setValidEmail] = useState<boolean>(false);
 
   useEffect(() => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -47,4 +46,4 @@ const ValidateInput = () => {
   );
 };
 
-export default ValidateInput;
+export default ValidateEmailInput;
