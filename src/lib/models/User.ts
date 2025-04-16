@@ -13,21 +13,18 @@ const UserSchema = new mongoose.Schema<UserInterface>(
     address: { type: String, required: false },
     cartitems: [
       {
-        product: { 
-          type: mongoose.Schema.Types.ObjectId, 
-          required: true, 
-          ref: "Product" 
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "Product",
         },
-        quantity: { 
-          type: Number, 
-          required: true, 
-          min: 1, 
-          default: 1 
-        },
-        totalPrice: { 
-          type: Number 
-        }
+        size: {type: String, required: true},
+        quantity: { type: Number, required: true, default: 1 },
+        totalProductPrice: { type: Number },
       },
+    ],
+    orders: [
+      { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Order" },
     ],
     authProviderId: { type: String },
   },

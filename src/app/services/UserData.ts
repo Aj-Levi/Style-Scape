@@ -1,10 +1,10 @@
-import { AddUserInterface, UpdatedUserInterface, UserInterface } from "@/Interfaces";
+import { AddUserInterface, OrderItemInterface, UpdatedUserInterface, UserInterface } from "@/Interfaces";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const usersApi = createApi({
   reducerPath: "users",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
-  tagTypes: ["User"],
+  tagTypes: ["User", "CartItems"],
   endpoints: (builder) => ({
     getAllUsers: builder.query<UserInterface[], void>({
       query: () => "api/users",
@@ -51,6 +51,32 @@ export const usersApi = createApi({
         { type: "User" },
       ],
     }),
+
+    getCartItems: builder.query<OrderItemInterface[],void>({
+      query: () => `/api/cart`,
+      providesTags: ["CartItems"],
+    }),
+
+    addToCart: builder.mutation<{message: string}, {productid: string, size: string}>({
+      query: ({productid, size}) => ({
+        url: `/api/cart/${productid}`,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: {size: size},
+      }),
+
+      invalidatesTags: ["CartItems"],
+    }),
+
+    removeFromCart: builder.mutation<{message: string}, {productid: string, size: string}>({
+      query: ({productid, size}) => ({
+        url: `api/cart/${productid}`,
+        method: "DELETE",
+        body: {size: size},
+      }),
+
+      invalidatesTags: ["CartItems"],
+    })
   }),
 });
 
@@ -60,4 +86,7 @@ export const {
   useUpdateUserMutation,
   useDeleteUserMutation,
   useAddUserMutation,
+  useAddToCartMutation,
+  useGetCartItemsQuery,
+  useRemoveFromCartMutation,
 } = usersApi;

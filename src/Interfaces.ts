@@ -9,12 +9,6 @@ export interface ZustandStoreInterface{
     toggleSidebar: ()=>void;
 }
 
-export interface CartInterface{
-    product: mongoose.Types.ObjectId | ProductInterface;
-    quantity: number;
-    totalPrice: number;
-}
-
 export interface UserInterface extends Document{
     _id: ObjectId | string;
     firstname: string;
@@ -25,7 +19,8 @@ export interface UserInterface extends Document{
     image?: string;
     phone?: string;
     address?: string;
-    cartitems?: CartInterface[];
+    cartitems?: OrderItemInterface[];
+    orders?: (string | ObjectId | OrderInterface)[];
     authProviderId: string;
 }
 
@@ -80,10 +75,9 @@ export interface AddCategoryInterface{
 
 export interface ReviewInterface extends Document {
     _id: string;
-    name: string;
+    user: string | ObjectId | UserInterface;
     rating: number;
-    comment: string;
-    user: mongoose.Types.ObjectId | UserInterface;
+    comment?: string;
 }
 
 export interface UpdatedReviewInterface {
@@ -92,10 +86,9 @@ export interface UpdatedReviewInterface {
 }
 
 export interface AddReviewInterface {
-    name: string;
+    user: string | ObjectId | UserInterface;
     rating: number;
-    comment: string;
-    user: mongoose.Types.ObjectId | UserInterface;
+    comment?: string;
 }
 
 export interface ProductInterface extends Document {
@@ -114,7 +107,7 @@ export interface ProductInterface extends Document {
     metatitle?: string;
     metadesc?: string;
     metakeywords?: string[];
-    reviews?: ReviewInterface[];
+    reviews?: (string | ObjectId | ReviewInterface)[];
     rating: number;
 }
 
@@ -150,6 +143,23 @@ export interface AddProductInterface {
     metatitle?: string;
     metadesc?: string;
     metakeywords?: string[];
+}
+
+export interface OrderItemInterface{
+    product: string | ObjectId | ProductInterface;
+    size: string,
+    quantity: number;
+    totalProductPrice?: number;
+}
+
+export interface OrderInterface extends Document{
+    _id: string;
+    customer: string | ObjectId | UserInterface;
+    items?: OrderItemInterface[];
+    status: string;
+    shippingAddress: string;
+    contactNumber: string;
+    totalOrderPrice?: number;
 }
 
 export interface ToastInterface{

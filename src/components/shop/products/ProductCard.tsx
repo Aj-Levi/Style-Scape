@@ -2,6 +2,7 @@ import React from "react";
 import { Image } from "@imagekit/next";
 import { ProductInterface } from "@/Interfaces";
 import Link from "next/link";
+import AddToCartBtn from "./AddToCartBtn";
 
 const ProductCard = ({ product }: { product: ProductInterface }) => {
   const productUrl = `/categories/${String(product.categoryId)}/${String(
@@ -62,11 +63,7 @@ const ProductCard = ({ product }: { product: ProductInterface }) => {
             <Link href={productUrl} className="btn btn-sm btn-outline">
               Details
             </Link>
-            <button 
-              className="btn btn-sm btn-primary"
-            >
-              Add to Cart
-            </button>
+            <AddToCartBtn product={product} />
           </div>
         </div>
       </div>

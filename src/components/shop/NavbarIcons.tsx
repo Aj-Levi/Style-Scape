@@ -10,14 +10,22 @@ const NavbarIcons = async () => {
 
   return (
     <div className="flex items-center gap-x-2 *:cursor-pointer">
-      <button
-        className={`btn btn-primary max-md:p-2 ${
-          session?.user ? "" : "hidden"
-        }`}
+      <Link href={`http://localhost:3000/profile/${session?.user.id}/cart`}>
+        <button
+          className={`btn btn-primary max-md:p-2 ${
+            session?.user ? "" : "hidden"
+          }`}
+        >
+          <HiOutlineShoppingCart className={`w-4 h-4 md:w-5 md:h-5`} />
+        </button>
+      </Link>
+      <Link
+        href={
+          session?.user
+            ? `/profile/${session?.user.id}/personaldetails`
+            : "/login"
+        }
       >
-        <HiOutlineShoppingCart className={`w-4 h-4 md:w-5 md:h-5`} />
-      </button>
-      <Link href={session?.user ? `/profile/${session?.user.id}/personaldetails` : "/login"}>
         <button className={`btn btn-primary max-md:p-2`}>
           <RiAccountCircleLine className="w-4 h-4 md:w-5 md:h-5" />
         </button>
