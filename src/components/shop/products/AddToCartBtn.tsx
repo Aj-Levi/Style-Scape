@@ -7,7 +7,7 @@ import ToastStyles from "@/styles/ToastStyles";
 import React from "react";
 import { toast } from "react-toastify";
 
-const AddToCartBtn = ({ product, size = null }: { product: ProductInterface, size?: string | null }) => {
+const AddToCartBtn = ({ product, size = null, btnSize = "md" }: { product: ProductInterface, size?: string | null, btnSize?: string }) => {
   const [
     addToCart,
     {
@@ -37,7 +37,7 @@ const AddToCartBtn = ({ product, size = null }: { product: ProductInterface, siz
       <button
         onClick={handleAdd}
         disabled={isLoadingAdd}
-        className={`btn btn-${size} btn-primary`}
+        className={`btn btn-${btnSize} btn-primary`}
       >
         {isLoadingAdd ? (
           <>

@@ -78,15 +78,16 @@ export interface ReviewInterface extends Document {
     user: string | ObjectId | UserInterface;
     rating: number;
     comment?: string;
+    createdAt: string;
 }
 
 export interface UpdatedReviewInterface {
+    reviewId: string;
     rating?: number;
     comment?: string;
 }
 
 export interface AddReviewInterface {
-    user: string | ObjectId | UserInterface;
     rating: number;
     comment?: string;
 }
@@ -152,6 +153,13 @@ export interface OrderItemInterface{
     totalProductPrice?: number;
 }
 
+export interface paymentResultInterface{
+    id?: String;
+    status?: string;
+    update_time?: string;
+    email_address?: string;
+}
+
 export interface OrderInterface extends Document{
     _id: string;
     customer: string | ObjectId | UserInterface;
@@ -159,7 +167,12 @@ export interface OrderInterface extends Document{
     status: string;
     shippingAddress: string;
     contactNumber: string;
-    totalOrderPrice?: number;
+    totalOrderPrice: number;
+    shippingPrice: number;
+    paymentMethod: string;
+    paymentResult?: paymentResultInterface;
+    isDelivered: boolean;
+    deliveredAt?: string;
 }
 
 export interface ToastInterface{

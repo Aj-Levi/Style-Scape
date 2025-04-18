@@ -1,52 +1,52 @@
 "use client";
 
-import { useDeleteProductMutation } from "@/app/services/ProductData";
-import { ProductInterface } from "@/Interfaces";
+import { useDeleteProductReviewMutation } from "@/app/services/ProductData";
+import Modal from "@/components/Modal";
+import MutationStateHandler from "@/components/MutationStateHandler";
+import { ReviewInterface } from "@/Interfaces";
 import ToastStyles from "@/styles/ToastStyles";
 import React, { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
-import Modal from "../Modal";
-import MutationStateHandler from "../MutationStateHandler";
 
-const DeleteProduct = ({
-  product,
-  categoryId,
+const DeleteReview = ({
+  review,
+  productid,
 }: {
-  product: ProductInterface;
-  categoryId: string;
+  review: ReviewInterface;
+  productid: string;
 }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  const [productToDelete, setProductToDelete] =
-    useState<ProductInterface | null>(null);
+  const [reviewToDelete, setReviewToDelete] = useState<ReviewInterface | null>(
+    null
+  );
+
   const [
-    deleteProduct,
+    deleteReview,
     {
       isLoading: isLoadingDelete,
       isError: isErrorDelete,
       error: errorDelete,
       isSuccess: isSuccessDelete,
     },
-  ] = useDeleteProductMutation();
+  ] = useDeleteProductReviewMutation();
 
-  const handleDeleteProduct = async () => {
-    if (!productToDelete) return;
+  const openDeleteModal = (review: ReviewInterface) => {
+    setReviewToDelete(review);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!reviewToDelete) return;
+
     try {
-      await deleteProduct({
-        categoryId,
-        productId: String(productToDelete._id),
-      });
+      await deleteReview({ productid, id: { reviewId: String(review._id) } });
     } catch (error) {
       toast.error("Failed to delete product", ToastStyles);
     } finally {
-      setProductToDelete(null);
+      setReviewToDelete(null);
       setIsDeleteModalOpen(false);
     }
-  };
-
-  const openDeleteModal = (product: ProductInterface) => {
-    setProductToDelete(product);
-    setIsDeleteModalOpen(true);
   };
 
   return (
@@ -58,14 +58,14 @@ const DeleteProduct = ({
         SuccessMessage="Deleted Successfully"
       />
       <button
-        onClick={() => openDeleteModal(product)}
-        className="btn btn-sm btn-error flex-1"
+        onClick={() => openDeleteModal(review)}
+        className="btn btn-sm btn-outline btn-error gap-2"
+        disabled={isLoadingDelete}
       >
-        <FaTrash className="mr-1" /> Delete
+        <FaTrash /> Delete
       </button>
 
-      {/* Delete Confirmation Modal */}
-      {productToDelete && (
+      {reviewToDelete && (
         <Modal
           IsOpen={isDeleteModalOpen}
           setIsOpen={setIsDeleteModalOpen}
@@ -89,8 +89,7 @@ const DeleteProduct = ({
               </svg>
             </div>
             <p className="text-lg text-center mb-2">
-              Are you sure you want to delete product:{" "}
-              <span className="font-bold">{productToDelete.name}</span>?
+              Are you sure you want to delete this Review ?
             </p>
             <p className="text-center text-gray-500 mb-6">
               This action cannot be undone.
@@ -104,7 +103,7 @@ const DeleteProduct = ({
                 Cancel
               </button>
               <button
-                onClick={handleDeleteProduct}
+                onClick={handleDelete}
                 className="btn btn-error"
                 disabled={isLoadingDelete}
               >
@@ -125,4 +124,4 @@ const DeleteProduct = ({
   );
 };
 
-export default DeleteProduct;
+export default DeleteReview;

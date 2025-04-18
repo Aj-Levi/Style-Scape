@@ -10,6 +10,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useRouter } from "next/navigation";
 import AddToCartBtn from "@/components/shop/products/AddToCartBtn";
+import ReviewsSection from "@/components/shop/products/ReviewsSection";
+import { renderStars } from "@/components/shop/products/RatingAccessories";
 
 const ProductDetails = ({
   params,
@@ -53,17 +55,25 @@ const ProductDetails = ({
 
   return (
     <>
-      <QueryStateHandler isError={isError} isLoading={isLoading} error={error} LoadingFull={true} />
-      
+      <QueryStateHandler
+        isError={isError}
+        isLoading={isLoading}
+        error={error}
+        LoadingFull={true}
+      />
+
       {product && (
         <div className="bg-base-100 py-8">
           <div className="container mx-auto max-w-7xl px-4">
             <div className="mb-6">
-              <button onClick={() => router.back()} className="btn btn-sm btn-ghost gap-2">
+              <button
+                onClick={() => router.back()}
+                className="btn btn-sm btn-ghost gap-2"
+              >
                 <FaArrowLeft /> Back
               </button>
             </div>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
               {/* Product Images */}
               <div className="bg-base-200 rounded-lg overflow-hidden shadow-lg">
@@ -74,7 +84,7 @@ const ProductDetails = ({
                         <div key={index} className="aspect-square relative">
                           <Image
                             src={image}
-                            alt={`${product.name} image ${index+1}`}
+                            alt={`${product.name} image ${index + 1}`}
                             width={600}
                             height={600}
                             className="w-full h-full object-cover"
@@ -85,7 +95,9 @@ const ProductDetails = ({
                   </div>
                 ) : (
                   <div className="aspect-square flex items-center justify-center bg-base-300">
-                    <span className="text-base-content/40 text-xl">No image available</span>
+                    <span className="text-base-content/40 text-xl">
+                      No image available
+                    </span>
                   </div>
                 )}
               </div>
@@ -99,27 +111,39 @@ const ProductDetails = ({
                     <div className="badge badge-secondary">Featured</div>
                   )}
                   {product.isOnSale && (
-                    <div className="badge badge-error text-white font-bold ml-2">Sale</div>
+                    <div className="badge badge-error text-white font-bold ml-2">
+                      Sale
+                    </div>
                   )}
                 </div>
 
                 <div className="flex items-end gap-3">
                   {product.isOnSale && product.salePrice ? (
                     <>
-                      <span className="text-2xl font-bold text-primary">${product.salePrice.toFixed(2)}</span>
-                      <span className="text-lg line-through text-base-content/50">${product.price.toFixed(2)}</span>
+                      <span className="text-2xl font-bold text-primary">
+                        ${product.salePrice.toFixed(2)}
+                      </span>
+                      <span className="text-lg line-through text-base-content/50">
+                        ${product.price.toFixed(2)}
+                      </span>
                       <span className="badge badge-error text-white font-bold ml-2">
                         Save ${(product.price - product.salePrice).toFixed(2)}
                       </span>
                     </>
                   ) : (
-                    <span className="text-2xl font-bold text-primary">${product.price.toFixed(2)}</span>
+                    <span className="text-2xl font-bold text-primary">
+                      ${product.price.toFixed(2)}
+                    </span>
                   )}
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <div className={`badge ${product.stock > 0 ? 'badge-success' : 'badge-error'}`}>
-                    {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
+                  <div
+                    className={`badge ${
+                      product.stock > 0 ? "badge-success" : "badge-error"
+                    }`}
+                  >
+                    {product.stock > 0 ? "In Stock" : "Out of Stock"}
                   </div>
                   {product.stock > 0 && (
                     <span className="text-sm text-base-content/70">
@@ -128,10 +152,18 @@ const ProductDetails = ({
                   )}
                 </div>
 
+                <div className="flex gap-x-1">
+                  {renderStars(product.rating)}
+                </div>
+
                 {product.description && (
                   <div className="py-4">
-                    <h3 className="text-lg font-bold underline mb-2">Description</h3>
-                    <p className="text-base-content/80">{product.description}</p>
+                    <h3 className="text-lg font-bold underline mb-2">
+                      Description
+                    </h3>
+                    <p className="text-base-content/80">
+                      {product.description}
+                    </p>
                   </div>
                 )}
 
@@ -142,7 +174,9 @@ const ProductDetails = ({
                       {product.sizes.map((size, index) => (
                         <button
                           key={index}
-                          className={`btn btn-outline ${selectedSize === size ? 'btn-primary' : ''}`}
+                          className={`btn btn-outline ${
+                            selectedSize === size ? "btn-primary" : ""
+                          }`}
                           onClick={() => setSelectedSize(size)}
                         >
                           {size}
@@ -161,14 +195,22 @@ const ProductDetails = ({
                   {product.metakeywords && product.metakeywords.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
                       {product.metakeywords.map((keyword, index) => (
-                        <span key={index} className="badge badge-accent text-md font-semibold">{keyword}</span>
+                        <span
+                          key={index}
+                          className="badge badge-accent text-md font-semibold"
+                        >
+                          {keyword}
+                        </span>
                       ))}
                     </div>
                   )}
                 </div>
               </div>
             </div>
-            
+
+            {/* review component */}
+            <ReviewsSection productId={productId} />
+
             <style jsx global>{`
               .product-slider .slick-dots {
                 position: relative;
@@ -178,7 +220,7 @@ const ProductDetails = ({
                 justify-content: center;
                 padding: 10px 0;
               }
-              
+
               .product-slider .slick-dots li {
                 width: auto;
                 height: auto;
@@ -188,8 +230,6 @@ const ProductDetails = ({
           </div>
         </div>
       )}
-
-      skjbdfobdf
     </>
   );
 };

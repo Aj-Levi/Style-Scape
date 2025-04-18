@@ -63,7 +63,7 @@ const ProductCard = ({ product }: { product: ProductInterface }) => {
             <Link href={productUrl} className="btn btn-sm btn-outline">
               Details
             </Link>
-            <AddToCartBtn product={product} />
+            <AddToCartBtn product={product} btnSize="sm" />
           </div>
         </div>
       </div>

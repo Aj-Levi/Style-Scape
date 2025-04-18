@@ -11,6 +11,7 @@ import {
   useGetCartItemsQuery,
 } from "@/app/services/UserData";
 import QueryStateHandler from "@/components/QueryStateHandler";
+import ExpandedCheckout from "@/components/shop/orderComp/ExpandedCheckout";
 import RemoveFromCart from "@/components/shop/products/RemoveFromCart";
 import { ProductInterface } from "@/Interfaces";
 import { Image } from "@imagekit/next";
@@ -19,12 +20,12 @@ import React from "react";
 import { FaArrowLeft, FaShoppingCart } from "react-icons/fa";
 
 const Cart = () => {
-  const { data: CartItems, isLoading, isError, error } = useGetCartItemsQuery();
+  const { data: user, isLoading, isError, error } = useGetCartItemsQuery();
 
   const calculateSubtotal = () => {
-    if (!CartItems || CartItems.length === 0) return 0;
+    if (!user?.cartitems || user?.cartitems.length === 0) return 0;
 
-    return CartItems.reduce((acc, item) => {
+    return user?.cartitems.reduce((acc, item) => {
       const product = item.product as ProductInterface;
       const price = product?.salePrice || product?.price || 0;
       return acc + price * item.quantity;
@@ -46,11 +47,11 @@ const Cart = () => {
             <div className="flex justify-between items-center mb-6">
               <h2 className="card-title text-2xl">My Shopping Cart</h2>
               <span className="badge badge-primary">
-                {CartItems?.length || 0} items
+                {user?.cartitems?.length || 0} items
               </span>
             </div>
 
-            {CartItems && CartItems.length > 0 ? (
+            {user?.cartitems && user?.cartitems.length > 0 ? (
               <>
                 <div className="overflow-x-auto">
                   <table className="table w-full">
@@ -65,7 +66,7 @@ const Cart = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {(CartItems as CartInterface[]).map((item) => (
+                      {(user?.cartitems as CartInterface[]).map((item) => (
                         <tr key={String(item.product?._id)+item.size} className="hover">
                           <td>
                             <div className="flex items-center gap-4">
@@ -95,12 +96,6 @@ const Cart = () => {
                                 >
                                   {item.product?.name}
                                 </Link>
-                                {item.product?.sizes && (
-                                  <p className="text-xs text-base-content/60">
-                                    Available sizes:{" "}
-                                    {item.product.sizes.join(", ")}
-                                  </p>
-                                )}
                               </div>
                             </div>
                           </td>
@@ -142,39 +137,8 @@ const Cart = () => {
 
                 <div className="divider my-6"></div>
 
-                <div className="flex flex-col md:flex-row justify-between items-start gap-6">
-                  <div className="w-full md:w-1/2 mx-auto card bg-base-300 p-6 rounded-lg">
-                    <h3 className="text-lg font-bold mb-4">Order Summary</h3>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span>Subtotal:</span>
-                        <span className="font-medium">
-                          ${calculateSubtotal().toFixed(2)}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Shipping:</span>
-                        <span className="font-medium">Free</span>
-                      </div>
-                      <div className="divider my-2"></div>
-                      <div className="flex justify-between text-lg">
-                        <span className="font-bold">Total:</span>
-                        <span className="font-bold">
-                          ${calculateSubtotal().toFixed(2)}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-6 space-y-4">
-                      <button className="btn btn-primary w-full">
-                        Proceed to Checkout
-                      </button>
-                      <Link href="/home" className="btn btn-outline w-full">
-                        Continue Shopping
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+                {/* proceed to checkout component */}
+                <ExpandedCheckout subtotal={+calculateSubtotal().toFixed(2)} baseURL={window.location.href} />
               </>
             ) : (
               <div className="text-center py-12">

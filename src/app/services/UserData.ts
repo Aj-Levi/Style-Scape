@@ -52,7 +52,7 @@ export const usersApi = createApi({
       ],
     }),
 
-    getCartItems: builder.query<OrderItemInterface[],void>({
+    getCartItems: builder.query<UserInterface,void>({
       query: () => `/api/cart`,
       providesTags: ["CartItems"],
     }),

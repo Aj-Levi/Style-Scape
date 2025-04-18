@@ -1,10 +1,10 @@
-import { AddProductInterface, ProductInterface, UpdatedProductInterface } from "@/Interfaces";
+import { AddProductInterface, AddReviewInterface, ProductInterface, ReviewInterface, UpdatedProductInterface, UpdatedReviewInterface } from "@/Interfaces";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const productsApi = createApi({
   reducerPath: "products",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
-  tagTypes: ["Product"],
+  tagTypes: ["Product", "ProductReview"],
   endpoints: (builder) => ({
     getAllProducts: builder.query<ProductInterface[], void>({
       query: () => "api/products",
@@ -64,6 +64,45 @@ export const productsApi = createApi({
       }),
       invalidatesTags: (result, error, { productId }) => ["Product",{ type: "Product", id: productId }],
     }),
+
+    getProductReviews: builder.query<ReviewInterface[],string>({
+      query: (productid) => `/api/reviews/${productid}`,
+      providesTags: (result, error, productid) => [{type: "ProductReview", id: productid}]
+    }),
+
+    getProductUserReviews: builder.query<ReviewInterface[],string>({
+      query: (productid) => `/api/reviews/${productid}/userReview`,
+      providesTags: (result, error, productid) => [{type: "ProductReview", id: productid}]
+    }),
+
+    addProductReview: builder.mutation<{message: string}, {productid: string, review: AddReviewInterface}>({
+      query: ({productid, review}) => ({
+        url: `/api/reviews/${productid}`,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: review,
+      }),
+      invalidatesTags: (result, error, {productid}) => [{type: "ProductReview", id: productid}, { type: "Product", id: productid }]
+    }),
+
+    updateProductReview: builder.mutation<{message: string},{productid: string, updatedReview: UpdatedReviewInterface}>({
+      query: ({ productid, updatedReview }) => ({
+        url: `/api/reviews/${productid}`,
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: updatedReview,
+      }),
+      invalidatesTags: (result, error, {productid}) => [{type: "ProductReview", id: productid}, { type: "Product", id: productid }]
+    }),
+
+    deleteProductReview: builder.mutation<{message: string}, {productid: string, id: {reviewId: string}}>({
+      query: ({ productid, id }) => ({
+        url: `/api/reviews/${productid}`,
+        method: "DELETE",
+        body: id,
+      }),
+      invalidatesTags: (result, error, {productid}) => [{type: "ProductReview", id: productid}, { type: "Product", id: productid }]
+    })
   }),
 });
 
@@ -76,4 +115,9 @@ export const {
   useAddProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,
+  useGetProductReviewsQuery,
+  useGetProductUserReviewsQuery,
+  useAddProductReviewMutation,
+  useUpdateProductReviewMutation,
+  useDeleteProductReviewMutation,
 } = productsApi;

@@ -15,10 +15,11 @@ export async function GET(_request: Request) {
     await ConnectDB();
 
     const user: UserInterface | null = await User.findById(String(userId)).populate("cartitems.product").exec();
-    if(!user || !user.cartitems || user.cartitems.length === 0) {
-      return Response.json("Cart Is empty", {status: 404});
+    if(!user) {
+      return Response.json("User not found", {status: 404});
     }
-    return Response.json(user.cartitems);
+    
+    return Response.json(user, {status: 200});
   } catch (err) {
     return Response.json("some error occurred while getting the cart items", {status: 500})
   }

@@ -5,7 +5,6 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useRouter } from "next/navigation";
 
 const brands = [
   { id: 1, name: "Nike", logo: "/brands/NikeLogo.webp" },
@@ -21,7 +20,6 @@ interface BrandsMarqueProps {
 }
 
 const BrandsMarque = ({ title = "Our Brands" }: BrandsMarqueProps) => {
-  const router = useRouter();
   
   const settings = {
     dots: false,
@@ -62,10 +60,6 @@ const BrandsMarque = ({ title = "Our Brands" }: BrandsMarqueProps) => {
     ]
   };
 
-  const handleBrandClick = (brandName: string) => {
-    router.push(`/products?brand=${brandName}`);
-  };
-
   return (
     <section className="py-8 bg-base-200">
       {title && (
@@ -79,7 +73,6 @@ const BrandsMarque = ({ title = "Our Brands" }: BrandsMarqueProps) => {
             <div key={`${brand.id}-${index}`} className="px-4">
               <div 
                 className="flex flex-col items-center cursor-pointer" 
-                onClick={() => handleBrandClick(brand.name)}
               >
                 <div className="w-20 h-20 flex items-center justify-center bg-white rounded-full shadow-md hover:shadow-xl mb-3 transition-all duration-300 relative group overflow-hidden">
                   <div className="absolute inset-0 bg-base-100 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
