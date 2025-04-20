@@ -1,9 +1,11 @@
 import { OrderInterface } from "@/Interfaces";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL as string;
+
 export const ordersApi = createApi({
   reducerPath: "orders",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
+  baseQuery: fetchBaseQuery({ baseUrl: baseURL }),
   tagTypes: ["Order"],
   endpoints: (builder) => ({
     getAllOrders: builder.query<OrderInterface[], void>({

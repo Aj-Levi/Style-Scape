@@ -1,9 +1,11 @@
 import { AddProductInterface, AddReviewInterface, ProductInterface, ReviewInterface, UpdatedProductInterface, UpdatedReviewInterface } from "@/Interfaces";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL as string;
+
 export const productsApi = createApi({
   reducerPath: "products",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
+  baseQuery: fetchBaseQuery({ baseUrl: baseURL }),
   tagTypes: ["Product", "ProductReview"],
   endpoints: (builder) => ({
     getAllProducts: builder.query<ProductInterface[], void>({

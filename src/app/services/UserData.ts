@@ -1,9 +1,11 @@
 import { AddUserInterface, OrderItemInterface, UpdatedUserInterface, UserInterface } from "@/Interfaces";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL as string;
+
 export const usersApi = createApi({
   reducerPath: "users",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
+  baseQuery: fetchBaseQuery({ baseUrl: baseURL }),
   tagTypes: ["User", "CartItems"],
   endpoints: (builder) => ({
     getAllUsers: builder.query<UserInterface[], void>({

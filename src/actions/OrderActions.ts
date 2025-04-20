@@ -1,6 +1,8 @@
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL as string;
+
 export async function createRazorPayOrderId(amount: number) {
   try {
-    const response = await fetch("http://localhost:3000/api/createRazorpayOrder", {
+    const response = await fetch(baseURL+"/api/createRazorpayOrder", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

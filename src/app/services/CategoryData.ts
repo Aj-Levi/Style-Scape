@@ -1,9 +1,11 @@
 import { AddCategoryInterface, UpdatedCategoryInterface, CategoryInterface } from "@/Interfaces";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL as string;
+
 export const categoriesApi = createApi({
   reducerPath: "categories",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
+  baseQuery: fetchBaseQuery({ baseUrl: baseURL }),
   tagTypes: ["Category"],
   endpoints: (builder) => ({
     getAllCategories: builder.query<CategoryInterface[], void>({
