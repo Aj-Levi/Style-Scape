@@ -6,7 +6,7 @@ export async function middleware(Request: NextRequest) {
     const path = Request.nextUrl.pathname;
 
     if(!(session?.user)) {
-        if(path.startsWith("/profile") || path.startsWith("/admin")) {
+        if(path.startsWith("/profile") || path.startsWith("/admin") || path.startsWith("/orders")) {
             return NextResponse.redirect(new URL("/login", Request.url));
         }
         return NextResponse.next();
@@ -29,5 +29,6 @@ export const config = {
         "/sign-up",
         "/profile/:path*",
         "/admin/:path*",
+        "/orders/:path*",
     ]
 }

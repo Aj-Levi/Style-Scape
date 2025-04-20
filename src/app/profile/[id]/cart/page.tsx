@@ -104,22 +104,22 @@ const Cart = () => {
                             item.product?.salePrice ? (
                               <div>
                                 <span className="font-medium">
-                                  ${item.product.salePrice.toFixed(2)}
+                                ₹{item.product.salePrice.toFixed(2)}
                                 </span>
                                 <span className="text-xs line-through ml-2 text-base-content/50">
-                                  ${item.product.price.toFixed(2)}
+                                ₹{item.product.price.toFixed(2)}
                                 </span>
                               </div>
                             ) : (
                               <span className="font-medium">
-                                ${item.product?.price?.toFixed(2)}
+                                ₹{item.product?.price?.toFixed(2)}
                               </span>
                             )}
                           </td>
                           <td className="pl-6"> {item.size} </td>
                           <td className="pl-10">{item.quantity}</td>
                           <td className="font-medium">
-                            $
+                          ₹
                             {(
                               (item.product?.salePrice ||
                                 item.product?.price ||

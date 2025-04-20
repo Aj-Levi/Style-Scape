@@ -23,7 +23,12 @@ const ProductDetails = ({
   const router = useRouter();
 
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const { data: product, isLoading, isError, error } = useGetProductByIdQuery({
+  const {
+    data: product,
+    isLoading,
+    isError,
+    error,
+  } = useGetProductByIdQuery({
     categoryId: String(categoryId),
     productId: String(productId),
   });
@@ -34,14 +39,14 @@ const ProductDetails = ({
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    customPaging: function(i: number) {
+    customPaging: function (i: number) {
       return (
         <div className="mt-4">
           {product?.images && product.images[i] && (
             <div className="w-16 h-16 rounded border-2 hover:border-primary border-transparent overflow-hidden">
               <Image
                 src={product.images[i]}
-                alt={`${product.name} thumbnail ${i+1}`}
+                alt={`${product.name} thumbnail ${i + 1}`}
                 width={64}
                 height={64}
                 className="w-full h-full object-cover"
@@ -50,7 +55,7 @@ const ProductDetails = ({
           )}
         </div>
       );
-    }
+    },
   };
 
   return (
@@ -121,18 +126,18 @@ const ProductDetails = ({
                   {product.isOnSale && product.salePrice ? (
                     <>
                       <span className="text-2xl font-bold text-primary">
-                        ${product.salePrice.toFixed(2)}
+                      ₹{product.salePrice.toFixed(2)}
                       </span>
                       <span className="text-lg line-through text-base-content/50">
-                        ${product.price.toFixed(2)}
+                      ₹{product.price.toFixed(2)}
                       </span>
                       <span className="badge badge-error text-white font-bold ml-2">
-                        Save ${(product.price - product.salePrice).toFixed(2)}
+                        Save ₹{(product.price - product.salePrice).toFixed(2)}
                       </span>
                     </>
                   ) : (
                     <span className="text-2xl font-bold text-primary">
-                      ${product.price.toFixed(2)}
+                      ₹{product.price.toFixed(2)}
                     </span>
                   )}
                 </div>

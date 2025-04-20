@@ -183,7 +183,7 @@ const CategoryProducts = ({
                   <div className="flex gap-2 items-center">
                     <div className="relative flex-grow">
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50">
-                        $
+                      ₹
                       </span>
                       <input
                         type="number"
@@ -198,7 +198,7 @@ const CategoryProducts = ({
                     <span className="text-base-content/70">to</span>
                     <div className="relative flex-grow">
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50">
-                        $
+                      ₹
                       </span>
                       <input
                         type="number"

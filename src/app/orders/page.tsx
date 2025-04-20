@@ -77,7 +77,7 @@ const UserOrders = () => {
                           <td>
                             {new Date(order.createdAt).toLocaleDateString()}
                           </td>
-                          <td>${order.totalOrderPrice.toFixed(2)}</td>
+                          <td>₹{order.totalOrderPrice.toFixed(2)}</td>
                           <td>
                             <div
                               className={`badge ${

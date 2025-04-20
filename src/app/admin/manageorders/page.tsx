@@ -113,7 +113,7 @@ const ManageOrders = () => {
                       {new Date(order.createdAt).toLocaleDateString()}
                     </td>
                     <td className="text-center font-semibold">
-                      ${order.totalOrderPrice.toFixed(2)}
+                    ₹{order.totalOrderPrice.toFixed(2)}
                     </td>
                     <td className="text-center">
                       <div className={`badge ${

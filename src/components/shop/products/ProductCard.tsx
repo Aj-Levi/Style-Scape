@@ -45,15 +45,15 @@ const ProductCard = ({ product }: { product: ProductInterface }) => {
             {product.isOnSale && product.salePrice ? (
               <>
                 <span className="text-primary font-bold">
-                  ${product.salePrice.toFixed(2)}
+                ₹{product.salePrice.toFixed(2)}
                 </span>
                 <span className="ml-2 text-base-content/50 line-through text-sm">
-                  ${product.price.toFixed(2)}
+                ₹{product.price.toFixed(2)}
                 </span>
               </>
             ) : (
               <span className="text-primary font-bold">
-                ${product.price.toFixed(2)}
+                ₹{product.price.toFixed(2)}
               </span>
             )}
           </div>

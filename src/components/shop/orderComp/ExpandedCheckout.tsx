@@ -13,6 +13,7 @@ import ToastStyles from "@/styles/ToastStyles";
 import MutationStateHandler from "@/components/MutationStateHandler";
 import { useRouter } from "next/navigation";
 import { SiRazorpay } from "react-icons/si";
+import { BsCash } from "react-icons/bs";
 
 const ExpandedCheckout = ({ subtotal }: { subtotal: number }) => {
   const [Phone, setPhone] = useState<string | undefined>("");
@@ -119,6 +120,18 @@ const ExpandedCheckout = ({ subtotal }: { subtotal: number }) => {
               />
               <SiRazorpay className="mr-2" />
               <span>RazorPay</span>
+            </label>
+            <label className="flex items-center p-3 border rounded-md cursor-pointer">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="COD"
+                checked={paymentMethod === "COD"}
+                onChange={() => setPaymentMethod("COD")}
+                className="radio radio-primary mr-3"
+              />
+              <BsCash className="mr-2" />
+              <span>Cash on Delivery</span>
             </label>
           </div>
         </div>

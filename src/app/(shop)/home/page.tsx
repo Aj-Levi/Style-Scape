@@ -5,6 +5,10 @@ import HeroSection from '@/components/shop/Home/HeroSection'
 import React from 'react'
 import NewArrivals from '@/components/shop/products/NewArrivals'
 
+export const metadata = {
+  title: "Style Scape - Home"
+}
+
 const Home = () => {    
   return (
     <div className='w-screen py-[0rem]'>

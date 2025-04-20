@@ -179,14 +179,14 @@ const ManageCategoryProducts = ({ params }: { params: Promise<{ categoryId: stri
                     {product.isOnSale && product.salePrice ? (
                       <div className="flex gap-2 items-center">
                         <span className="text-md font-bold">
-                          ${product.salePrice}
+                        ₹{product.salePrice}
                         </span>
                         <span className="text-sm line-through opacity-60">
-                          ${product.price}
+                        ₹{product.price}
                         </span>
                       </div>
                     ) : (
-                      <span className="text-md font-bold">${product.price}</span>
+                      <span className="text-md font-bold">₹{product.price}</span>
                     )}
                   </div>
                   <div className="badge badge-outline font-semibold">
