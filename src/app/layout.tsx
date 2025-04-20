@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 };
 
 const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT as string;
+const PayPalClientId = process.env.PAYPAL_CLIENT_ID as string;
 
 export default function RootLayout({
   children,

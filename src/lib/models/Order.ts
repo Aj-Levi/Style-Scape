@@ -24,6 +24,7 @@ const OrderSchema = new mongoose.Schema<OrderInterface>(
     shippingAddress: { type: String, required: true },
     contactNumber: { type: String, required: true },
     totalOrderPrice: { type: Number, required: true, default: 0.0 },
+    isPaid: {type: Boolean, required: true, default: false},
 
     shippingPrice: {
       type: Number,
@@ -36,7 +37,7 @@ const OrderSchema = new mongoose.Schema<OrderInterface>(
     paymentResult: {
       id: { type: String },
       status: { type: String },
-      update_time: { type: String },
+      update_time: { type: Number },
       email_address: { type: String },
     },
 

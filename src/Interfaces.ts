@@ -156,7 +156,7 @@ export interface OrderItemInterface{
 export interface paymentResultInterface{
     id?: String;
     status?: string;
-    update_time?: string;
+    update_time?: number;
     email_address?: string;
 }
 
@@ -169,10 +169,12 @@ export interface OrderInterface extends Document{
     contactNumber: string;
     totalOrderPrice: number;
     shippingPrice: number;
+    isPaid: boolean;
     paymentMethod: string;
     paymentResult?: paymentResultInterface;
     isDelivered: boolean;
     deliveredAt?: string;
+    createdAt: string;
 }
 
 export interface ToastInterface{

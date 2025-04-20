@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
-import { ImPaypal } from "react-icons/im";
 import { useGetCartItemsQuery } from "@/app/services/UserData";
 import ProceedToCheckout from "./ProceedToCheckout";
 import AddressInput from "@/components/profile/AddressInput";
@@ -13,11 +12,12 @@ import { toast } from "react-toastify";
 import ToastStyles from "@/styles/ToastStyles";
 import MutationStateHandler from "@/components/MutationStateHandler";
 import { useRouter } from "next/navigation";
+import { SiRazorpay } from "react-icons/si";
 
-const ExpandedCheckout = ({ subtotal, baseURL }: { subtotal: number, baseURL: string }) => {
+const ExpandedCheckout = ({ subtotal }: { subtotal: number }) => {
   const [Phone, setPhone] = useState<string | undefined>("");
   const [PhoneError, setPhoneError] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("paypal");
+  const [paymentMethod, setPaymentMethod] = useState("razorpay");
   const [isPlacing, setIsPlacing] = useState<boolean>(false);
 
   const router = useRouter();
@@ -34,6 +34,8 @@ const ExpandedCheckout = ({ subtotal, baseURL }: { subtotal: number, baseURL: st
   ] = useAddOrderMutation();
 
   const handlePlaceOrder = async (formdata: FormData) => {
+    setIsPlacing(true);
+
     const phone = formdata.get("phone") as string;
     const address = formdata.get("address") as string;
 
@@ -41,8 +43,6 @@ const ExpandedCheckout = ({ subtotal, baseURL }: { subtotal: number, baseURL: st
       toast.warn("Shipping and contact details are required", ToastStyles);
       return;
     }
-
-    setIsPlacing(true);
 
     const orderDetails = {
       contactNumber: phone,
@@ -53,7 +53,7 @@ const ExpandedCheckout = ({ subtotal, baseURL }: { subtotal: number, baseURL: st
     try {
       const {order_ID} = await addOrder(orderDetails).unwrap();
       setTimeout(() => {
-        router.push(`orders/${order_ID}`)
+        router.push(`/orders/${order_ID}`);
       }, 1500);
     } catch (error) {
       toast.error("Could not place the order", ToastStyles);
@@ -113,21 +113,22 @@ const ExpandedCheckout = ({ subtotal, baseURL }: { subtotal: number, baseURL: st
                 type="radio"
                 name="paymentMethod"
                 value="paypal"
-                checked={paymentMethod === "paypal"}
-                onChange={() => setPaymentMethod("paypal")}
+                checked={paymentMethod === "razorpay"}
+                onChange={() => setPaymentMethod("razorpay")}
                 className="radio radio-primary mr-3"
               />
-              <ImPaypal className="mr-2" />
-              <span>Paypal</span>
+              <SiRazorpay className="mr-2" />
+              <span>RazorPay</span>
             </label>
           </div>
         </div>
 
         <button
+        type="submit"
           disabled={isLoading || isPlacing || isLoadingAdd}
           className="w-full btn btn-primary btn-md"
         >
-          {isLoading || isPlacing || isLoadingAdd ? (
+          {(isLoading || isPlacing || isLoadingAdd) ? (
             <>
               <span className="loading loading-spinner loading-sm"></span>
               Please Wait

@@ -37,7 +37,7 @@ const Profile = async ({ children }: { children: ReactNode }) => {
     );
   } else if (session?.user.role === "user") {
     tabs.push(
-      { id: "orders", label: "Orders", icon: <FaShoppingBag /> },
+      { id: "orders", label: "Order History", icon: <FaShoppingBag /> },
       { id: "cart", label: "My Cart", icon: <FaShoppingCart /> }
     );
   }

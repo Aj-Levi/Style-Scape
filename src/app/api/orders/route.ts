@@ -17,17 +17,12 @@ export async function GET(_Req: Request) {
   }
 
   try {
-
     await ConnectDB();
     const orders = await Order.find({})
       .populate({
         path: "customer",
         model: "User",
-        select: "firstname, lastname, email, image",
-      })
-      .populate({
-        path: "items.product",
-        model: "Product",
+        select: "firstname lastname",
       })
       .exec();
 
@@ -70,7 +65,7 @@ export async function POST(request: Request) {
       totalOrderPrice += item.totalProductPrice || 0;
     }
 
-    const shippingPrice = totalOrderPrice > 4 ? 0 : 2.99;
+    const shippingPrice = totalOrderPrice > 300 ? 0 : 150;
     totalOrderPrice += shippingPrice;
 
     const newOrder = await Order.create({
@@ -89,10 +84,7 @@ export async function POST(request: Request) {
     user.orders.push(String(newOrder._id));
     await user.save();
 
-    return Response.json(
-      { order_ID: String(newOrder._id) },
-      { status: 200 }
-    );
+    return Response.json({ order_ID: String(newOrder._id) }, { status: 200 });
   } catch (error) {
     return Response.json("Internal Server Error", { status: 500 });
   }
@@ -112,24 +104,31 @@ export async function DELETE(request: Request) {
 
   try {
     const body = await request.json();
-    const {orderId} = body;
+    const { orderId } = body;
 
     await ConnectDB();
 
-    const user: UserInterface | null = await User.findById(String(session.user.id));
-    if(!user) {
-        return Response.json("User not found", { status: 404 }); 
+    const user: UserInterface | null = await User.findById(
+      String(session.user.id)
+    );
+    if (!user) {
+      return Response.json("User not found", { status: 404 });
     }
 
-    if(user.orders && user.orders.length !== 0) {
-        user.orders = (user.orders).filter((orderid) => String(orderid) !== orderId);
+    if (user.orders && user.orders.length !== 0) {
+      user.orders = user.orders.filter(
+        (orderid) => String(orderid) !== orderId
+      );
     }
 
-    await Order.deleteOne({_id: orderId});
+    await Order.deleteOne({ _id: orderId });
     await user.save();
 
-    return Response.json({message: "Order Deleted Successfully"}, {status: 200});
+    return Response.json(
+      { message: "Order Deleted Successfully" },
+      { status: 200 }
+    );
   } catch (error) {
-    return Response.json("Internal Server Error", { status: 500 }); 
+    return Response.json("Internal Server Error", { status: 500 });
   }
 }

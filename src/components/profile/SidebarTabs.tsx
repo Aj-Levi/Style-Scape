@@ -16,7 +16,8 @@ const SidebarTabs = ({ tabs , userid }: { tabs: TabInterface[] , userid: string 
           onClick={() => {
             setActiveTab(tab.id);
             if(tab.id === "continueshopping") router.push(`/home`);
-            else if(tab.id === "manageusers" || tab.id === "managecategories") router.push(`/admin/${tab.id}`);
+            else if(tab.id === "orders") router.push("/orders");
+            else if(tab.id === "manageusers" || tab.id === "managecategories" || tab.id === "manageorders") router.push(`/admin/${tab.id}`);
             else router.push(`/profile/${userid}/${tab.id}`);
         }}
           className={`btn btn-ghost justify-start w-full mb-2 ${

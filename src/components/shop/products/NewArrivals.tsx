@@ -21,30 +21,6 @@ interface ArrowProps {
 const NewArrivals = ({ title = "New Arrivals" }: NewArrivalsProps) => {
   const { data, isLoading, isError, error } = useGetNewArrivalsQuery();
 
-  const PrevArrow: React.FC<ArrowProps> = ({ onClick }) => {
-    return (
-      <button
-        className="btn btn-circle btn-sm btn-ghost bg-base-100/60 absolute left-2 top-1/2 -translate-y-1/2 z-10"
-        onClick={onClick}
-        aria-label="Previous slide"
-      >
-        <FaChevronLeft />
-      </button>
-    );
-  };
-
-  const NextArrow: React.FC<ArrowProps> = ({ onClick }) => {
-    return (
-      <button
-        className="btn btn-circle btn-sm btn-ghost bg-base-100/60 absolute right-2 top-1/2 -translate-y-1/2 z-10"
-        onClick={onClick}
-        aria-label="Next slide"
-      >
-        <FaChevronRight />
-      </button>
-    );
-  };
-
   const settings = {
     infinite: true,
     speed: 500,
@@ -54,8 +30,7 @@ const NewArrivals = ({ title = "New Arrivals" }: NewArrivalsProps) => {
     autoplaySpeed: 1800,
     pauseOnHover: true,
     swipeToSlide: true,
-    prevArrow: <PrevArrow />,
-    nextArrow: <NextArrow />,
+    arrows: false,
     responsive: [
       {
         breakpoint: 1280,

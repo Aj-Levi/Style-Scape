@@ -11,12 +11,12 @@
   },
   "dependencies": {
     "@imagekit/next": "^2.0.0",
-    "@paypal/react-paypal-js": "^8.8.3",
     "@reduxjs/toolkit": "^2.6.1",
     "bcryptjs": "^3.0.2",
     "mongoose": "^8.13.1",
     "next": "15.2.4",
     "next-auth": "^5.0.0-beta.25",
+    "razorpay": "^2.9.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",

@@ -138,7 +138,7 @@ const Cart = () => {
                 <div className="divider my-6"></div>
 
                 {/* proceed to checkout component */}
-                <ExpandedCheckout subtotal={+calculateSubtotal().toFixed(2)} baseURL={window.location.href} />
+                <ExpandedCheckout subtotal={+calculateSubtotal().toFixed(2)} />
               </>
             ) : (
               <div className="text-center py-12">
