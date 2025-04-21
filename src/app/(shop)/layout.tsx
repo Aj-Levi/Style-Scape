@@ -10,7 +10,7 @@ const ShopLayout = async({children}: {children: ReactNode}) => {
   return (
     <>
         <Navbar />
-        <Sidebar user={user} />
+        <Sidebar user={user!} />
         {children}
         <Footer />
     </>

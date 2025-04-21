@@ -5,14 +5,14 @@ import Link from "next/link";
 import { FaHome, FaShoppingBag, FaShoppingCart, FaUser } from "react-icons/fa";
 
 interface SidebarProps {
+  id?: string;
+  role?: string;
   firstname?: string;
   lastname?: string;
-  email: string;
-  role: "admin" | "user";
-  image?: string;
-  id: string | number;
-  _id?: string | number;
-  createdAt?: string | number;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  createdAt?: Date | string;
 }
 
 const Sidebar = ({ user }: {user: SidebarProps}) => {
