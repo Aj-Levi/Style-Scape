@@ -85,30 +85,31 @@ const Sidebar = ({ user }: { user: any }) => {
             </div>
           </div>
           <div>
-            {/* User account section */}
-            <div className="p-4 border-b border-base-300 bg-base-200">
-              <h3 className="font-medium mb-3 text-secondary">Account</h3>
-              <ul className="menu menu-vertical gap-1 text-base-content">
-                <li>
-                  <Link
-                    href={`/profile/${user.id}/profiledetails`}
-                    className="flex items-center gap-3"
-                  >
-                    <FaUser size={18} />
-                    <span>My Account</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/profile/${user.id}/cart"
-                    className="flex items-center gap-3"
-                  >
-                    <FaShoppingCart size={18} />
-                    <span className="flex justify-between w-full">Cart</span>
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            {user && (
+              <div className="p-4 border-b border-base-300 bg-base-200">
+                <h3 className="font-medium mb-3 text-secondary">Account</h3>
+                <ul className="menu menu-vertical gap-1 text-base-content">
+                  <li>
+                    <Link
+                      href={`/profile/${user.id}/profiledetails`}
+                      className="flex items-center gap-3"
+                    >
+                      <FaUser size={18} />
+                      <span>My Account</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/profile/${user.id}/cart"
+                      className="flex items-center gap-3"
+                    >
+                      <FaShoppingCart size={18} />
+                      <span className="flex justify-between w-full">Cart</span>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            )}
 
             {/* Footer */}
             <div className="p-4 mt-auto bg-base-300 text-center text-sm text-base-content">

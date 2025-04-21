@@ -2,6 +2,8 @@ import { UserInterface } from "@/Interfaces";
 import ConnectDB from "@/lib/connectDB";
 import { getSession } from "@/lib/getSession";
 import User from "@/lib/models/User";
+import { OrderSchema } from "@/lib/models/Order";
+import mongoose from "mongoose";
 
 export async function GET(_Req: Request) {
   const session = await getSession();
@@ -11,6 +13,10 @@ export async function GET(_Req: Request) {
 
   try {
     await ConnectDB();
+
+    if(!mongoose.models.Order) {
+      mongoose.model("Order", OrderSchema);
+    }
 
     const user: UserInterface | null = await User.findById(
       String(session.user.id)
@@ -34,6 +40,7 @@ export async function GET(_Req: Request) {
       : Response.json([], { status: 200 });
       
   } catch (error) {
+    console.log(error);
     return Response.json("Internal Server Error", { status: 500 });
   }
 }

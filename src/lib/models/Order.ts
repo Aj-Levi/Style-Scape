@@ -1,7 +1,7 @@
 import { OrderInterface } from "@/Interfaces";
 import mongoose from "mongoose";
 
-const OrderSchema = new mongoose.Schema<OrderInterface>(
+export const OrderSchema = new mongoose.Schema<OrderInterface>(
   {
     customer: {
       type: mongoose.Schema.Types.ObjectId,
