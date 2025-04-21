@@ -5,7 +5,7 @@ import User from "@/lib/models/User";
 import { OrderSchema } from "@/lib/models/Order";
 import mongoose from "mongoose";
 
-export async function GET(_Req: Request) {
+export async function GET() {
   const session = await getSession();
   if (!session?.user) {
     return Response.json("Active Session is required", { status: 400 });
@@ -40,7 +40,7 @@ export async function GET(_Req: Request) {
       : Response.json([], { status: 200 });
       
   } catch (error) {
-    console.log(error);
+    console.log("Error in GET Orders: ", error);
     return Response.json("Internal Server Error", { status: 500 });
   }
 }

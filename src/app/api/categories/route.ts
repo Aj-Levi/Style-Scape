@@ -9,7 +9,7 @@ export async function GET() {
     const allCategories: CategoryInterface[] = await Category.find({});
     return allCategories ? Response.json(allCategories, {status: 200}) : Response.json([], {status: 200});
   } catch (err) {
-    console.error("some error occured while getting all the Categories");
+    console.error("some error occured while getting all the Categories",err);
     return Response.json("some error occured while getting all the Categories", {
       status: 500,
     });

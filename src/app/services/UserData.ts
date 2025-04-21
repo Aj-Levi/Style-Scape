@@ -1,4 +1,4 @@
-import { AddUserInterface, OrderItemInterface, UpdatedUserInterface, UserInterface } from "@/Interfaces";
+import { AddUserInterface, UpdatedUserInterface, UserInterface } from "@/Interfaces";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL as string;

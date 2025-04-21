@@ -20,6 +20,7 @@ export async function GET() {
     const allusers: UserInterface[] = await User.find({});
     return allusers ? Response.json(allusers, {status: 200}) : Response.json([], {status: 200});
   } catch (err) {
+    console.error("Error in GET Users: ", err);
     console.error("some error occured while getting all the users");
     return Response.json("some error occured while getting all the users", {
       status: 500,

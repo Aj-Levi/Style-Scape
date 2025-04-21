@@ -39,6 +39,7 @@ export async function GET(
 
     return Response.json(order, { status: 200 });
   } catch (error) {
+    console.log("Error in GET Order: ", error);
     return Response.json("Internal Server Error", { status: 500 });
   }
 }
@@ -72,6 +73,7 @@ export async function PATCH(
 
     return Response.json({ message: "Marked Delivered" }, { status: 200 });
   } catch (error) {
+    console.log("Error in PATCH Order: ", error);
     return Response.json("Internal Server Error", { status: 500 });
   }
 }
@@ -121,6 +123,7 @@ export async function DELETE(
       return Response.json("Could not cancel the order", { status: 400 });
     }
   } catch (error) {
+    console.log("Error in DELETE Order: ", error);
     return Response.json("Internal Server Error", { status: 500 });
   }
 }

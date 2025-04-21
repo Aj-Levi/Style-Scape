@@ -22,6 +22,7 @@ const AddToCartBtn = ({ product, size = null, btnSize = "md" }: { product: Produ
     try {
       await addToCart({productid: String(product._id), size: size || product.sizes![0] || "S"});
     } catch (error) {
+      console.error("Could not add the item to cart", error);
       toast.error("Could not add the item to cart", ToastStyles);
     }
   };

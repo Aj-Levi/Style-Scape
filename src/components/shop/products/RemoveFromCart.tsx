@@ -21,6 +21,7 @@ const RemoveFromCart = ({ Product_Id, size }: { Product_Id: string, size: string
     try {
       await deleteProductFromCart({productid: productId, size});
     } catch (err) {
+      console.error("Failed to remove item", err);
       toast.error("Failed to remove item");
     }
   };

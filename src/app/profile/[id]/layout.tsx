@@ -57,18 +57,18 @@ const Profile = async ({ children }: { children: ReactNode }) => {
           <div className="col-span-1">
             <div className="card bg-base-200 shadow-xl">
               <div className="card-body items-center text-center">
-                <SidebarUserDetails id={session?.user.id!} />
+                <SidebarUserDetails id={user.id!} />
 
                 <div className="divider"></div>
 
-                <SidebarTabs tabs={tabs} userid={session?.user.id!} />
+                <SidebarTabs tabs={tabs} userid={user.id!} />
                 <SignOut />
               </div>
             </div>
           </div>
 
           <div className="col-span-1 md:col-span-3 flex flex-col">
-            <Greeting id={session?.user.id!} />
+            <Greeting id={user.id!} />
             {children}
           </div>
         </div>

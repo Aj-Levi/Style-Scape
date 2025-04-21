@@ -23,6 +23,7 @@ const RazorPayPaymentBtn = ({amount, orderIdDb}: {amount: number, orderIdDb: str
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         order_id: data.id,
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         handler: async function (response: any) {
           // verify payment
           const res = await fetch("/api/verifyRazorPayOrder", {
@@ -47,9 +48,11 @@ const RazorPayPaymentBtn = ({amount, orderIdDb}: {amount: number, orderIdDb: str
         },
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const payment = new (window as any).Razorpay(paymentData);
       payment.open();
     } catch (error) {
+      console.error("Error creating Razorpay order:", error);
       toast.error("Payment Failed", ToastStyles);
     } finally {
       setIsLoading(false);

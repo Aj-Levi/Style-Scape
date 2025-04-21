@@ -43,6 +43,7 @@ const AddCategory = () => {
     try {
       await addCategory(category);
     } catch (err) {
+      console.error("Error adding category:", err);
       toast.error("Could not add category", ToastStyles);
     } finally {
       setIsAddCategoryModalOpen(false);

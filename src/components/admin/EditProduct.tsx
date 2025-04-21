@@ -48,6 +48,7 @@ const EditProduct = ({product, categoryId}: {product: ProductInterface, category
             updatedProduct
           });
         } catch (error) {
+          console.error("Error updating product:", error);
           toast.error("Failed to update product", ToastStyles);
         } finally {
           setProductToEdit(null);

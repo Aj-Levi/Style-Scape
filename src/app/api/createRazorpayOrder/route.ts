@@ -16,6 +16,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(order);
   } catch (error) {
+    console.error("Error creating Razorpay order:", error);
     return NextResponse.json("Internal Server Error", { status: 500 });
   }
 }

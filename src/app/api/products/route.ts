@@ -10,6 +10,7 @@ export async function GET() {
     const allProducts: ProductInterface[] = await Product.find({});
     return allProducts ? Response.json(allProducts, {status: 200}) : Response.json([], {status: 200});
   } catch (err) {
+    console.log("Error in GET Products: ", err);
     return Response.json("some error occured while getting all the Products", {
       status: 500,
     });
@@ -91,6 +92,7 @@ export async function POST(Req: Request) {
       message: "Product added successfully",
     }, {status: 200});
   } catch (error) {
+    console.log("Error in POST Product: ", error);
     return Response.json("Error adding product", {
       status: 500,
     });

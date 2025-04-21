@@ -28,19 +28,6 @@ const OrderSummary = ({ params }: { params: Promise<{ orderId: string }> }) => {
     error,
   } = useGetOrderByIdQuery(String(orderId));
 
-  const getStatusClass = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "delivered":
-        return "bg-success";
-      case "shipped":
-        return "bg-info";
-      case "pending":
-        return "bg-warning";
-      default:
-        return "bg-neutral";
-    }
-  };
-
   return (
     <>
       <QueryStateHandler

@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useGetNewArrivalsQuery } from "@/app/services/ProductData";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -10,12 +9,6 @@ import QueryStateHandler from "@/components/QueryStateHandler";
 
 interface NewArrivalsProps {
   title?: string;
-}
-
-interface ArrowProps {
-  className?: string;
-  style?: React.CSSProperties;
-  onClick?: () => void;
 }
 
 const NewArrivals = ({ title = "New Arrivals" }: NewArrivalsProps) => {
@@ -54,7 +47,7 @@ const NewArrivals = ({ title = "New Arrivals" }: NewArrivalsProps) => {
         },
       },
     ],
-    customPaging: (_: number) => (
+    customPaging: () => (
       <div
         className="w-3 h-3 mx-1 rounded-full bg-base-300 hover:bg-primary transition-colors duration-300"
         style={{
@@ -70,21 +63,11 @@ const NewArrivals = ({ title = "New Arrivals" }: NewArrivalsProps) => {
         <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
           {title}
         </h2>
-        <div className="alert alert-info shadow-lg max-w-3xl mx-auto">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            className="stroke-current flex-shrink-0 w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            ></path>
-          </svg>
-          <span>No new arrivals available</span>
+        <div className="alert alert-neutral flex justify-center gap-x-4 shadow-lg max-w-3xl mx-auto">
+          <span className="loading loading-spinner loading-md text-primary"></span>
+          <span className="text-lg font-semibold text-primary">
+            Loading New Arrivals
+          </span>
         </div>
       </div>
     );

@@ -32,6 +32,7 @@ const DeleteCategory = ({
     try {
       await deleteCategory(id);
     } catch (err) {
+      console.error("Error deleting category:", err);
       toast.error("Could not delete the category", ToastStyles);
     } finally {
       setCategoryIdToDelete(null);

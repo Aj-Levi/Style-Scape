@@ -12,6 +12,7 @@ export async function GET() {
 
     return Response.json({ token, expire, signature, publicKey });
   } catch (err) {
+    console.error("Error in GET Upload Auth: ", err);
     return Response.json("error while authenticating imagekit cred", {
       status: 500,
     });

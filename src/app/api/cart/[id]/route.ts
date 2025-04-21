@@ -45,12 +45,14 @@ export async function POST(
     let productFound = false;
 
     if (user.cartitems && user.cartitems.length > 0) {
-      for (let item of user.cartitems) {
+      for (const item of user.cartitems) {
         if (String(item.product) === Product_Id && item.size === size) {
           item.quantity += 1;
-          product.salePrice
-            ? (item.totalProductPrice! += product.salePrice)
-            : (item.totalProductPrice! += product.price);
+          if (product.salePrice) {
+            item.totalProductPrice! += product.salePrice;
+          } else {
+            item.totalProductPrice! += product.price;
+          }
           productFound = true;
           break;
         }
@@ -75,6 +77,7 @@ export async function POST(
       { status: 200 }
     );
   } catch (error) {
+    console.error("Error adding product to cart:", error);
     return Response.json("Failed to add product to cart", { status: 500 });
   }
 }
@@ -103,7 +106,7 @@ export async function DELETE(
     }
 
     // Finding product in cart
-    let itemIndex = user.cartitems.findIndex(
+    const itemIndex = user.cartitems.findIndex(
       (item) => (String(item.product) === Product_Id && item.size === size)
     );
 
@@ -122,6 +125,7 @@ export async function DELETE(
     return Response.json({message: "Cart updated successfully"},{ status: 200 }
     );
   } catch (error) {
+    console.error("Error updating cart:", error);
     return Response.json("Failed to update cart", { status: 500 });
   }
 }

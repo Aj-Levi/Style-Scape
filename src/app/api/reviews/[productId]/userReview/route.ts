@@ -59,6 +59,7 @@ export async function GET(_Req: Request,{
 
     return Response.json(UserReviews, { status: 200 });
   } catch (error) {
+    console.log("Error in GET User Reviews: ", error);
     return Response.json("Internal Server Error", { status: 500 });
   }
 }

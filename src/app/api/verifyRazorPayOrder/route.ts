@@ -79,6 +79,7 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error) {
+    console.error("Error verifying Razorpay order:", error);
     return NextResponse.json(
       { error: "An error occurred", success: false },
       { status: 500 }

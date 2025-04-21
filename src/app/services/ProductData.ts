@@ -15,7 +15,7 @@ export const productsApi = createApi({
 
     getProductsByCategory: builder.query<ProductInterface[],string>({
       query: (categoryId) => `api/products/${categoryId}`,
-      providesTags: (result, error) => ["Product"],
+      providesTags: ["Product"],
     }),
 
     getProductById: builder.query<ProductInterface,{ categoryId: string; productId: string }>({

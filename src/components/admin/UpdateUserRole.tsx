@@ -17,7 +17,7 @@ const UpdateUserRole = ({user}: {user: UserInterface}) => {
   ] = useUpdateUserMutation();
 
   const handleUpdate = async (user: UserInterface) => {
-    let updatedUser: UpdatedUserInterface =
+    const updatedUser: UpdatedUserInterface =
       user.role === "admin"
         ? {
             role: "user",

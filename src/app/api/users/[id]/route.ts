@@ -88,7 +88,7 @@ export async function PATCH(
       hashedpassword = await bcrypt.hash(body?.password, salt);
     }
     
-    let updateData: UpdatedUserInterface = {
+    const updateData: UpdatedUserInterface = {
       firstname: body?.firstname || user.firstname,
       lastname: body?.lastname || user.lastname,
       phone: body?.phone || user.phone,

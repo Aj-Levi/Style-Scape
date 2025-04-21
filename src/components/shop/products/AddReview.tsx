@@ -8,7 +8,6 @@ import RatingSelector from "./RatingAccessories";
 import { toast } from "react-toastify";
 import ToastStyles from "@/styles/ToastStyles";
 import { AddReviewInterface } from "@/Interfaces";
-import { set } from "mongoose";
 
 const AddReview = ({ productid }: { productid: string }) => {
   const [isAddProductModalOpen, setIsAddProductModalOpen] =
@@ -36,6 +35,7 @@ const AddReview = ({ productid }: { productid: string }) => {
       };
       await addReview({ productid, review: newReview });
     } catch (error) {
+      console.error("Could not add the review", error);
       toast.error("Could not add the review", ToastStyles);
     } finally {
       setIsAddProductModalOpen(false);

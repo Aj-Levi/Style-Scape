@@ -106,6 +106,7 @@ const CategoryImgUpload = ({ id }: { id: string }) => {
       try {
         await updateCategory({ id, updatedCategory });
       } catch (err) {
+        console.error("Failed to update category:", err);
         toast.error("couldn't update the category info", ToastStyles);
       }
     } catch (error) {

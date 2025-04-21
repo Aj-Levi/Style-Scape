@@ -4,7 +4,7 @@ import { useZustandStore } from "@/lib/stores/ZustandStore";
 import { FiSun, FiMoon } from "react-icons/fi";
 
 const ThemeToggleFixed = () => {
-  let { currentTheme , toggleTheme } = useZustandStore();
+  const { currentTheme , toggleTheme } = useZustandStore();
 
   return (
     <button 

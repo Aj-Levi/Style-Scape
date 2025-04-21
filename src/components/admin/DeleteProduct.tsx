@@ -37,6 +37,7 @@ const DeleteProduct = ({
         productId: String(productToDelete._id),
       });
     } catch (error) {
+      console.error("Error deleting product:", error);
       toast.error("Failed to delete product", ToastStyles);
     } finally {
       setProductToDelete(null);

@@ -5,7 +5,8 @@ import User from "./lib/models/User";
 import { compare } from "bcryptjs";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
-import { JWT } from "next-auth/jwt";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { JWT } from "next-auth/jwt";
 
 // Extend the next-auth types
 declare module "next-auth" {
@@ -155,7 +156,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return true;
     },
-    async redirect({ url, baseUrl }) {
+    async redirect({ baseUrl }) {
       return baseUrl;
     },
   },

@@ -20,6 +20,7 @@ const CancelOrder = ({ orderId }: { orderId: string }) => {
       setIsCancelling(true);
       await CancelOrder(String(orderId));
     } catch (error) {
+      console.error("Could Not Cancel The Order", error);
       toast.error("Could Not Cancel The Order", ToastStyles);
     } finally {
       setIsCancelling(false);

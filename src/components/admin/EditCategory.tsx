@@ -53,6 +53,7 @@ const EditCategory = ({ category }: { category: CategoryInterface }) => {
         updatedCategory,
       });
     } catch (err) {
+      console.error("Error updating category:", err);
       toast.error("Could not update category", ToastStyles);
     } finally {
       setIsEditCategoryModalOpen(false);

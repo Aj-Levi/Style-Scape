@@ -6,7 +6,11 @@ const ValidateEmailInput = ({ValidEmail, setValidEmail}: {ValidEmail: boolean, s
 
   useEffect(() => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    emailRegex.test(Email) ? setValidEmail(true) : setValidEmail(false);
+    if(emailRegex.test(Email)) {
+      setValidEmail(true);
+    } else {
+      setValidEmail(false);
+    }
   }, [Email]);
 
   return (

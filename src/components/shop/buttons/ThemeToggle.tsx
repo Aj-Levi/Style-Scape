@@ -4,7 +4,7 @@ import { FiSun, FiMoon } from "react-icons/fi";
 import { useZustandStore } from "@/lib/stores/ZustandStore";
 
 const ThemeToggle = () => {
-    let { currentTheme, toggleTheme } = useZustandStore();
+    const { currentTheme, toggleTheme } = useZustandStore();
   return (
     <button
       className="font-semibold btn btn-secondary max-md:p-2"

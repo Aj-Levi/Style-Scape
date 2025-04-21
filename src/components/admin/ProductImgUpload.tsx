@@ -84,6 +84,7 @@ const ProductImgUpload = ({
     try {
       authParams = await authenticator();
     } catch (authError) {
+      console.error("Authentication error:", authError);
       toast.error("Error while uploading", ToastStyles);
       return;
     }
@@ -120,6 +121,7 @@ const ProductImgUpload = ({
           updatedProduct,
         });
       } catch (err) {
+        console.error("Error updating product images:", err);
         toast.error("Couldn't update the product images", ToastStyles);
       }
     } catch (error) {
@@ -157,6 +159,7 @@ const ProductImgUpload = ({
         updatedProduct,
       });
     } catch (err) {
+      console.error("Error removing image:", err);
       toast.error("Couldn't remove the image", ToastStyles);
     }
   };

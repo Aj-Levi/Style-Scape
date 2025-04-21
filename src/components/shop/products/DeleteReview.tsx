@@ -42,6 +42,7 @@ const DeleteReview = ({
     try {
       await deleteReview({ productid, id: { reviewId: String(review._id) } });
     } catch (error) {
+      console.error("Failed to delete product", error);
       toast.error("Failed to delete product", ToastStyles);
     } finally {
       setReviewToDelete(null);

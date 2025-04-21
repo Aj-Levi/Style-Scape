@@ -26,6 +26,7 @@ export async function GET(
 
     return Response.json(product, { status: 200 });
   } catch (error) {
+    console.log("Error in GET Product: ", error);
     return Response.json("Failed to fetch product details", { status: 500 });
   }
 }
@@ -117,6 +118,7 @@ export async function PATCH(
 
     return Response.json({message: "Product Updated Successfully"}, {status: 200});
   } catch (error) {
+    console.log("Error in PATCH Product: ", error);
     return Response.json("Failed to update product", { status: 500 });
   }
 }
@@ -149,6 +151,7 @@ export async function DELETE(
       message: "Product deleted successfully",
     }, {status: 200});
   } catch (error) {
+    console.log("Error in DELETE Product: ", error);
     return Response.json("Failed to delete product", { status: 500 });
   }
 }

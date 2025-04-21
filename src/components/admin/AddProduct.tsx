@@ -43,6 +43,7 @@ const AddProduct = ({ category }: { category: CategoryInterface | undefined }) =
 
       await addProduct(newProduct);
     } catch (error) {
+      console.error("Error adding product:", error);
       toast.error("Failed to add product", ToastStyles);
     } finally {
       setIsAddProductModalOpen(false);

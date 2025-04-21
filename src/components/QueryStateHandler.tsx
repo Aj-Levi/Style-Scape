@@ -22,7 +22,7 @@ const QueryStateHandler = ({
     if (isError) {
       const err = error as {
         status?: number;
-        data?: any;
+        data?: string | {success: boolean, message: string };
         error?: string;
       };
 

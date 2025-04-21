@@ -4,7 +4,7 @@ import { getSession } from "@/lib/getSession";
 import Order from "@/lib/models/Order";
 import User from "@/lib/models/User";
 
-export async function GET(_Req: Request) {
+export async function GET() {
   const session = await getSession();
   if (!session?.user) {
     return Response.json("An active admin session is required", {
@@ -30,6 +30,7 @@ export async function GET(_Req: Request) {
       ? Response.json(orders, { status: 200 })
       : Response.json([], { status: 200 });
   } catch (error) {
+    console.error("Internal Server Error while getting all orders", error);
     return Response.json("Internal Server Error", { status: 500 });
   }
 }
@@ -61,7 +62,7 @@ export async function POST(request: Request) {
     const orderItems: OrderItemInterface[] = user.cartitems;
 
     let totalOrderPrice: number = 0;
-    for (let item of orderItems) {
+    for (const item of orderItems) {
       totalOrderPrice += item.totalProductPrice || 0;
     }
 
@@ -86,6 +87,7 @@ export async function POST(request: Request) {
 
     return Response.json({ order_ID: String(newOrder._id) }, { status: 200 });
   } catch (error) {
+    console.error("Internal Server Error while creating order", error);
     return Response.json("Internal Server Error", { status: 500 });
   }
 }
@@ -129,6 +131,7 @@ export async function DELETE(request: Request) {
       { status: 200 }
     );
   } catch (error) {
+    console.error("Internal Server Error while deleting order", error);
     return Response.json("Internal Server Error", { status: 500 });
   }
 }

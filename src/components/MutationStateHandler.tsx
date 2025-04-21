@@ -1,7 +1,7 @@
 "use client";
 
 import ToastStyles from "@/styles/ToastStyles";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 
 interface MutationStateHandlerProps {
@@ -21,7 +21,7 @@ interface MutationStateHandlerProps {
       if (isError) {
         const err = error as {
           status?: number;
-          data?: any;
+          data?: string | {success: boolean, message: string };
           error?: string;
         };
   
@@ -40,7 +40,7 @@ interface MutationStateHandlerProps {
       if (isSuccess) {
         toast.success(SuccessMessage, ToastStyles);
       }
-    }, [isError, isSuccess, error]);
+    }, [isError, isSuccess, error, SuccessMessage]);
   
     return null;
   };

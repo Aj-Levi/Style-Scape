@@ -86,6 +86,7 @@ export async function POST(
       { status: 200 }
     );
   } catch (error) {
+    console.log("Error in POST Review: ", error);
     return Response.json("Internal Server Error", { status: 500 });
   }
 }
@@ -129,6 +130,7 @@ export async function PATCH(
 
     return Response.json({ message: "Updated Successfully" }, { status: 200 });
   } catch (error) {
+    console.log("Error in PATCH Review: ", error);
     return Response.json("Internal Server Error", { status: 500 });
   }
 }
@@ -173,6 +175,7 @@ export async function DELETE(
 
     return Response.json({ message: "Deleted Successfully" }, { status: 200 });
   } catch (error) {
+    console.log("Error in DELETE Review: ", error);
     return Response.json("Internal Server Error", { status: 500 });
   }
 }

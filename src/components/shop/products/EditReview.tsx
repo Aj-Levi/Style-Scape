@@ -52,6 +52,7 @@ const EditReview = ({
     try {
       await updateReview({ productid, updatedReview });
     } catch (err) {
+      console.error("Could not update Review", err);
       toast.error("Could not update Review", ToastStyles);
     } finally {
       setIsEditReviewModalOpen(false);

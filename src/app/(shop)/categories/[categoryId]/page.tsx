@@ -269,7 +269,7 @@ const CategoryProducts = ({
                 </svg>
                 <h3 className="text-xl font-bold mb-2">No products found</h3>
                 <p className="text-base-content/60 mb-6">
-                  We couldn't find any products matching your current filters.
+                  We couldn&apos;t find any products matching your current filters.
                   Try adjusting your search or filter criteria.
                 </p>
                 <button onClick={reset} className="btn btn-primary">

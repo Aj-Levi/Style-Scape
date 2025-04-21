@@ -84,7 +84,7 @@ const UserReviews = ({ productid }: { productid: string }) => {
         ) : (
           <div className="alert alert-info">
             <div className="flex justify-center w-full">
-              <span>You haven't added any reviews yet</span>
+              <span>You haven&apos;t added any reviews yet</span>
             </div>
           </div>
         )}

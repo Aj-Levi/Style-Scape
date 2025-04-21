@@ -4,7 +4,18 @@ import { useZustandStore } from "@/lib/stores/ZustandStore";
 import Link from "next/link";
 import { FaHome, FaShoppingBag, FaShoppingCart, FaUser } from "react-icons/fa";
 
-const Sidebar = ({ user }: { user: any }) => {
+interface SidebarProps {
+  firstname?: string;
+  lastname?: string;
+  email: string;
+  role: "admin" | "user";
+  image?: string;
+  id: string | number;
+  _id?: string | number;
+  createdAt?: string | number;
+}
+
+const Sidebar = ({ user }: {user: SidebarProps}) => {
   const { isSidebarOpen, toggleSidebar } = useZustandStore();
 
   const closeSidebar = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -62,7 +73,7 @@ const Sidebar = ({ user }: { user: any }) => {
                     className="font-semibold"
                     href="/categories/67f7b396680e690029227e86"
                   >
-                    Men's Collection
+                    Men&apos;s Collection
                   </Link>
                 </li>
                 <li>
@@ -70,7 +81,7 @@ const Sidebar = ({ user }: { user: any }) => {
                     className="font-semibold"
                     href="/categories/67f7b507680e690029227e8b"
                   >
-                    Women's Collection
+                    Women&apos;s Collection
                   </Link>
                 </li>
                 <li>
@@ -78,7 +89,7 @@ const Sidebar = ({ user }: { user: any }) => {
                     className="font-semibold"
                     href="/categories/67f7b579680e690029227e8e"
                   >
-                    Kid's Collection
+                    Kid&apos;s Collection
                   </Link>
                 </li>
               </ul>

@@ -1,4 +1,4 @@
-import mongoose, { Document, ObjectId } from "mongoose";
+import { Document, ObjectId } from "mongoose";
 import { ReactNode } from "react";
 
 export interface ZustandStoreInterface{
@@ -154,7 +154,7 @@ export interface OrderItemInterface{
 }
 
 export interface paymentResultInterface{
-    id?: String;
+    id?: string;
     status?: string;
     update_time?: number;
     email_address?: string;

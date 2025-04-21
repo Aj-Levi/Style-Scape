@@ -57,6 +57,7 @@ const ExpandedCheckout = ({ subtotal }: { subtotal: number }) => {
         router.push(`/orders/${order_ID}`);
       }, 1500);
     } catch (error) {
+      console.error("Could not place the order", error);
       toast.error("Could not place the order", ToastStyles);
     } finally {
       setIsPlacing(false);

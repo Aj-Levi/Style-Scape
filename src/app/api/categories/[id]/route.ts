@@ -54,6 +54,7 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (err) {
+    console.error("some error occured while deleting the Category ", err);
     return Response.json("some error occured while deleting the Category", {
       status: 500,
     });
@@ -86,7 +87,7 @@ export async function PATCH(
       return Response.json("Category not found", { status: 404 });
     }
 
-    let updateData: UpdatedCategoryInterface = {
+    const updateData: UpdatedCategoryInterface = {
       name: body?.name || category.name,
       image: body?.image || category.image,
       description: body?.description || category.description,
@@ -106,6 +107,7 @@ export async function PATCH(
       { status: 200 }
     );
   } catch (err) {
+    console.error("some error occured while updating the Category ", err);
     return Response.json("some error occured while updating the Category", {
       status: 500,
     });

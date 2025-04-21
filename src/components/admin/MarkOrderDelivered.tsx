@@ -15,6 +15,7 @@ const MarkOrderDelivered = ({ orderId }: { orderId: string }) => {
     try {
       await markAsDelivered(orderId);
     } catch (error) {
+      console.error("Error marking order as delivered:", error);
       toast.error("Failed to mark order as delivered", ToastStyles);
     } finally {
       setIsupdating(false);

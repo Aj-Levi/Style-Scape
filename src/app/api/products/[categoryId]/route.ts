@@ -25,6 +25,7 @@ export async function GET(
     return products? Response.json(products, {status: 200}) : Response.json([], {status: 200});
     
   } catch (error) {
+    console.log("Error in GET Products: ", error);
     return Response.json("Failed to fetch products for this category", { status: 500 });
   }
 }

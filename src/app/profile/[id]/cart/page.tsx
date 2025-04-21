@@ -147,8 +147,8 @@ const Cart = () => {
                 </div>
                 <h3 className="text-xl font-bold mb-4">Your cart is empty</h3>
                 <p className="text-base-content/70 mb-8 max-w-md mx-auto">
-                  Looks like you haven't added any products to your cart yet.
-                  Browse our collections and find something you'll love!
+                  Looks like you haven&apos;t added any products to your cart yet.
+                  Browse our collections and find something you&apos;ll love!
                 </p>
                 <Link href="/home" className="btn btn-primary">
                   <FaArrowLeft className="mr-2" /> Start Shopping
