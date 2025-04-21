@@ -1,8 +1,20 @@
+"use server";
+import { redirect } from "next/navigation";
+import { getSession } from "@/lib/getSession";
+
 import LoginImage from "@/components/auth/LoginImage";
 import ThemeToggleFixed from "@/components/auth/ThemeToggleFixed";
 import React, { ReactNode } from "react";
 
-const LoginSignUpLayout = ({children}: {children: ReactNode}) => {
+const LoginSignUpLayout = async({children}: {children: ReactNode}) => {
+
+  const session = await getSession();
+  const user = session?.user;
+
+  if(user) {
+    redirect("/home");
+  }
+  
   return (
     <div className="flex h-screen w-screen max-md:flex-col max-md:justify-center max-md:gap-y-8 bg-base-100">
       <ThemeToggleFixed />

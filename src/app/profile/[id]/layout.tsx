@@ -1,3 +1,5 @@
+"use server";
+import { redirect } from "next/navigation";
 import React, { ReactNode } from "react";
 import { FaUser, FaShoppingBag, FaCog, FaShoppingCart, FaStore } from "react-icons/fa";
 import SidebarTabs from "@/components/profile/SidebarTabs";
@@ -10,6 +12,10 @@ import Greeting from "@/components/profile/Greeting";
 
 const Profile = async ({ children }: { children: ReactNode }) => {
   const session = await getSession();
+  const user = session?.user;
+  if (!user) {
+    redirect("/login");
+  }
 
   const tabs: TabInterface[] = [
     { id: "personaldetails", label: "Profile", icon: <FaUser /> },
