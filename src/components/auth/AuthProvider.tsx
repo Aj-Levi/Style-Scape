@@ -1,4 +1,5 @@
-import { signIn } from "@/auth";
+"use client";
+import { providerLogin } from "@/actions/User";
 import ToastStyles from "@/styles/ToastStyles";
 import React, { ReactNode } from "react";
 import { toast } from "react-toastify";
@@ -7,11 +8,11 @@ const AuthProvider = ({ provider, icon }: { provider: string, icon: ReactNode })
   return (
     <form
       action={async () => {
-        try {
-          await signIn(provider);
-        } catch (error) {
-          console.error("Failed to sign in with " + provider, error);
-          toast.error("Failed to sign in with " + provider, ToastStyles);
+        const response = await providerLogin(provider);
+        if(response.success) {
+          toast.success(response.message, ToastStyles);
+        } else {
+          toast.error(response.message, ToastStyles);
         }
       }}
     >
