@@ -10,7 +10,9 @@ const NavbarIcons = async () => {
 
   return (
     <div className="flex items-center gap-x-2 *:cursor-pointer">
-      <Link href={`http://localhost:3000/profile/${session?.user.id}/cart`}>
+      <Link
+        href={session?.user ? `/profile/${session?.user.id}/cart` : "/login"}
+      >
         <button
           className={`btn btn-primary max-md:p-2 ${
             session?.user ? "" : "hidden"

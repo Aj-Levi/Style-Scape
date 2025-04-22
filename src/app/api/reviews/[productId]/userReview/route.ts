@@ -11,7 +11,7 @@ export async function GET(_Req: Request,{
 }) {
   const session = await getSession();
   if (!session?.user) {
-    return Response.json("Active Session is required", { status: 400 });
+    return Response.json([], { status: 200 });
   }
 
   try {
