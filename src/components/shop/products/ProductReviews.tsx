@@ -16,7 +16,7 @@ const ProductReviews = ({ productid }: { productid: string }) => {
 
   const sliderSettings = {
     dots: true,
-    infinite: true,
+    infinite: Reviews && Reviews.length > 1,
     speed: 500,
     slidesToShow:
       Reviews && Reviews.length > 2
@@ -25,14 +25,14 @@ const ProductReviews = ({ productid }: { productid: string }) => {
         ? Reviews.length
         : 1,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: Reviews && Reviews.length > 1,
     autoplaySpeed: 3000,
     pauseOnHover: true,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: Reviews && Reviews.length > 1 ? 2 : 1,
           slidesToScroll: 1,
         },
       },

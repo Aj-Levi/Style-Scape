@@ -34,8 +34,8 @@ const ProductDetails = ({
   });
 
   const sliderSettings = {
-    dots: true,
-    infinite: true,
+    dots: product?.images && product.images.length > 1,
+    infinite: product?.images && product.images.length > 1,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -126,10 +126,10 @@ const ProductDetails = ({
                   {product.isOnSale && product.salePrice ? (
                     <>
                       <span className="text-2xl font-bold text-primary">
-                      ₹{product.salePrice.toFixed(2)}
+                        ₹{product.salePrice.toFixed(2)}
                       </span>
                       <span className="text-lg line-through text-base-content/50">
-                      ₹{product.price.toFixed(2)}
+                        ₹{product.price.toFixed(2)}
                       </span>
                       <span className="badge badge-error text-white font-bold ml-2">
                         Save ₹{(product.price - product.salePrice).toFixed(2)}
