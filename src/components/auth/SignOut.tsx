@@ -16,6 +16,7 @@ const SignOut = () => {
             toast.success("Logged out successfully", ToastStyles);
             setTimeout(() => {
               router.replace("/home");
+              router.refresh();
             }, 1500);
         } catch(err) {
           console.error("error while signing out the user", err);
