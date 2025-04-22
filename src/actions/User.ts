@@ -61,16 +61,4 @@ const registerUser = async (
   }
 };
 
-const providerLogin = async (
-  provider: string
-): Promise<{ success: boolean; message: string }> => {
-  try {
-    await signIn(provider);
-  } catch (error) {
-    console.error("Failed to sign in with " + provider, error);
-    return { success: false, message: "Failed to sign in with " + provider };
-  }
-  return { success: true, message: "Logged In Successfully" };
-};
-
-export { registerUser, loginUser, providerLogin };
+export { registerUser, loginUser };

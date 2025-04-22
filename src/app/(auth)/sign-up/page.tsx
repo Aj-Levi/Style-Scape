@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import ToastStyles from "@/styles/ToastStyles";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 
 const Login = () => {
   const [ValidEmail, setValidEmail] = useState<boolean>(false);
@@ -23,16 +25,16 @@ const Login = () => {
 
           <div className="flex flex-col space-y-4 mb-6">
             <form
-              action={async(formdata: FormData): Promise<void> => {
+              action={async (formdata: FormData): Promise<void> => {
                 const response = await registerUser(formdata);
-                if(response.success) {
+                if (response.success) {
                   toast.success(response.message, ToastStyles);
                   setTimeout(() => {
                     router.push("/login");
                   }, 2000);
-                }else{
+                } else {
                   toast.warn(response.message, ToastStyles);
-                };
+                }
               }}
               className="space-y-4 mt-6"
             >
@@ -82,8 +84,11 @@ const Login = () => {
                   <input type="text" placeholder="Last Name" name="lastname" />
                 </label>
               </div>
-              
-              <ValidateEmailInput ValidEmail={ValidEmail} setValidEmail={setValidEmail} />
+
+              <ValidateEmailInput
+                ValidEmail={ValidEmail}
+                setValidEmail={setValidEmail}
+              />
               <ShowHidePassword />
 
               <button
@@ -94,6 +99,28 @@ const Login = () => {
                 Sign Up
               </button>
             </form>
+            <div className="relative flex items-center py-2">
+              <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
+              <span className="flex-shrink mx-4 text-base-content text-sm">
+                or
+              </span>
+              <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
+            </div>
+
+            <button
+              onClick={() => signIn("google", { prompt: "select_account" })}
+              className="flex items-center justify-center w-full btn btn-primary"
+            >
+              <FaGoogle className="mr-2" />
+              <span className="font-medium">Sign in with Google</span>
+            </button>
+            <button
+              onClick={() => signIn("github")}
+              className="flex items-center justify-center w-full btn btn-primary"
+            >
+              <FaGithub className="mr-2" />
+              <span className="font-medium">Sign in with GitHub</span>
+            </button>
           </div>
 
           <div className="mt-6 text-center">

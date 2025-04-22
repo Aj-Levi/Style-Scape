@@ -3,7 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import ConnectDB from "./lib/connectDB";
 import User from "./lib/models/User";
 import { compare } from "bcryptjs";
-import GitHub from "next-auth/providers/github";
+import GitHub from "next-auth/providers/github"
 import Google from "next-auth/providers/google";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { JWT } from "next-auth/jwt";
@@ -46,13 +46,15 @@ declare module "next-auth/jwt" {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
-    GitHub({
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    }),
+    GitHub,
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "select_account",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
     }),
     Credentials({
       name: "Credentials",
@@ -136,14 +138,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const alreadyUser = await User.findOne({ email });
 
           if (!alreadyUser) {
-            await User.create({
+            const newuser = await User.create({
               email,
               firstname,
               lastname,
               image,
               authProviderId: id,
             });
+
+            user.id = String(newuser._id);
+            user.role = newuser.role;
+            user.firstname = newuser.firstname;
+            user.lastname = newuser.lastname;
+            user.image = newuser.image;
+            user.createdAt = newuser.createdAt;
+
           }
+
+          user.id = String(alreadyUser._id);
+          user.role = alreadyUser.role;
+          user.firstname = alreadyUser.firstname;
+          user.lastname = alreadyUser.lastname;
+          user.image = alreadyUser.image;
+          user.createdAt = alreadyUser.createdAt;
+
           return true;
 
         } catch (error) {

@@ -12,6 +12,7 @@ import Greeting from "@/components/profile/Greeting";
 
 const Profile = async ({ children }: { children: ReactNode }) => {
   const session = await getSession();
+  console.log("session is ----> ",session);
   const user = session?.user;
   if (!user) {
     redirect("/login");
