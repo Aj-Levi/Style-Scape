@@ -18,7 +18,7 @@ interface SidebarProps {
 const Sidebar = ({ user }: {user: SidebarProps}) => {
   const { isSidebarOpen, toggleSidebar } = useZustandStore();
 
-  const closeSidebar = (e: React.MouseEvent<HTMLDivElement>) => {
+  const closeSidebar = (e: React.MouseEvent<HTMLDivElement> | React.MouseEvent<HTMLLIElement>) => {
     e.stopPropagation();
     toggleSidebar();
   };
@@ -48,13 +48,13 @@ const Sidebar = ({ user }: {user: SidebarProps}) => {
             {/* Main navigation */}
             <nav className="p-4 border-b border-base-300">
               <ul className="menu menu-vertical gap-1 text-base-content">
-                <li>
+                <li onClick={(e): void => closeSidebar(e)}>
                   <Link href="/home" className="flex items-center gap-3">
                     <FaHome size={18} />
                     <span>Home</span>
                   </Link>
                 </li>
-                <li>
+                <li onClick={(e): void => closeSidebar(e)}>
                   <Link href="/categories" className="flex items-center gap-3">
                     <FaShoppingBag size={18} />
                     <span>Collections</span>
@@ -68,7 +68,7 @@ const Sidebar = ({ user }: {user: SidebarProps}) => {
             <div className="p-4 border-b border-base-300 bg-base-100">
               <h3 className="font-medium mb-3 text-secondary">Categories</h3>
               <ul className="menu menu-vertical gap-1 text-base-content">
-                <li>
+                <li onClick={(e): void => closeSidebar(e)}>
                   <Link
                     className="font-semibold"
                     href="/categories/67f7b396680e690029227e86"
@@ -76,7 +76,7 @@ const Sidebar = ({ user }: {user: SidebarProps}) => {
                     Men&apos;s Collection
                   </Link>
                 </li>
-                <li>
+                <li onClick={(e): void => closeSidebar(e)}>
                   <Link
                     className="font-semibold"
                     href="/categories/67f7b507680e690029227e8b"
@@ -84,7 +84,7 @@ const Sidebar = ({ user }: {user: SidebarProps}) => {
                     Women&apos;s Collection
                   </Link>
                 </li>
-                <li>
+                <li onClick={(e): void => closeSidebar(e)}>
                   <Link
                     className="font-semibold"
                     href="/categories/67f7b579680e690029227e8e"
@@ -100,7 +100,7 @@ const Sidebar = ({ user }: {user: SidebarProps}) => {
               <div className="p-4 border-b border-base-300 bg-base-200">
                 <h3 className="font-medium mb-3 text-secondary">Account</h3>
                 <ul className="menu menu-vertical gap-1 text-base-content">
-                  <li>
+                  <li onClick={(e): void => closeSidebar(e)}>
                     <Link
                       href={`/profile/${user.id}/profiledetails`}
                       className="flex items-center gap-3"
@@ -109,7 +109,7 @@ const Sidebar = ({ user }: {user: SidebarProps}) => {
                       <span>My Account</span>
                     </Link>
                   </li>
-                  <li>
+                  <li onClick={(e): void => closeSidebar(e)}>
                     <Link
                       href="/profile/${user.id}/cart"
                       className="flex items-center gap-3"
