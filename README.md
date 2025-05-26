@@ -103,17 +103,19 @@
    - Copy `.env.example` → `.env.local`
    - Fill in your credentials:
      ```env
-     MONGODB_URI=
-     NEXTAUTH_URL=http://localhost:3000
-     NEXTAUTH_SECRET=
-     GITHUB_ID=
-     GITHUB_SECRET=
-     GOOGLE_ID=
-     GOOGLE_SECRET=
+     MONGO_URI=
+     AUTH_SECRET=
+     AUTH_GITHUB_ID=
+     AUTH_GITHUB_SECRET=
+     AUTH_GOOGLE_ID=
+     AUTH_GOOGLE_SECRET=
+     IMAGEKIT_PUBLIC_KEY =
+     IMAGEKIT_URL_ENDPOINT =
+     IMAGEKIT_PRIVATE_KEY =
+     NEXT_PUBLIC_RAZORPAY_KEY_ID=
      RAZORPAY_KEY_ID=
      RAZORPAY_KEY_SECRET=
-     IMAGEKIT_PUBLIC_KEY=
-     IMAGEKIT_PRIVATE_KEY=
+     NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
      ```
 4. **Run the dev server**
    ```bash
