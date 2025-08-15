@@ -6,12 +6,6 @@
 
 ---
 
-## 🌟 Live Demo
-
-[https://style-scape.vercel.app](https://style-scape.vercel.app)
-
----
-
 ## ✨ Key Features
 
 ### 🛍️ For Customers
